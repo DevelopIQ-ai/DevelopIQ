@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Property AI",
+  title: "DevelopIQ",
   description: "Agents for Commercial Real Estate",
 };
 

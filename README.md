@@ -1,6 +1,6 @@
 # DevelopIQ
 
-PropertyAI is an intelligent real estate data aggregation and analysis system designed to automate property research. The system processes property links, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis.
+DevelopIQ is an intelligent real estate data aggregation and analysis system designed to automate property research. The system processes property links, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis.
 
 ## 🏗️ Project Structure
 

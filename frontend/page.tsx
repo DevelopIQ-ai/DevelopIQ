@@ -47,7 +47,7 @@ export default function Home() {
           <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
             <div className="w-4 h-4 bg-primary rounded-sm" />
           </div>
-          <span className="font-medium">PropertyAI</span>
+          <span className="font-medium">DevelopIQ</span>
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
