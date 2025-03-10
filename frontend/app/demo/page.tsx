@@ -190,7 +190,7 @@ export default function Demo() {
           <div className="w-8 h-8 bg-orange-500/10 rounded flex items-center justify-center">
             <div className="w-4 h-4 bg-orange-500 rounded-sm" />
           </div>
-          <span className="font-medium">PropertyAI</span>
+          <span className="font-medium">DevelopIQ</span>
         </Link>
       </header>
       <main className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] py-12">
