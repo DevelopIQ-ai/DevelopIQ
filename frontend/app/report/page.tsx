@@ -6,6 +6,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { MapPin } from "lucide-react";
 import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
+import { NewsArticlesTab } from "@/app/report/news-articles";
 import { PrintDialog } from "@/components/print-dialog";
 import {
   Carousel,
@@ -21,12 +22,16 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 import { fetchAttomData } from "@/lib/attom-data-fetcher";
 import { mockPropertyData } from "@/app/report/mock-data"
 import { fetchZoningData } from "@/lib/codebook-data-fetcher";
+import { NewsArticle } from "@/schemas/views/research-agent-schema";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
+  const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
+  const [newsLoading, setNewsLoading] = useState(false);
+  const [newsError, setNewsError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -69,6 +74,56 @@ export default function PropertyAnalysisDashboard() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    function getLocality(address: string) {
+        const addressParts = address.split(',');
+        // Extract city from second-to-last element and state from the state code in the next element
+        if (addressParts.length >= 3) {
+          const city = addressParts[addressParts.length - 3].trim();
+          // Extract just the state code from the state+zip part
+          const stateZipPart = addressParts[addressParts.length - 2].trim();
+          const state = stateZipPart.split(' ')[0]; // Get just the state code
+          return `${city}, ${state}`;
+        }
+        return address; // Return full address if parsing fails
+    }
+
+    async function fetchData() {
+        try {
+          setNewsLoading(true);
+          const locality = getLocality(propertyAddress || "");
+          const response = await fetch('/api/agents', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ location: locality }),
+          });
+          const data = await response.json();
+          console.log(data);
+          if (data.status === 'success' && data.output && data.output.news) {
+            setNewsArticles(data.output.news);
+          } else {
+            setNewsArticles([]);
+            // Optional: Set error if the response format isn't as expected
+            if (data.status === 'failed') {
+              setNewsError(data.error || "Failed to retrieve news articles");
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching news articles:", error);
+          setNewsError(error instanceof Error ? error.message : "An unexpected error occurred");
+        } finally {
+          setNewsLoading(false);
+        }
+    }
+  
+    if (propertyAddress && newsArticles.length === 0) {
+      console.log("Fetching data for", propertyAddress);
+      fetchData();
+    }
+  }, [propertyAddress, newsArticles.length]);
 
   if (isLoading) {
     return (
@@ -209,6 +264,7 @@ export default function PropertyAnalysisDashboard() {
           <TabsList className="tabs-list">
             <TabsTrigger value="property">General Property Information</TabsTrigger>
             <TabsTrigger value="development">Development Info</TabsTrigger>
+            <TabsTrigger value="news">News Articles</TabsTrigger>
           </TabsList>
 
           <TabsContent value="property" className="m-0" data-section="property">
@@ -229,6 +285,16 @@ export default function PropertyAnalysisDashboard() {
               </p>
             </div>
             <DevelopmentInfoTab reportHandler={reportHandler!} />
+          </TabsContent>
+
+          <TabsContent value="news" className="m-0" data-section="news">
+            <div className="mb-4">
+              <h2 className="text-2xl font-semibold mb-4">News Articles</h2>
+              <p className="text-muted-foreground">
+                Latest news articles and updates about the area.
+              </p>
+            </div>
+            <NewsArticlesTab newsArticles={newsArticles} newsLoading={newsLoading} newsError={newsError} />
           </TabsContent>
         </Tabs>
       </div>
