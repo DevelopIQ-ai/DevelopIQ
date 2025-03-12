@@ -9,7 +9,31 @@ export function NewsArticlesTab({ newsArticles, newsLoading, newsError }: { news
 
   if (newsLoading) {
     return (
-      <p>Loading...</p>
+        <div className="container mx-auto max-w-7xl py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Array(4).fill(0).map((_, index) => (
+                    <Card key={index} className="overflow-hidden flex flex-col items-start p-6">
+                        <div className="w-24 h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded mb-4 self-start loading-skeleton"></div>
+                        <CardHeader className="p-0 w-full">
+                            <div className="flex justify-between items-start mb-2">
+                                <div className="w-3/4 h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                            </div>
+                            <div className="w-32 h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded mt-2 mb-3 loading-skeleton"></div>
+                            <div className="space-y-2 mb-4 w-full">
+                                <div className="w-full h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                                <div className="w-full h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                                <div className="w-4/5 h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                            </div>
+                        </CardHeader>
+                        <div className="space-y-2 mb-4 w-full">
+                            <div className="w-full h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                            <div className="w-3/4 h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded loading-skeleton"></div>
+                        </div>
+                        <div className="w-36 h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded mt-auto loading-skeleton"></div>
+                    </Card>
+                ))}
+            </div>
+        </div>
     );
   }
 
