@@ -1,0 +1,30 @@
+{
+  "name": "agentic-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "mastra dev",
+    "flatten-toc": "tsx src/mastra/scripts.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/google": "^1.1.20",
+    "@ai-sdk/openai": "^1.2.2",
+    "@mastra/core": "^0.5.0",
+    "@mastra/loggers": "^0.1.9",
+    "jsdom": "^26.0.0",
+    "mastra": "^0.1.56",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,742 @@
+[
+  {
+    "title": "TITLE XV: LAND USAGE",
+    "type": "Title",
+    "level": 0,
+    "children": [
+      {
+        "title": "CHAPTER 150:  SUBDIVISIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 150.001  TITLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.002  POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.003  PURPOSE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.004  AUTHORITY AND JURISDICTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.005  ENACTMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.006  INTERPRETATION AND CONFLICT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.007  SAVING PROVISION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.008  AMENDMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.009  CONDITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.010  RESUBDIVISION OF LAND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.011  VACATION OF PLATS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.012  VARIANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.013  GENERAL REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.014  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.025  GENERAL PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.026  MAJOR AND MINOR SUBDIVISIONS; SKETCH PLAN APPLICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.027  MAJOR SUBDIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.028  MINOR SUBDIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.029  EXEMPT DIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.040  GENERAL IMPROVEMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.041  LOT IMPROVEMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.042  DRAINAGE AND STORM SEWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.043  WATER FACILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.044  SEWERAGE FACILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.045  SIDEWALKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.046  UTILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.047  PUBLIC USES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.048  PRESERVATION OF NATURAL FEATURES AND AMENITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.049  NONRESIDENTIAL SUBDIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.060  GENERAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.061  CONSTRUCTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.062  DESIGN STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.063  DEDICATIONS AND RESERVATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.075  IMPROVEMENTS AND PERFORMANCE BOND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.076  INSPECTION OF PUBLIC IMPROVEMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.077  MAINTENANCE OF PUBLIC IMPROVEMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.078  ISSUANCE OF BUILDING PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.090  SKETCH PLAN.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.091  PRELIMINARY PLAT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.092  CONSTRUCTION PLANS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.093  FINAL SUBDIVISION PLAT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.094  EXEMPT I DIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.095  EXEMPT II DIVISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.999  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-150",
+        "chapterNumber": "150",
+        "chapterName": "SUBDIVISIONS"
+      },
+      {
+        "title": "CHAPTER 151:  ZONING",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 151.001  COMPREHENSIVE PLAN ADOPTED BY REFERENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.002  TITLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.003  AUTHORITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.004  COMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.005  JURISDICTIONAL AREA.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.006  APPLICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.007  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.008  FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.020  ZONE MAP.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.021  ZONE DISTRICTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.022  DISTRICT BOUNDARIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.023  RESIDENTIAL DISTRICTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.024  BUSINESS DISTRICTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.025  INDUSTRIAL DISTRICT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.026  CONSERVATION DISTRICT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.027  PERMITTED USES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.028  LOT AND YARD REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.029  HEIGHT REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.030  STANDARDS FOR MANUFACTURED HOMES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.045  NONCONFORMING USES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.046  PRIVATE SWIMMING POOLS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.047  OFF-STREET PARKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.048  MANUFACTURED HOUSING AND MOBILE HOMES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.049  PLANNED UNIT RESIDENTIAL, BUSINESS, AND INDUSTRIAL PROJECTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.050  TEMPORARY STRUCTURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.051  SIGNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.052  HOME OCCUPATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.053  SANITARY CLEANOUTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.054  CLEANOUTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.055  WASTEWATER GREASE TRAP REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.056  REGISTRATION OF VACANT OR DISTRESSED PROPERTIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.070  ADMINISTRATIVE OFFICER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.071  ZONING-BUILDING PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.072  VIOLATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.073  METHOD OF APPEAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.085  GENERAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.086  APPEALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.087  VARIANCES FROM DEVELOPMENT STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.088  USE VARIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.089  SPECIAL EXCEPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.090  PERFORMANCE STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.091  NONCONFORMING USES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.092  COMMITMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.105  GENERAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.106  PETITION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.107  REFERRAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.108  ACTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 151.999  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-151",
+        "chapterNumber": "151",
+        "chapterName": "ZONING"
+      },
+      {
+        "title": "CHAPTER 152:  BUILDINGS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 152.01  CITY BUILDING CODE ADOPTED BY REFERENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.02  BUILDING STANDARDS ADOPTED BY REFERENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.03  UNSAFE STRUCTURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.04  BUILDING PERMIT FEE SCHEDULE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.05  RESIDENTIAL INVESTMENT INCENTIVES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.20  DESIGN REVIEW BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.21  PURPOSE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.22  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.23  CITY BOUNDARIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.24  DEMOLITION PERMIT REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.25  LIMITATIONS ON ISSUANCE OF BUILDING, DEMOLITION, SIGN PERMITS, AND CERTIFICATES OF ZONING COMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.26  ISSUANCE OF CERTIFICATE OF APPROPRIATENESS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.27  CRITERIA FOR EVALUATING APPLICATIONS FOR CERTIFICATE OF APPROPRIATENESS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.28  NOTICE OF DEMOLITION REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.29  CERTIFICATE OF APPROPRIATENESS REQUIRED FOR NEW SIGNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.30  EXCLUSIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.31  APPEAL FROM DECISION OF REVIEW BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.32  REVIEW BOARD GUIDELINES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-152",
+        "chapterNumber": "152",
+        "chapterName": "BUILDINGS"
+      },
+      {
+        "title": "CHAPTER 153:  PUBLIC WAYS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 153.01  STREET EXCAVATION AND MOVING PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.15  GENERAL REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.16  FLOWABLE FILL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.17  RESTORATION TO MATCH EXISTING SURROUNDINGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.18  WAIVER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.19  STREET CUT APPLICATION AND PERMIT FORM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 153.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-153",
+        "chapterNumber": "153",
+        "chapterName": "PUBLIC WAYS"
+      },
+      {
+        "title": "CHAPTER 154:  FLOOD HAZARD AREAS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 154.01  STATUTORY AUTHORIZATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.02  FINDINGS OF FACT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.03  STATEMENT OF PURPOSE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.04  OBJECTIVES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.05  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.06  LANDS TO WHICH THIS CHAPTER APPLIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.07  BASIS FOR ESTABLISHING REGULATORY FLOOD DATA.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.08  ESTABLISHMENT OF FLOODPLAIN DEVELOPMENT PERMIT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.09  COMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.10  ABROGATION AND GREATER RESTRICTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.11  DISCREPANCY BETWEEN MAPPED FLOODPLAIN AND ACTUAL GROUND ELEVATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.12  INTERPRETATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.13  WARNING AND DISCLAIMER OF LIABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.25  DESIGNATION OF ADMINISTRATOR.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.26  PERMIT PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.27  DUTIES AND RESPONSIBILITIES OF THE FLOODPLAIN ADMINISTRATOR.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.40  GENERAL STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.41  SPECIFIC STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.42  STANDARDS FOR SUBDIVISION PROPOSALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.43  CRITICAL FACILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.44  STANDARDS FOR IDENTIFIED FLOODWAYS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.45  STANDARDS FOR IDENTIFIED FRINGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.46  STANDARDS FOR SFHAS WITHOUT ESTABLISHED BASE FLOOD ELEVATION AND/OR FLOODWAYS/FRINGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.47  STANDARDS FOR FLOOD PRONE AREAS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.60  VARIANCE AND APPEALS BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.61  VARIANCE PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.62  CONDITIONS FOR VARIANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.63  VARIANCE NOTIFICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.64  HISTORIC STRUCTURE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.65  SPECIAL CONDITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 154.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-154",
+        "chapterNumber": "154",
+        "chapterName": "FLOOD HAZARD AREAS"
+      },
+      {
+        "title": "CHAPTER 155:  STORM WATER MANAGEMENT",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 155.01  STORM WATER UTILITY FEE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.15  ADOPTION OF STORM WATER MANAGEMENT SYSTEM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.16  RESPONSIBILITY OF THE BOARD OF WORKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.17  SERVICE CHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.18  STORM WATER RATE AND FEE ESTABLISHMENT PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.19  EQUIVALENT RESIDENTIAL UNIT (ERU).",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.20  BILLING; COLLECTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.21  APPEALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.22  STORM WATER REVENUE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.23  EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.35  STATE PROVISIONS ADOPTED BY REFERENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.36  ADMINISTRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.37  PETITION TO INVESTIGATE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.38  INVESTIGATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.39  ASSESSMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.50  STATE PROVISIONS ADOPTED BY REFERENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.51  DEPARTMENT CREATED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.52  TERRITORY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 155.53  BOARD OF DIRECTORS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-155",
+        "chapterNumber": "155",
+        "chapterName": "STORM WATER MANAGEMENT"
+      }
+    ],
+    "id": "title-0"
+  }
+]
