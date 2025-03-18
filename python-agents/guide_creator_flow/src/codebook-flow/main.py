@@ -2,6 +2,8 @@
 import json
 from random import randint
 from typing import Dict, List, Any
+import os
+from dotenv import load_dotenv
 
 from pydantic import BaseModel
 
@@ -12,9 +14,13 @@ import agentops
 from crews.extraction_crew.extraction_crew import ExtractionCrew
 from instructions import hints
 
+
 # Initialize agentops with API key and tags - this automatically starts a session
+# Load environment variables
+load_dotenv()
+
 agentops.init(
-    api_key='c89fd65b-b70c-4c77-8bdd-4959898f4b43',
+    api_key=os.environ.get('AGENTOPS_API_KEY'),
     default_tags=['crewai']
 )
 
