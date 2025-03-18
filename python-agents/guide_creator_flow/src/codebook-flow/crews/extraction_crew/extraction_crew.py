@@ -20,7 +20,7 @@ class SectionsOutput(BaseModel):
 class ExtractionCrew():
 	"""ExtractionCrew crew"""
 	# llm= LLM(model="ollama/llama3.2", base_url="http://localhost:11434")
-	llm = LLM(model="gpt-4o-mini", api_key="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")
+	llm = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
