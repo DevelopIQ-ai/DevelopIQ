@@ -24,7 +24,6 @@ export async function fetchAttomData(handler: PropertyReportHandler, propertyAdd
     throw new Error("Failed to fetch property data");
   }
   const data = await response.json();
-  console.log("Fetched data", data);
   const validatedEndpoint: PropertyExpandedProfile = ExpandedProfileSchema.parse(data);
   const mappedData: GeneralPropertyInfo = mapAttomProfileToGeneralPropertyInfo(validatedEndpoint);
   const validatedData: GeneralPropertyInfo = PropertyReportHandler.validateGeneralInfo(mappedData);
@@ -32,3 +31,5 @@ export async function fetchAttomData(handler: PropertyReportHandler, propertyAdd
 
   return { handler, propertyAddress };
 }
+
+

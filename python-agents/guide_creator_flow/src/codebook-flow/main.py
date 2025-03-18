@@ -9,12 +9,15 @@ from crewai.flow.flow import Flow, listen, start
 from bs4 import BeautifulSoup
 from crewai import Crew, Task, Agent
 import agentops
-from crews.content_crew.content_crew import ContentCrew
+from crews.extraction_crew.extraction_crew import ExtractionCrew
+from instructions import hints
 
+# Initialize agentops with API key and tags - this automatically starts a session
 agentops.init(
-    api_key='4391bcf8-5497-4d1b-a216-fc67d8ba1e42',
+    api_key='c89fd65b-b70c-4c77-8bdd-4959898f4b43',
     default_tags=['crewai']
 )
+
 
 def get_html_document():
         with open("gas_city.html", "r") as f:
@@ -164,25 +167,29 @@ class ContentFlow(Flow[ContentState]):
     def get_relevant_sections(self):
         print("Getting relevant sections")
         result = (
-            ContentCrew()
+            ExtractionCrew()
             .crew()
-            .kickoff(inputs={"table_of_contents": self.state.table_of_contents, "topic": "permitted use matrix"})
+            .kickoff(inputs={
+                "table_of_contents": self.state.table_of_contents, 
+                "topic": "Permitted Use Matrix", 
+                "hint": hints["permitted_use_matrix_extraction_hint"],
+                "html_document": self.state.html_document
+            })
         )
-        
         print("Relevant sections generated", result.raw)
         self.state.relevant_sections = result.raw
+
 
 def kickoff():
     content_flow = ContentFlow()
     content_flow.kickoff()
-
+    agentops.end_session(end_state="Success")
 
 def plot():
     content_flow = ContentFlow()
     content_flow.plot()
 
 if __name__ == "__main__":
-    # html_document = get_html_document()
-    # table_of_contents = get_table_of_contents(html_document)
-    # print(table_of_contents)
+    # No need to call start_session as it's already started by init()
     kickoff()
+    # agentops.end_session(end_state="Success")

@@ -1,0 +1,29 @@
+
+find_sections:
+  description: >
+    Examine the provided JSON structure representing a municipal code table of contents.
+    The user is looking for information about: "{topic}".
+          
+    Analyze the structure to determine which section(s) would most likely contain this information.
+    Look for keyword matches and consider the hierarchy of the document.
+    
+    For each relevant section identified, use the section_extractor_tool to extract the complete content.
+
+    Industry Expert Hint for finding the section about {topic}: {hint}
+    
+    JSON structure:
+    {table_of_contents}
+  expected_output: >
+    Return a JSON array of the 3-5 most relevant sections, ordered by relevance, including both the section 
+    metadata and the complete extracted content.
+    The output must follow this exact format:
+    [
+      {
+        "section_number": "The section number (e.g. '151.027')",
+        "section_title": "The title of the section without the section number",
+        "relevance_score": A number from 1-10 indicating relevance (10 being highest),
+        "reason": "A brief explanation of why this section is relevant",
+        "content": "The full extracted content of the section"
+      }
+    ]
+  agent: municipal_code_section_extractor

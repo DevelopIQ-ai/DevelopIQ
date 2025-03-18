@@ -1,16 +1,15 @@
 import { z } from "zod";
 
-// Define a base DataPoint schema without defaults.
-const BaseDataPointSchema = z.object({
+
+const DataPointSchema = z.object({
   alias: z.string(),
   value: z.union([z.string(), z.number(), z.null()]),
   source: z.union([z.string(), z.null()]),
 });
 
-// Helper that creates a DataPoint schema with a default alias and default values.
-export const dataPointWithAlias = (defaultAlias: string) =>
-  BaseDataPointSchema.default({
-    alias: defaultAlias,
+export const dataPointWithAlias = (alias: string) => 
+  DataPointSchema.default({
+    alias,
     value: null,
     source: null,
   });
@@ -33,40 +32,26 @@ export const GeneralPropertyInfoSchema = z.object({
     }),
     "Legal Description": z.object({
       legal1: dataPointWithAlias("Legal Description"),
-    }).default(() => ({
-      legal1: dataPointWithAlias("Legal Description").parse(undefined),
-    })),
+    }),
     "Regulatory Status": z.object({
       "Zoning Classification": z.object({
         siteZoningIdent: dataPointWithAlias("Site Zoning Identifier"),
         zoningType: dataPointWithAlias("Zoning Type"),
+        zoneName: dataPointWithAlias("Zone Name"),
+        zoneSubType: dataPointWithAlias("Zone Subtype")
       }),
       "Overlay Districts": z.object({
         overlayDistricts: dataPointWithAlias("Overlay Districts"),
       }),
-    }).default(() => ({
-      "Zoning Classification": {
-        siteZoningIdent: dataPointWithAlias("Site Zoning Identifier").parse(undefined),
-        zoningType: dataPointWithAlias("Zoning Type").parse(undefined),
-      },
-      "Overlay Districts": {
-        overlayDistricts: dataPointWithAlias("Overlay Districts").parse(undefined),
-      },
-    })),
+    }),
     "Tax Status": z.object({
       taxCodeArea: dataPointWithAlias("Tax Code Area"),
       taxAmt: dataPointWithAlias("Tax Amount"),
       taxYear: dataPointWithAlias("Tax Year"),
-    }).default(() => ({
-      taxCodeArea: dataPointWithAlias("Tax Code Area").parse(undefined),
-      taxAmt: dataPointWithAlias("Tax Amount").parse(undefined),
-      taxYear: dataPointWithAlias("Tax Year").parse(undefined),
-    })),
+    }),
     "Tax Deliquincy": z.object({
       taxDeliquincy: dataPointWithAlias("Tax Deliquincy"),
-    }).default(() => ({
-      taxDeliquincy: dataPointWithAlias("Tax Deliquincy").parse(undefined),
-    })),
+    }),
   }).default(() => ({
     "Geospatial Information": {
       latitude: dataPointWithAlias("Latitude").parse(undefined),
@@ -88,6 +73,8 @@ export const GeneralPropertyInfoSchema = z.object({
       "Zoning Classification": {
         siteZoningIdent: dataPointWithAlias("Site Zoning Identifier").parse(undefined),
         zoningType: dataPointWithAlias("Zoning Type").parse(undefined),
+        zoneName: dataPointWithAlias("Zone Name").parse(undefined),
+        zoneSubType: dataPointWithAlias("Zone Subtype").parse(undefined),
       },
       "Overlay Districts": {
         overlayDistricts: dataPointWithAlias("Overlay Districts").parse(undefined),
