@@ -164,6 +164,7 @@ class ContentState(BaseModel):
 class ContentFlow(Flow[ContentState]):
 
     @start()
+    # TODO: @evan - retrieve the html document
     def retrieve_and_process_html_document(self):
         print("Getting HTML document")
         self.state.html_document = get_html_document()
