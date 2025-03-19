@@ -1,20 +1,2937 @@
 [
   {
-    "title": "TITLE XV: LAND USAGE",
+    "title": "SELLERSBURG, INDIANACODE OF ORDINANCES",
     "type": "Title",
     "level": 0,
     "children": [
       {
-        "title": "CHAPTER 150:  SUBDIVISIONS",
+        "title": "CHAPTER 10:  RULES OF CONSTRUCTION; GENERAL PENALTY",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 150.001  TITLE.",
+            "title": "\u00a7 10.01  TITLE OF CODE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.002  POLICY.",
+            "title": "\u00a7 10.02  INTERPRETATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.03  APPLICATION TO FUTURE ORDINANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.04  CONSTRUCTION OF CODE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.05  RULES OF INTERPRETATION; DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.06  SEVERABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.07  REFERENCE TO OTHER SECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.08  REFERENCE TO OFFICES; NAME DESIGNATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.09  ERRORS AND OMISSIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.10  REASONABLE TIME.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.11  REPEAL OR MODIFICATION OF CODE SECTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.12  LIMITATION PERIODS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.13  ORDINANCES UNAFFECTED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.14  ORDINANCES WHICH AMEND OR SUPPLEMENT CODE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.15  SECTION HISTORIES; STATUTORY REFERENCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.16  PRESERVATION OF PENALTIES, OFFENSES, RIGHTS AND LIABILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 10.99  GENERAL PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-10",
+        "chapterNumber": "10",
+        "chapterName": "RULES OF CONSTRUCTION; GENERAL PENALTY"
+      },
+      {
+        "title": "CHAPTER 11:  TOWN SEAL",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 11.01  TOWN SEAL.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-11",
+        "chapterNumber": "11",
+        "chapterName": "TOWN SEAL"
+      },
+      {
+        "title": "CHAPTER 30:  TOWN COUNCIL",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 30.01  MEMBERS OF COUNCIL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.02  LEGISLATIVE VOTING DISTRICTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.03  ORGANIZATION OF TOWN COUNCIL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.04  QUORUM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.05  REGULAR AND SPECIAL MEETINGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.06  POWERS OF COUNCIL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.07  RULES OF ORDER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.08  COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.15  DOCKETING OF DOCUMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.16  DOCKETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.17  VOTING PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.18  AGENDA.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.19  ROLL CALL VOTE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.20  SUSPENSION OF RULES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.21  CONTROL OF MEETINGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.22  LACK OF QUORUM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.23 LIAISONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.24  EFFECTIVE DATE OF ORDINANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 30.25  ORDINANCES AFFECTING CODE.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-30",
+        "chapterNumber": "30",
+        "chapterName": "TOWN COUNCIL"
+      },
+      {
+        "title": "CHAPTER 31:  TOWN POLICIES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 31.01  RETURNED CHECKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.02  NO SMOKING IN PUBLIC BUILDINGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.03  PAYMENT TO CREDITORS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.04  LOCK BOX PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.05  LINE OF CREDIT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.06  AUTHORIZATION AND EXECUTION OF NOTES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.07  INTERLOCAL GOVERNMENT AGREEMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.08 WATER AND WASTEWATER UTILITIES IDENTITY THEFT PREVENTION PROGRAM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.09  OUTSIDE SERVICE PROVIDERS, CONTRIBUTORS AND VENDORS; INDEMNIFICATION REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.10  CELLPHONE POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 31.11  ELECTRONIC PARTICIPATION IN MEETINGS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-31",
+        "chapterNumber": "31",
+        "chapterName": "TOWN POLICIES"
+      },
+      {
+        "title": "CHAPTER 32:  TOWN OFFICIALS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 32.15  TERM OF OFFICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.16  POWERS AND DUTIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.17  COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.18  DEPUTIES AND EMPLOYEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.30  APPOINTMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.31  DUTIES AND POWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.32  ASSISTANTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 32.33  TERM OF OFFICE.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-32",
+        "chapterNumber": "32",
+        "chapterName": "TOWN OFFICIALS"
+      },
+      {
+        "title": "CHAPTER 33:  BOARDS, COMMISSIONS AND DEPARTMENTS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 33.001  AUTHORITY OF TOWN COUNCIL TO ESTABLISH COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.010  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.011  MEMBERSHIP; APPOINTMENT; TERMS; AND ORGANIZATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.012  RIGHTS AND RESPONSIBILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.020  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.021  APPOINTMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.022  EX OFFICIO MEMBER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.023  POWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.024  RIGHTS AND RESPONSIBILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.025  MEMBERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.040  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.041  SUPERINTENDENT; POWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.042  GOVERNING REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.050  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.051  SUPERINTENDENT; POWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.052  GOVERNING REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.060  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.061  SUPERINTENDENT; POWERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.062  GOVERNING REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.080  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.081  FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.082  LOCATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.100 CREATION OF BOARD; MEMBERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.101 CREATION OF DEPARTMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.102 DIRECTOR OF MUNICIPAL WORKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.103 ASSISTANT DIRECTOR OF MUNICIPAL WORKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 33.115  ESTABLISHMENT; MEMBERSHIP; TERM.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-33",
+        "chapterNumber": "33",
+        "chapterName": "BOARDS, COMMISSIONS AND DEPARTMENTS"
+      },
+      {
+        "title": "CHAPTER 34:  PERSONNEL",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 34.001  TOWN ORGANIZATION AND STRUCTURE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.002  A PROUD TEAM DEDICATED TO CITIZEN SERVICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.003  PURPOSE OF THE HANDBOOK.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.020  EMPLOYMENT AT-WILL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.021  EQUAL OPPORTUNITY EMPLOYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.022  STATUS OF EMPLOYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.023  ACCOMMODATION OF INDIVIDUALS WITH DISABILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.024  CRIMINAL BACKGROUND CHECKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.025  PERSONNEL FILES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.026  ANTI-NEPOTISM POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.027  CONSENSUAL ROMANTIC OR SEXUAL RELATIONSHIPS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.028  JOB VACANCIES AND PROMOTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.029  OUTSIDE EMPLOYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.030  WORK HOURS AND OVERTIME.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.031  GHOST EMPLOYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.032  ELIGIBILITY FOR REHIRE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.033  RESIGNATION OF EMPLOYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.034  EXPECTED PAYMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.035  EXIT INTERVIEWS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.050  BENEFITS ENROLLMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.051  HEALTH AND WELFARE INSURANCE; MEDICAL/DENTAL/LIFE AND DISABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.052  BENEFIT ELECTION CHANGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.053  COBRA CONTINUATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.054  HIPPA PRIVACY NOTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.055  PUBLIC EMPLOYEES RETIREMENT FUND (PERF).",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.056  LONGEVITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.057  HOLIDAYS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.058  PAID TIME OFF (PTO).",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.059  BEREAVEMENT LEAVE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.060  INDIANA MILITARY LEAVE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.061  CONTINUATION OF BENEFITS AND PAID TIME OFF.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.062  NOTICE REQUIREMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.063  FAMILY MEDICAL LEAVE ACT (FMLA).",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.065  PERSONAL LEAVES OF ABSENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.066  WORKERS COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.067  UNEMPLOYMENT COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.080  PAYCHECKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.081  DIRECT DEPOSIT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.082  PAYROLL DEDUCTIONS AND GARNISHMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.083  OVERTIME.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.084  MEAL PERIODS AND BREAKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.085  ON-CALL DESIGNATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.086  TRAVEL AND EXPENSE REIMBURSEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.087  MILEAGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.088  OVERNIGHT TRAVEL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.089  JURY DUTY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.100  ATTENDANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.101  CONFIDENTIALITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.102  CONFLICTS OF INTEREST.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.103  SOLICITATION AND DISTRIBUTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.104  DRESS CODE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.105  DRUG AND ALCOHOL-FREE WORKPLACE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.106  NON-HARASSMENT POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.107  EMPLOYEE PERFORMANCE MANAGEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.108  PROBLEM SOLVING PROCEDURE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.109  EMERGENCY WEATHER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.110  SMOKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.111   MEDIA INQUIRIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.112  SECURITY INSPECTIONS AND RIGHT TO SEARCH.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.113  WORKPLACE VIOLENCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.114  SAFETY AND SECURITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.115  USE OF TOWN PROPERTY AND VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.116  SOCIAL NETWORKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.117  PERSONAL TELEPHONE CALLS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.118  COMPUTER USAGE AND ELECTRONIC COMMUNICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 34.119  TOWN CELLULAR PHONES.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-34",
+        "chapterNumber": "34",
+        "chapterName": "PERSONNEL"
+      },
+      {
+        "title": "CHAPTER 35:  FUNDS; FINANCES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 35.01  UTILITY CASH RESERVE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.02  CUMULATIVE CAPITAL DEVELOPMENT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.03  CASH RESERVE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.04  PETTY CASH FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.05  ACCIDENT REPORT ACCOUNT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.06  SELLERSBURG PROMOTIONAL FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.07  LOCAL ROAD AND STREET FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.08  MOTOR VEHICLE HIGHWAY FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.09  SPECIAL VEHICLE INSPECTION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.10  RAINY DAY FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.11  PARKS DEPARTMENT PETTY CASH FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.12 TOWN COURT CASH CHANGE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.13  UNSAFE BUILDING FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.14  CONTINUATION OF OTHER FUNDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.15 BEAUTIFICATION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.16 WILKERSON PARK MEMORIAL FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.17  RETAINAGE ESCROW ACCOUNT FOR PUBLIC WORKS CONTRACTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.18  PROMOTION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.19  WASTEWATER TAP FEE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.20  WASTEWATER EXPANSION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.21  PARKS DONATION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.22  POLICE VEHICLE LEASE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.23  STORM WATER PLANNING GRANT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.24  PLANNING AND ZONING FUND 270.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.25  SELLERSBURG POLICE CHRISTMAS FOR KIDS FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.26  INDIANA OFFICE OF COMMUNITY RURAL AFFAIRS FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.27  TAX INCREMENT FINANCE DISTRICT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.28  CLERK-TREASURER ATTORNEY FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.29  LOIT SPECIAL DISTRIBUTION FUND 257.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.30  AMERICAN RESCUE PLAN ACT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.31  COMMUNITY INVESTOR AND SPONSORSHIP FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.34  ECONOMIC REVITALIZATION AREAS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.35  BIDS AND PROPOSALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.36  CANCELLATION OF SOLICITATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.37  SMALL PURCHASES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.38  PURCHASING AGENCY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.39  PROTECTION OF OFFERS; STATUS OF DOCUMENTS AS PUBLIC RECORDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.40  DISCUSSIONS WITH OFFERORS RESPONDING TO REQUEST FOR PROPOSALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.41  DELAY OF OPENING OF OFFERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.42  EVIDENCE OF FINANCIAL RESPONSIBILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.43  USE OF REQUEST FOR PROPOSALS (RFP) FOR PURCHASE OF DESIGNATED TYPES OF SUPPLIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.44  MODIFICATION AND TERMINATION OF CONTRACTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.45  SMALL BUSINESS SET-ASIDE PURCHASES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.46  COUNTRY OF ORIGIN OF PURCHASES",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.60 GENERAL INFORMATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.61 DEFINITION OF CAPITAL ASSETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.62 VALUATION OF CAPITAL ASSETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.63 ASSET DEFINITIONS BY MAJOR CATEGORY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.64 DEPRECIATION METHODS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.65 CAPITAL ASSET ACQUISITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.66 ASSET TRANSFERS AND DISPOSITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.67 PERIODIC INVENTORIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.68 RESPONSIBILITIES OF CLERK-TREASURER'S OFFICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.69 RESPONSIBILITIES OF DEPARTMENT MANAGERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.80  CREDIT CARD PURCHASES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.90  INTERNAL CONTROL STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.100  FEES FOR COPIES OF PUBLIC RECORDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.110  DEFINITION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.111  APPLICATION; PROCESS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 35.112  AUTHORITY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-35",
+        "chapterNumber": "35",
+        "chapterName": "FUNDS; FINANCES"
+      },
+      {
+        "title": "CHAPTER 36:  POLICE AND FIRE DEPARTMENTS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 36.01  ESTABLISHMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.02  COMPENSATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.03  FIVE-MEMBER BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.04  MEMBER OF TOWN COUNCIL TO SERVE AS EX OFFICIO MEMBER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.05  BOND REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.06  REMOVAL OR MEMBERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.07  DUTIES AND RESPONSIBILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.10  AUTHORITY TO ESTABLISH.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.11  RESERVED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.12  COURT PAY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.13  WORK PERIODS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.14  RETIRING OFFICERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.15  UNIFORM/CLOTHING ALLOWANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.20  POLICE PENSION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.21  POLICE PETTY CASH FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.22  POLICE STATION FUND ACCOUNT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.23  LAW ENFORCEMENT CONTINUING EDUCATION FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.24  FORFEITURE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.25  POLICE EQUIPMENT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.30  ACCIDENT REPORT FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.31  POLICE DEPARTMENT FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.32  VEHICLE INSPECTION FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.33 VEHICLE TOW-IN FEE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.34 PHOTO, VIDEOTAPE AND CD FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.34  FINGERPRINT CARD FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 36.40  AUTHORITY TO ESTABLISH.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-36",
+        "chapterNumber": "36",
+        "chapterName": "POLICE AND FIRE DEPARTMENTS"
+      },
+      {
+        "title": "CHAPTER 37:  TOWN COURT",
+        "type": "Chapter",
+        "level": 1,
+        "children": [],
+        "id": "chapter-37",
+        "chapterNumber": "37",
+        "chapterName": "TOWN COURT"
+      },
+      {
+        "title": "CHAPTER 50:  GENERAL PROVISIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 50.01  AUTHORITY TO ESTABLISH UTILITY SERVICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.02  AUTHORITY TO ESTABLISH WATERWORKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.03  AUTHORITY TO REGULATE DISPOSAL OF SANITARY SEWAGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.04  HARDSHIP UTILITY CASES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.05  DISCONNECTION NOTICES; NSF CHARGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.06  CUSTOMER APPLICATION AND DEPOSIT POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.07  VACATION, SEASONAL OR PART-TIME SHUT OFFS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.08  BANKRUPT ACCOUNTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.09 RESPONSIBILITY FOR STORMWATER MANAGEMENT; FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.10  WITHDRAWAL AND REMOVAL OF TOWN WATER UTILITY FROM JURISDICTION OF INDIANA UTILITY REGULATORY COMMISSION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.11  BAD DEBT AND UNCOLLECTIBLE ACCOUNTS RECEIVABLE WRITE-OFF POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.12  PAYMENT PLANS WITH DELINQUENT WATER CUSTOMERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 50.13  ADJUSTMENT OF UTILITY BILLS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-50",
+        "chapterNumber": "50",
+        "chapterName": "GENERAL PROVISIONS"
+      },
+      {
+        "title": "CHAPTER 51:  GARBAGE AND REFUSE; RECYCLING",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 51.01  LOCATION OF DUMPSTERS; PLACEMENT AND STORAGE OF CONTAINERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.02  MAXIMUM CONTAINER SIZE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.03  COLLECTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.04  RESIDENCES; APARTMENT COMPLEXES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.05  PRIVATE CONTRACTORS; WRITTEN NOTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.06  BILLINGS; DISCONTINUATION OF SERVICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.07  PENALTIES; DEPOSITS OF REVENUE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.08  DECLARATION OF INFRACTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.09  YARD WASTE; PICK-UPS AND REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.10  HAZARDOUS WASTE DISPOSAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.11  LANDFILL DUMPING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.25  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.26  ESTABLISHMENT OF MANDATORY PROGRAM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.27  BILLING AND COLLECTION RESPONSIBILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.28  RECYCLING NON-REVERTING ESCROW FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.29  VIOLATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.30  ENFORCEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.31  CONSTRUCTION AND INTERPRETATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.32  TIMELY PERFORMANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 51.33  AMENDMENTS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-51",
+        "chapterNumber": "51",
+        "chapterName": "GARBAGE AND REFUSE; RECYCLING"
+      },
+      {
+        "title": "CHAPTER 52:  WATER",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 52.01  WASTEWATER SUMMER AVERAGING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.02  ADJUSTMENTS FOR THE FILLING UP OF SWIMMING POOLS WITH WATER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.15  RATES AND EFFECTIVE DATE BASED ON WATER SUPPLIED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.16  MONTHLY METERED RATES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.17  WHOLESALE CUSTOMER RATES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.18  MINIMUM MONTHLY CHARGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.19  FIRE PROTECTION RATES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.20  RATES FOR TEMPORARY USERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.21  CONNECTION CHARGES/FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.22  REESTABLISHMENT OF SERVICE; SURCHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.23  GENERAL SERVICE CHARGE; SURCHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.24  SECURITY DEPOSITS; ADMINISTRATION FEE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.25  COLLECTION OR DEFERRED PAYMENT CHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.26  INSUFFICIENT FUNDS CHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.27  PAYMENT IN LIEU OF TAXES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.28  REASONABLE RETURNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.40  REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.41  DISCHARGE OF SURFACE WATERS PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 52.50  POTABLE WATER CROSS- CONNECTION CONTROL PROGRAM.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-52",
+        "chapterNumber": "52",
+        "chapterName": "WATER"
+      },
+      {
+        "title": "CHAPTER 53:  SEWERS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 53.001  ENDANGERING WATER SUPPLY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.002  PRIVIES, CESSPOOLS AND SEPTIC TANKS PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.003  SANITARY FACILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.004  MINIMUM WATER LINE SIZE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.015  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.016  USER CHARGES AND CLASSES OF USERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.017  OWNERS CHARGED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.018  METERED WATER USERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.019  UNMETERED WATER USERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.020  SERVICES RENDERED TO THE TOWN.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.021  CHARGES FOR MONITORING INDUSTRIAL WASTES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.022  EFFECTIVE DATE OF RATES AND CHARGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.023  MONTHLY CHARGES ESTABLISHED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.024  EFFECTIVE DATE FOR CERTAIN RATES AND CHARGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.025  QUANTITY OF WATER DISCHARGED AND ITS EFFECT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.026  STRENGTH AND CHARACTER CONSIDERATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.027  CONNECTION CHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.028  MONTHLY BILLINGS; LATE PENALTIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.029  STUDY REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.030  BY-LAWS AND REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.031  APPEALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.032  SPECIAL RATE CONTRACTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.033  ANNEXED TERRITORY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.045  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.046  PROHIBITED ACTIVITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.047  PERMIT AND INSPECTION FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.048  TWO CLASSES OF BUILDING SEWER PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.049  CERTAIN DISCHARGES PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.050  PRETREATMENT OF INDUSTRIAL WASTES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.051  REQUIRED INFORMATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.052  UNPOLLUTED WATER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.053  INDUSTRIAL COOLING WATER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.054  WASTEWATER FLOWS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.055  STRENGTHS OF WASTEWATERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.056  INTERCEPTORS OR TRAPS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.057  ACCIDENTAL DISCHARGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.058  COMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.059  DISORDERLY CONDUCT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.060  INSPECTIONS, MEASUREMENTS, SAMPLINGS AND TESTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.061  APPEALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.075  CONNECTION PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.076  INSPECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.077  PIPE, CLEAN OUT AND BEDDING REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.078  BACKFILLING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.079  SUMP PUMPS AND DRAINS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.080  ABANDONED SEPTIC TANKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.081  CONSTRUCTION PROCESS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.095  REVENUE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.096  OPERATION AND MAINTENANCE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.097  SEWAGE WORKS SINKING FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.098  SEWAGE WORKS IMPROVEMENT FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.099  INVESTMENT OF FUNDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.110  SEWER HOOK-UP FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.111  USAGE DESIGNATION OF CONNECTION FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.112  SANITARY SEWER CONNECTION PERMIT FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.113  METER DEPOSITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.114  TAP FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 53.115  ADMINISTRATION FEE.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-53",
+        "chapterNumber": "53",
+        "chapterName": "SEWERS"
+      },
+      {
+        "title": "CHAPTER 54:  INDUSTRIAL PRETREATMENT",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 54.001  PURPOSE AND POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.002  ADMINISTRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.003  ABBREVIATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.004  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.005  PROHIBITED DISCHARGE STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.006  NATIONAL CATEGORICAL PRETREATMENT STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.007  LOCAL LIMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.008  COUNCIL'S RIGHT OF REVISION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.009  DILUTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.020  PRETREATMENT FACILITIES AND GREASE TRAPS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.021  ADDITIONAL PRETREATMENT MEASURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.022  ACCIDENTAL DISCHARGE/SLUG CONTROL PLANS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.023  HAULED WASTEWATER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.035  ANALYSIS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.036  PERMIT REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.037  EXISTING CONNECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.038  NEW CONNECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.039  APPLICATION CONTENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.040  SIGNATORIES AND CERTIFICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.041  PERMIT DECISIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.042  PERMIT DURATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.043  PERMIT CONTENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.044  PERMIT APPEALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.045  PERMIT MODIFICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.046  PERMIT TRANSFER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.047  PERMIT REVOCATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.048  PERMIT REISSUANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.049  WASTE RECEIVED FROM OTHER JURISDICTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.060  BASELINE MONITORING REPORTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.061  COMPLIANCE SCHEDULE PROGRESS REPORTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.062  REPORTS ON COMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.063  PERIODIC COMPLIANCE REPORTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.064  REPORTS OF CHANGED CONDITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.065  REPORTS OF POTENTIAL PROBLEMS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.066  REPORTS FROM UNPERMITTED USERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.067  NOTICE OF VIOLATION; REPEAT SAMPLING AND REPORTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.068  NOTIFICATION OF THE DISCHARGE OF HAZARDOUS WASTE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.069  ANALYTICAL REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.070  SAMPLE COLLECTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.071  TIMING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.072  RECORD KEEPING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.073  RIGHT OF ENTRY; INSPECTION AND SAMPLING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.074  SEARCH WARRANTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.075  CONFIDENTIAL INFORMATION PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.076  ANNUAL PUBLICATION OF NONCOMPLIANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.090  NOTIFICATION OF VIOLATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.091  AGREED ORDERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.092  SHOW CAUSE HEARING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.093  COMPLIANCE ORDERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.094  CEASE AND DESIST ORDERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.095  ADMINISTRATIVE FINES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.096  EMERGENCY SUSPENSIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.097  TERMINATION OF DISCHARGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.098  INJUNCTIVE RELIEF.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.099  CIVIL PENALTIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.100  REMEDIES NONEXCLUSIVE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.101  UPSET.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.102  PROHIBITED DISCHARGE STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.103  BYPASS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.115  PRETREATMENT CHARGES AND FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 54.116  SURCHARGE AND FEE SCHEDULE.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-54",
+        "chapterNumber": "54",
+        "chapterName": "INDUSTRIAL PRETREATMENT"
+      },
+      {
+        "title": "CHAPTER 55:  STORMWATER CONTROL",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 55.001  AUTHORITY AND TITLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.002  APPLICABILITY AND EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.003  BACKGROUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.004  FINDINGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.005  PURPOSE",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.006  ABBREVIATIONS AND DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.007  RESPONSIBILITY FOR ADMINISTRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.008  INTERPRETATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.009  DISCLAIMER OF LIABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.025  APPLICABILITY AND EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.026  PROHIBITED DISCHARGES AND CONNECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.027  EXEMPTED DISCHARGES AND CONNECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.028  STORAGE OF HAZARDOUS OR TOXIC MATERIAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.029  PRIVATE PROPERTY MAINTENANCE DUTIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.030  SPILL REPORTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.031  INSPECTIONS AND MONITORING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.040  APPLICABILITY AND EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.041  POLICY ON STORMWATER QUANTITY MANAGEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.042  CALCULATIONS AND DESIGN STANDARDS AND SPECIFICATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.043  PLACEMENT OF UTILITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.044  INSPECTION, MAINTENANCE, RECORD KEEPING, AND REPORTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.055  APPLICABILITY AND EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.056  POLICY ON STORMWATER POLLUTION PREVENTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.057  CALCULATIONS AND DESIGN STANDARDS AND SPECIFICATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.058  INSPECTION, MAINTENANCE, RECORD KEEPING, AND REPORTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.070  APPLICABILITY AND EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.071  POLICY ON STORMWATER QUALITY MANAGEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.072  CALCULATIONS AND DESIGN STANDARDS AND SPECIFICATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.073  INSPECTION, MAINTENANCE, RECORD KEEPING, AND REPORTING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.080  PERMIT PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.081  INFORMATION REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.082  CHANGES TO PLANS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.083  REQUIRED ASSURANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.084  CERTIFICATION OF AS-BUILT PLANS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.095  COMPLIANCE WITH THIS CHAPTER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.096  ENFORCEMENT OF THIS CHAPTER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.097  COST OF ABATEMENT OF THE VIOLATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 55.098  APPEALS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-55",
+        "chapterNumber": "55",
+        "chapterName": "STORMWATER CONTROL"
+      },
+      {
+        "title": "CHAPTER 70:  GENERAL PROVISIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 70.01  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.02  SCHEDULE FOR PAYMENT OF FINES FOR CIVIL TRAFFIC VIOLATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.10  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.11  POSSESSION OR CONSUMPTION PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.12  OPERATOR OR OWNER OF MOTOR VEHICLE IN VIOLATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.13  CITATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.14  SIGNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 70.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-70",
+        "chapterNumber": "70",
+        "chapterName": "GENERAL PROVISIONS"
+      },
+      {
+        "title": "CHAPTER 71:  TRAFFIC RULES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 71.01  RAISING VEHICLE IN RIGHT-OF- WAY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.02  PASSING VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.03  OVERTAKING VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.04  TURN SIGNALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.05  VEHICLE TURNING LEFT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.06  LIMITATIONS ON TURNING AROUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.07  U-TURNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.08  OBEDIENCE TO STOP SIGNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.09  WIDTH REGULATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.10  IMPROPER EQUIPMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.20  LIMIT FOR ALL PUBLIC STREETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.21  EXCEPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.22  SIGNS POSTED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.23  AUTHORITY TO WEIGH VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.24  EXAMINATION OF TRUCK WEIGHTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 71.25  IMPOUNDMENT OF VEHICLE AND CARGO.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-71",
+        "chapterNumber": "71",
+        "chapterName": "TRAFFIC RULES"
+      },
+      {
+        "title": "CHAPTER 72:  PARKING REGULATIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 72.01  DESIGNATED PARKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.02  EXCEPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.03  PARKING RESTRICTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.04  METHOD OF PARKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.05  PARKING SEMI-TRAILERS AND SEMI- TRUCKS ON TOWN PROPERTY PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.06  LIMITED PARKING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.07  PARKING FOR PERSONS WITH DISABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.08  RESIDENT-ONLY PARKING; FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.09  PARKING OR STANDING VEHICLES IN DESIGNATED SCHOOL BUS LOADING/UNLOADING ZONES PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.10  SHOPPING CENTERS AND BUSINESS PARKING AREAS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.11  EMERGENCY LANES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 72.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-72",
+        "chapterNumber": "72",
+        "chapterName": "PARKING REGULATIONS"
+      },
+      {
+        "title": "CHAPTER 73:  TRAFFIC SCHEDULES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [],
+        "id": "chapter-73",
+        "chapterNumber": "73",
+        "chapterName": "TRAFFIC SCHEDULES"
+      },
+      {
+        "title": "CHAPTER 74:  PARKING SCHEDULES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [],
+        "id": "chapter-74",
+        "chapterNumber": "74",
+        "chapterName": "PARKING SCHEDULES"
+      },
+      {
+        "title": "CHAPTER 75:  GOLF CARTS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 75.01  TITLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 75.02  AUTHORITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 75.03  PERMITTED STREETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 75.04  PROHIBITED STREETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 75.05  REQUIRED GOLF CART EQUIPMENT AND DOCUMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 75.06  PERMITTING PROCESS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-75",
+        "chapterNumber": "75",
+        "chapterName": "GOLF CARTS"
+      },
+      {
+        "title": "CHAPTER 90:  ABANDONED VEHICLES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 90.01  JUNK ON PROPERTY PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.02  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.03  EXCLUSIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.04  RESPONSIBILITY OF OWNER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.05  DISCOVERY OF POSSESSION BY PERSON OTHER THAN VEHICLE OWNER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.06  NOTICE TO BUREAU OF VEHICLE DISCOVERED IN POSSESSION OF PERSON OTHER THAN OWNER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.07  INABILITY TO DETERMINE OWNERSHIP; DECLARING VEHICLE ABANDONED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.08  RELEASE TO OWNER OR LIEN HOLDER OF STORED VEHICLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.09  RELEASE; CONTENTS; NOTICE BY TOWING OPERATOR.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.10  FAILURE OF OWNER OR LIEN HOLDER TO APPEAR; DECLARING VEHICLE ABANDONED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.11  NOTICE TAG PREPARED BY POLICE OFFICER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.12  PREPARATION OF REPORT; PHOTOGRAPHS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.13  DISPOSITION OF VEHICLE OF LESS THAN $300 IN VALUE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.14  DUTIES OF TAGGING OFFICER; TOWING AND STORAGE OF VEHICLE OR PARTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.15  VEHICLE ABANDONED ON RENTAL PROPERTY; NOTIFICATION PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.16  TOWING VEHICLE FROM RENTAL PROPERTY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.17  TOWING OPERATOR REQUIRED TO NOTIFY PUBLIC AGENCY AND STATE BUREAU OF MOTOR VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.18  VEHICLE ABANDONED ON PRIVATE PROPERTY; NOTIFICATION PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.19  ABANDONED VEHICLE REPORT; FORWARDING TO STATE BUREAU OF MOTOR VEHICLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.20  SEARCH BY BUREAU FOR OWNER OR LIEN HOLDER; NOTICE TO OWNER OR LIEN HOLDER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.21  MEANS OF VEHICLE IDENTIFICATION NOT AVAILABLE; DISPOSAL OF VEHICLE WITHOUT NOTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.22  PUBLIC SALE BY BUREAU; NOTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.23  PURCHASERS AT PUBLIC SALE; BILL OF SALE; FEES; ROADWORTHINESS OF VEHICLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.24  PAYMENT OF REMOVAL, STORAGE AND DISPOSITION COSTS; COST LIMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.25  SALES PROCEEDS CREDITED AGAINST REMOVAL, STORAGE AND DISPOSITION COSTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.26  SALES BY BUREAU; PROCEEDS; TRANSFER TO MOTOR VEHICLE HIGHWAY FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.27  ESTABLISHMENT OF PROCEDURES AND ABANDONED VEHICLE FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.28  REMOVAL OF ABANDONED VEHICLES; ESTABLISHMENT OF PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 90.29  EXEMPTIONS FROM LIABILITY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-90",
+        "chapterNumber": "90",
+        "chapterName": "ABANDONED VEHICLES"
+      },
+      {
+        "title": "CHAPTER 91:  FAIR HOUSING; RENTAL PROPERTIES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 91.01  POLICY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.02  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.03  UNLAWFUL PRACTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.04  DISCRIMINATION IN SALES OR RENTALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.05  DISCRIMINATION IN RESIDENTIAL REAL ESTATE TRANSACTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.06  DISCRIMINATION IN BROKERAGE SERVICES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.07  INTERFERENCE, COERCION OR INTIMIDATION; PREVENTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.08  EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.09  ADMINISTRATIVE ENFORCEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.20  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.21  SMOKE DETECTORS REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.22  TYPE AND PLACEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.23  PROVISION, INSTALLATION AND MAINTENANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 91.24  ENFORCEMENT.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-91",
+        "chapterNumber": "91",
+        "chapterName": "FAIR HOUSING; RENTAL PROPERTIES"
+      },
+      {
+        "title": "CHAPTER 92:  PARKS AND RECREATION",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 92.01  AUTHORITY TO OPERATE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 92.02  ADMINISTRATION OF PROGRAMS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 92.03  DESIGNATION OF TOWN PARKS.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-92",
+        "chapterNumber": "92",
+        "chapterName": "PARKS AND RECREATION"
+      },
+      {
+        "title": "CHAPTER 93:  ANIMALS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 93.01  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.02  RESTRAINT REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.03  IMPOUNDMENT OF ANIMALS IN DISTRESS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.04  IMPOUNDMENT PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.05  RABIES VACCINATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.06  NUISANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.07  ANIMAL BITES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.08  HUMANE TREATMENT REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.09  INJURING OR KILLING ANIMALS PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.10  ANIMALS IN HEAT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.11  ANIMAL WASTES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.12  KEEPING LIVESTOCK, FOWL AND POULTRY PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.13  BEE KEEPING PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.14  ABANDONMENT OR DUMPING PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.15  VICIOUS OR DANGEROUS ANIMALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.16  RESTRICTION ON THE RIGHT TO KEEP, OWN OR TRADE IN CERTAIN SPECIES OF ANIMALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.17  KENNELS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.18  GUARD AND SENTRY DOGS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.19  ISSUANCE OF CITATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.20  INTERFERENCE WITH ENFORCEMENT PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.21 REGULATION OF POSSESSION OF VICIOUS OR DANGEROUS ANIMALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.30  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.31  OBTAINING A WAIVER AND A PERMIT FOR CHICKEN FLOCKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.32  INSPECTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.33  STANDARDS FOR MAINTAINING CHICKEN FLOCKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 93.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-93",
+        "chapterNumber": "93",
+        "chapterName": "ANIMALS"
+      },
+      {
+        "title": "CHAPTER 94:  STREETS AND SIDEWALKS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 94.01  PERMIT REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.02  APPLICATION; FORM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.03  LIABILITY ASSUMED BY APPLICANT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.04  STANDARDS FOR COMPLETION AND APPROVAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.05  COMPLIANCE REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.06  FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.07  RESPONSIBILITIES OF APPLICANT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.08  SPECIFICATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.09  FAILURE TO OBTAIN PERMIT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.20 DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.21  SOLICITATION ACTIVITY REGULATED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.22 ENFORCEMENT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.35  STANDARDS AND REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 94.99  PENALTIES.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-94",
+        "chapterNumber": "94",
+        "chapterName": "STREETS AND SIDEWALKS"
+      },
+      {
+        "title": "CHAPTER 95:  HEALTH AND SANITATION; NUISANCES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 95.01  PUBLIC NUISANCES; INTERPRETATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.02  NUISANCES CREATED BY OTHERS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.03  INSPECTION OF PREMISES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.04  PUBLIC HEALTH NUISANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.05  LITTERING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.06  NOISE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.07  DANGEROUS STRUCTURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.08  OPEN WELLS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.09  TREES, SHRUBS OBSTRUCTING STREETS AND SIDEWALKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.10  STORAGE OF EXPLOSIVES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.11  JUNK VEHICLES; SCRAP METAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.12  ANIMAL NUISANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.13  SUMP PUMPS DRAINING ON STREETS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.15  NOTICES; FORM.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.16  REFUSAL OR NEGLECT TO ABATE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.17  NOTIFICATION COSTS; COLLECTION REMEDIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.30  HOURS OF RESTRICTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.45  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.46  EXCESSIVE GROWTH PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.47  INSPECTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.48  REMOVAL NOTICE; CONTINUOUS NOTICE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.49   FAILURE TO REMOVE; REMEDIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.50  COST OF REMOVAL BY TOWN.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.51  PUBLIC NUISANCE DECLARED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 95.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-95",
+        "chapterNumber": "95",
+        "chapterName": "HEALTH AND SANITATION; NUISANCES"
+      },
+      {
+        "title": "CHAPTER 96:  LEGAL FIREWORKS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 96.01  GENERAL.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-96",
+        "chapterNumber": "96",
+        "chapterName": "LEGAL FIREWORKS"
+      },
+      {
+        "title": "CHAPTER 110:  GENERAL LICENSING PROVISIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 110.01  AUTHORITY TO LICENSE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.02  APPLICATIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.03  COUNCIL APPROVAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.04  DURATION OF LICENSE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.05  ISSUANCE, REVOCATION OR SUSPENSION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.15  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.16  EXCEPTIONS TO DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.17  LICENSE OR REGISTRATION REQUIRED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.18  APPLICATION AND PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.19  LICENSE INELIGIBILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.20  SUSPENSION AND REVOCATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.21  TRANSFERABLE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.22  BADGES AND IDENTIFICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.23  PROHIBITED ACTIVITIES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.24  EXCLUSION BY PLACARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.25  ADDITIONAL TRANSIENT MERCHANT REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.26  TRESPASS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.27  NUISANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.28  PEDDLER, SOLICITOR, TRANSIENT MERCHANT PENALTY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.29  SEVERABILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.30  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.31  DUTY OF DRIVER.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.32  INSURANCE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.33  EQUIPMENT REQUIRED; USE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.34  INSPECTION OF TRUCKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.35  OPERATIONAL RESTRICTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.36  BACKING TRUCK PROHIBITED.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.40  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.41  REGISTRATION REQUIRED; EXEMPTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.42  APPLICATION FOR REGISTRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.43  INVESTIGATION OF APPLICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.44  APPEAL OF DENIAL.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.45  CONDUCT OF REGISTRANTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.46  DISCLOSURE REQUIREMENTS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.47  REPORT ON CONVICTIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.48  REVOCATION OF REGISTRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.55  PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 110.99  PENALTY.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-110",
+        "chapterNumber": "110",
+        "chapterName": "GENERAL LICENSING PROVISIONS"
+      },
+      {
+        "title": "CHAPTER 111:  ADULT ENTERTAINMENT BUSINESSES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 111.01  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 111.02  LICENSING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 111.03  SELLERSBURG ADULT ENTERTAINMENT COMMISSION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 111.04  ELIGIBILITY FOR LICENSURE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 111.05  APPEAL OF DECISION OF AEC.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 111.06  ADULT ENTERTAINMENT ENFORCEMENT OFFICER AND STAFF.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-111",
+        "chapterNumber": "111",
+        "chapterName": "ADULT ENTERTAINMENT BUSINESSES"
+      },
+      {
+        "title": "CHAPTER 130:  GENERAL OFFENSES",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 130.01  LITTERING.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.02  HORSES ON SIDEWALKS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.03  FIREARMS; WEAPONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.04  BASKETBALL GOALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.05  FALSE POLICE ALARMS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.06  SIGNS ON UTILITY POLES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.061  TEMPORARY POLITICAL AND COMMUNITY EVENT SIGNS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 130.07  AUTHORITY TO PRESERVE PUBLIC PEACE.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-130",
+        "chapterNumber": "130",
+        "chapterName": "GENERAL OFFENSES"
+      },
+      {
+        "title": "CHAPTER 150:  BUILDING REGULATIONS",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 150.001  ADOPTION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.002  TITLE.",
             "type": "Section"
           },
           {
@@ -22,163 +2939,183 @@
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.004  AUTHORITY AND JURISDICTION.",
+            "title": "\u00a7 150.004  AUTHORITY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.005  ENACTMENT.",
+            "title": "\u00a7 150.005  SCOPE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.006  INTERPRETATION AND CONFLICT.",
+            "title": "\u00a7 150.006  ADOPTION OF CODES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.007  SAVING PROVISION.",
+            "title": "\u00a7 150.020  APPLICATION FOR PERMITS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.008  AMENDMENTS.",
+            "title": "\u00a7 150.021  PERMIT REQUIRED.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.009  CONDITIONS.",
+            "title": "\u00a7 150.022  COMPLIANCE REQUIRED.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.010  RESUBDIVISION OF LAND.",
+            "title": "\u00a7 150.023  REVIEW OF APPLICATION.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.011  VACATION OF PLATS.",
+            "title": "\u00a7 150.024  INSPECTIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.012  VARIANCES.",
+            "title": "\u00a7 150.035  ELECTRICAL LICENSE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.013  GENERAL REGULATIONS.",
+            "title": "\u00a7 150.036  HEATING AND AIR CONDITIONING LICENSE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.014  DEFINITIONS.",
+            "title": "\u00a7 150.037  GENERAL CONTRACTORS LICENSE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.025  GENERAL PROCEDURES.",
+            "title": "\u00a7 150.038  PLUMBING CONTRACTORS LICENSE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.026  MAJOR AND MINOR SUBDIVISIONS; SKETCH PLAN APPLICATION.",
+            "title": "\u00a7 150.050  STANDARDS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.027  MAJOR SUBDIVISIONS.",
+            "title": "\u00a7 150.051  WRECKING BUILDINGS AND STRUCTURES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.028  MINOR SUBDIVISIONS.",
+            "title": "\u00a7 150.052  MOVING BUILDINGS OR STRUCTURES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.029  EXEMPT DIVISIONS.",
+            "title": "\u00a7 150.053  EXTERIOR MAINTENANCE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.040  GENERAL IMPROVEMENTS.",
+            "title": "\u00a7 150.054  TENTS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.041  LOT IMPROVEMENTS.",
+            "title": "\u00a7 150.055  STORMWATER AND SUBSOIL DRAINAGE SYSTEMS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.042  DRAINAGE AND STORM SEWERS.",
+            "title": "\u00a7 150.056  OBSTRUCTIONS IN RIGHTS-OF- WAY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.043  WATER FACILITIES.",
+            "title": "\u00a7 150.057  INTERCEPTOR REQUIRED.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.044  SEWERAGE FACILITIES.",
+            "title": "\u00a7 150.058  CHANGE OF USE OR OCCUPANCY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.045  SIDEWALKS.",
+            "title": "\u00a7 150.059  MAINTENANCE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.046  UTILITIES.",
+            "title": "\u00a7 150.060  DISCONNECTION OF UNSAFE ELECTRICAL SERVICE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.047  PUBLIC USES.",
+            "title": "\u00a7 150.061  ELECTRICAL CONNECTIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.048  PRESERVATION OF NATURAL FEATURES AND AMENITIES.",
+            "title": "\u00a7 150.062  SEALING VACANT BUILDINGS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.049  NONRESIDENTIAL SUBDIVISIONS.",
+            "title": "\u00a7 150.063  UNSAFE BUILDINGS AND STRUCTURES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.060  GENERAL.",
+            "title": "\u00a7 150.064  ADMINISTRATIVE REVIEW.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.061  CONSTRUCTION.",
+            "title": "\u00a7 150.065  LOCAL BUILDING CODE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.062  DESIGN STANDARDS.",
+            "title": "\u00a7 150.075  STOP ORDER.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.063  DEDICATIONS AND RESERVATIONS.",
+            "title": "\u00a7 150.076  CERTIFICATE OF OCCUPANCY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.075  IMPROVEMENTS AND PERFORMANCE BOND.",
+            "title": "\u00a7 150.077  RESPONSIBILITY OF POLICE DEPARTMENT TO COOPERATE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.076  INSPECTION OF PUBLIC IMPROVEMENTS.",
+            "title": "\u00a7 150.078  RESPONSIBILITY OF FIRE DEPARTMENT TO COOPERATE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.077  MAINTENANCE OF PUBLIC IMPROVEMENTS.",
+            "title": "\u00a7 150.079  AUTHORITY TO TAKE EMERGENCY ACTION.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.078  ISSUANCE OF BUILDING PERMITS.",
+            "title": "\u00a7 150.080  LIABILITY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.090  SKETCH PLAN.",
+            "title": "\u00a7 150.081  VIOLATIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.091  PRELIMINARY PLAT.",
+            "title": "\u00a7 150.082  RIGHT OF APPEAL.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.092  CONSTRUCTION PLANS.",
+            "title": "\u00a7 150.083  REMEDIES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.093  FINAL SUBDIVISION PLAT.",
+            "title": "\u00a7 150.084  ENTRY AUTHORIZED.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.094  EXEMPT I DIVISIONS.",
+            "title": "\u00a7 150.095  TITLE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 150.095  EXEMPT II DIVISIONS.",
+            "title": "\u00a7 150.096  EXPIRATION OF PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.097  RE-INSTATEMENT OF EXPIRED PERMIT.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.098  EXTENSION OF PERMITS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.099  FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.100  DISPOSITION OF FEES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 150.101  FEE SCHEDULE.",
             "type": "Section"
           },
           {
@@ -188,285 +3125,153 @@
         ],
         "id": "chapter-150",
         "chapterNumber": "150",
-        "chapterName": "SUBDIVISIONS"
+        "chapterName": "BUILDING REGULATIONS"
       },
       {
-        "title": "CHAPTER 151:  ZONING",
+        "title": "CHAPTER 151:  MOBILE HOME PARKS",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 151.001  COMPREHENSIVE PLAN ADOPTED BY REFERENCE.",
+            "title": "\u00a7 151.01  DEFINITIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 151.002  TITLE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.003  AUTHORITY.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.004  COMPLIANCE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.005  JURISDICTIONAL AREA.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.006  APPLICATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.007  DEFINITIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.008  FEES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.020  ZONE MAP.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.021  ZONE DISTRICTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.022  DISTRICT BOUNDARIES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.023  RESIDENTIAL DISTRICTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.024  BUSINESS DISTRICTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.025  INDUSTRIAL DISTRICT.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.026  CONSERVATION DISTRICT.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.027  PERMITTED USES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.028  LOT AND YARD REQUIREMENTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.029  HEIGHT REGULATIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.030  STANDARDS FOR MANUFACTURED HOMES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.045  NONCONFORMING USES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.046  PRIVATE SWIMMING POOLS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.047  OFF-STREET PARKING.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.048  MANUFACTURED HOUSING AND MOBILE HOMES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.049  PLANNED UNIT RESIDENTIAL, BUSINESS, AND INDUSTRIAL PROJECTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.050  TEMPORARY STRUCTURES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.051  SIGNS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.052  HOME OCCUPATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.053  SANITARY CLEANOUTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.054  CLEANOUTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.055  WASTEWATER GREASE TRAP REQUIREMENTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.056  REGISTRATION OF VACANT OR DISTRESSED PROPERTIES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.070  ADMINISTRATIVE OFFICER.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.071  ZONING-BUILDING PERMITS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.072  VIOLATIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.073  METHOD OF APPEAL.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.085  GENERAL.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.086  APPEALS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.087  VARIANCES FROM DEVELOPMENT STANDARDS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.088  USE VARIANCE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.089  SPECIAL EXCEPTIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.090  PERFORMANCE STANDARDS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.091  NONCONFORMING USES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.092  COMMITMENTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.105  GENERAL.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.106  PETITION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.107  REFERRAL.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.108  ACTION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 151.999  PENALTY.",
+            "title": "\u00a7 151.02  REGULATIONS AFFECTING MOBILE HOME PARKS.",
             "type": "Section"
           }
         ],
         "id": "chapter-151",
         "chapterNumber": "151",
-        "chapterName": "ZONING"
+        "chapterName": "MOBILE HOME PARKS"
       },
       {
-        "title": "CHAPTER 152:  BUILDINGS",
+        "title": "CHAPTER 152:  FLOOD HAZARD AREAS",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 152.01  CITY BUILDING CODE ADOPTED BY REFERENCE.",
+            "title": "\u00a7 152.01  STATUTORY AUTHORIZATION.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.02  BUILDING STANDARDS ADOPTED BY REFERENCE.",
+            "title": "\u00a7 152.02  FINDINGS OF FACT.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.03  UNSAFE STRUCTURES.",
+            "title": "\u00a7 152.03  STATEMENT OF PURPOSE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.04  BUILDING PERMIT FEE SCHEDULE.",
+            "title": "\u00a7 152.04  OBJECTIVES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.05  RESIDENTIAL INVESTMENT INCENTIVES.",
+            "title": "\u00a7 152.05  DEFINITIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.20  DESIGN REVIEW BOARD.",
+            "title": "\u00a7 152.06  LANDS TO WHICH THIS CHAPTER APPLIES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.21  PURPOSE.",
+            "title": "\u00a7 152.07  BASIS FOR ESTABLISHING REGULATORY FLOOD DATA.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.22  DEFINITIONS.",
+            "title": "\u00a7 152.08  ESTABLISHMENT OF FLOODPLAIN DEVELOPMENT PERMIT.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.23  CITY BOUNDARIES.",
+            "title": "\u00a7 152.09  COMPLIANCE.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.24  DEMOLITION PERMIT REQUIRED.",
+            "title": "\u00a7 152.10  ABROGATION AND GREATER RESTRICTIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.25  LIMITATIONS ON ISSUANCE OF BUILDING, DEMOLITION, SIGN PERMITS, AND CERTIFICATES OF ZONING COMPLIANCE.",
+            "title": "\u00a7 152.11  DISCREPANCY BETWEEN MAPPED FLOODPLAIN AND ACTUAL GROUND ELEVATIONS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.26  ISSUANCE OF CERTIFICATE OF APPROPRIATENESS.",
+            "title": "\u00a7 152.12  INTERPRETATION.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.27  CRITERIA FOR EVALUATING APPLICATIONS FOR CERTIFICATE OF APPROPRIATENESS.",
+            "title": "\u00a7 152.13  WARNING AND DISCLAIMER OF LIABILITY.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.28  NOTICE OF DEMOLITION REQUIRED.",
+            "title": "\u00a7 152.25  DESIGNATION OF ADMINISTRATOR.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.29  CERTIFICATE OF APPROPRIATENESS REQUIRED FOR NEW SIGNS.",
+            "title": "\u00a7 152.26  PERMIT PROCEDURES.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.30  EXCLUSIONS.",
+            "title": "\u00a7 152.27  DUTIES AND RESPONSIBILITIES OF THE FLOODPLAIN ADMINISTRATOR.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.31  APPEAL FROM DECISION OF REVIEW BOARD.",
+            "title": "\u00a7 152.40  GENERAL STANDARDS.",
             "type": "Section"
           },
           {
-            "title": "\u00a7 152.32  REVIEW BOARD GUIDELINES.",
+            "title": "\u00a7 152.41  SPECIFIC STANDARDS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.42  STANDARDS FOR SUBDIVISION PROPOSALS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.43  CRITICAL FACILITY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.44  STANDARDS FOR IDENTIFIED FLOODWAYS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.45  STANDARDS FOR IDENTIFIED FRINGE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.46  STANDARDS FOR SFHAS WITHOUT ESTABLISHED BASE FLOOD ELEVATION AND/OR FLOODWAYS/FRINGES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.47  STANDARDS FOR FLOOD PRONE AREAS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.60  DESIGNATION OF VARIANCE AND APPEALS BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.61  DUTIES OF VARIANCE AND APPEALS BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.62  VARIANCE PROCEDURES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.63  CONDITIONS FOR VARIANCES.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.64  VARIANCE NOTIFICATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.65  HISTORIC STRUCTURE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 152.66  SPECIAL CONDITIONS.",
             "type": "Section"
           },
           {
@@ -476,265 +3281,87 @@
         ],
         "id": "chapter-152",
         "chapterNumber": "152",
-        "chapterName": "BUILDINGS"
+        "chapterName": "FLOOD HAZARD AREAS"
       },
       {
-        "title": "CHAPTER 153:  PUBLIC WAYS",
+        "title": "CHAPTER 153:  SUBDIVISIONS",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 153.01  STREET EXCAVATION AND MOVING PERMITS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.15  GENERAL REQUIREMENTS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.16  FLOWABLE FILL.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.17  RESTORATION TO MATCH EXISTING SURROUNDINGS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.18  WAIVER.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.19  STREET CUT APPLICATION AND PERMIT FORM.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 153.99  PENALTY.",
+            "title": "\u00a7 153.01  SUBDIVISION ORDINANCE REPEALED AND REPLACED BY UNIFIED DEVELOPMENT ORDINANCE.",
             "type": "Section"
           }
         ],
         "id": "chapter-153",
         "chapterNumber": "153",
-        "chapterName": "PUBLIC WAYS"
+        "chapterName": "SUBDIVISIONS"
       },
       {
-        "title": "CHAPTER 154:  FLOOD HAZARD AREAS",
+        "title": "CHAPTER 154:  ZONING",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 154.01  STATUTORY AUTHORIZATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.02  FINDINGS OF FACT.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.03  STATEMENT OF PURPOSE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.04  OBJECTIVES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.05  DEFINITIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.06  LANDS TO WHICH THIS CHAPTER APPLIES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.07  BASIS FOR ESTABLISHING REGULATORY FLOOD DATA.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.08  ESTABLISHMENT OF FLOODPLAIN DEVELOPMENT PERMIT.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.09  COMPLIANCE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.10  ABROGATION AND GREATER RESTRICTIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.11  DISCREPANCY BETWEEN MAPPED FLOODPLAIN AND ACTUAL GROUND ELEVATIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.12  INTERPRETATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.13  WARNING AND DISCLAIMER OF LIABILITY.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.25  DESIGNATION OF ADMINISTRATOR.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.26  PERMIT PROCEDURES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.27  DUTIES AND RESPONSIBILITIES OF THE FLOODPLAIN ADMINISTRATOR.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.40  GENERAL STANDARDS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.41  SPECIFIC STANDARDS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.42  STANDARDS FOR SUBDIVISION PROPOSALS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.43  CRITICAL FACILITY.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.44  STANDARDS FOR IDENTIFIED FLOODWAYS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.45  STANDARDS FOR IDENTIFIED FRINGE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.46  STANDARDS FOR SFHAS WITHOUT ESTABLISHED BASE FLOOD ELEVATION AND/OR FLOODWAYS/FRINGES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.47  STANDARDS FOR FLOOD PRONE AREAS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.60  VARIANCE AND APPEALS BOARD.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.61  VARIANCE PROCEDURES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.62  CONDITIONS FOR VARIANCES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.63  VARIANCE NOTIFICATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.64  HISTORIC STRUCTURE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.65  SPECIAL CONDITIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 154.99  PENALTY.",
+            "title": "\u00a7 154.01  ZONING ORDINANCE REPEALED AND REPLACED BY UNIFIED DEVELOPMENT ORDINANCE.",
             "type": "Section"
           }
         ],
         "id": "chapter-154",
         "chapterNumber": "154",
-        "chapterName": "FLOOD HAZARD AREAS"
+        "chapterName": "ZONING"
       },
       {
-        "title": "CHAPTER 155:  STORM WATER MANAGEMENT",
+        "title": "CHAPTER 155:  COMPREHENSIVE PLAN",
         "type": "Chapter",
         "level": 1,
         "children": [
           {
-            "title": "\u00a7 155.01  STORM WATER UTILITY FEE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.15  ADOPTION OF STORM WATER MANAGEMENT SYSTEM.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.16  RESPONSIBILITY OF THE BOARD OF WORKS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.17  SERVICE CHARGE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.18  STORM WATER RATE AND FEE ESTABLISHMENT PROCEDURES.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.19  EQUIVALENT RESIDENTIAL UNIT (ERU).",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.20  BILLING; COLLECTION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.21  APPEALS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.22  STORM WATER REVENUE FUND.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.23  EXEMPTIONS.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.35  STATE PROVISIONS ADOPTED BY REFERENCE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.36  ADMINISTRATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.37  PETITION TO INVESTIGATE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.38  INVESTIGATION.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.39  ASSESSMENT.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.50  STATE PROVISIONS ADOPTED BY REFERENCE.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.51  DEPARTMENT CREATED.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.52  TERRITORY.",
-            "type": "Section"
-          },
-          {
-            "title": "\u00a7 155.53  BOARD OF DIRECTORS.",
+            "title": "\u00a7 155.01  ADOPTION OF COMPREHENSIVE PLAN.",
             "type": "Section"
           }
         ],
         "id": "chapter-155",
         "chapterNumber": "155",
-        "chapterName": "STORM WATER MANAGEMENT"
+        "chapterName": "COMPREHENSIVE PLAN"
+      },
+      {
+        "title": "CHAPTER 156:  UNSAFE BUILDING CODE",
+        "type": "Chapter",
+        "level": 1,
+        "children": [
+          {
+            "title": "\u00a7 156.01  ADOPTION BY REFERENCE; SCOPE.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.02  DEFINITIONS.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.03  ORDER; CONTENTS; NOTICE; EXPIRATION.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.04  HEARING AUTHORITY; THREE MEMBER BOARD.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.05  FAILURE OR REFUSAL TO COMPLY WITH ORDER; CIVIL PENALTY.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.06  UNSAFE BUILDING FUND.",
+            "type": "Section"
+          },
+          {
+            "title": "\u00a7 156.99  VIOLATIONS; PENALTIES.",
+            "type": "Section"
+          }
+        ],
+        "id": "chapter-156",
+        "chapterNumber": "156",
+        "chapterName": "UNSAFE BUILDING CODE"
       }
     ],
     "id": "title-0"

@@ -13,7 +13,8 @@ from crewai import Crew, Task, Agent
 import agentops
 from crews.extraction_crew.extraction_crew import ExtractionCrew
 from instructions import hints
-
+from alp import get_html_codebook
+import requests
 
 # Initialize agentops with API key and tags - this automatically starts a session
 # Load environment variables
@@ -26,8 +27,21 @@ agentops.init(
 
 
 def get_html_document():
-        with open("gas_city.html", "r") as f:
-            return f.read()
+        municipality = "Sellersburg"
+        state = "IN"
+        html_url = get_html_codebook(municipality, state)
+ 
+        print(f"HTML URL: {html_url}")
+        try:
+            response = requests.get(html_url)
+            response.raise_for_status()  # Raise exception for HTTP errors
+            print(f"Response: {response.text}")
+            return response.text
+        except Exception as e:
+            print(f"Error fetching URL: {e}")
+            # Fallback to local file if URL fetch fails
+            with open("gas_city.html", "r") as f:
+                return f.read()
     
 def get_table_of_contents(html_document: str):
     """Extract table of contents from HTML document."""
