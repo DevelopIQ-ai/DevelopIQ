@@ -15,6 +15,7 @@ from crews.extraction_crew.extraction_crew import ExtractionCrew
 from instructions import hints
 from alp import get_html_codebook
 import requests
+from openai import OpenAI
 
 # Initialize agentops with API key and tags - this automatically starts a session
 # Load environment variables
@@ -35,15 +36,110 @@ def get_html_document():
         try:
             response = requests.get(html_url)
             response.raise_for_status()  # Raise exception for HTTP errors
-            print(f"Response: {response.text}")
+            # print(f"Response: {response.text}")
             return response.text
         except Exception as e:
             print(f"Error fetching URL: {e}")
             # Fallback to local file if URL fetch fails
             with open("gas_city.html", "r") as f:
                 return f.read()
+            
+def get_all_titles(html_document: str):
+    """Extract all titles from HTML document."""
+    soup = BeautifulSoup(html_document, 'html.parser')
+        
+    titles = []
+    title_elements = soup.select('.Title.rbox, .rbox.Title')
+    for i, title_element in enumerate(title_elements):
+        if i > 0:
+            # skip 'Code of Ordinances' title
+            title_text = title_element.text.strip() or f"Title {i + 1}"
+            
+            title_entry = {
+                "title": title_text,
+                "id": f"title-{i}"
+            }
+            titles.append(title_entry)
+    return titles
+
+def rank_titles_by_relevance(titles, topic="Permitted Use Matrix"):
+    """Rank titles by relevance to a given topic using an AI API."""
+    # Initialize OpenAI client
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     
-def get_table_of_contents(html_document: str):
+    # Format titles for the prompt
+    titles_text = "\n".join([f"- {title['title']} (ID: {title['id']})" for title in titles])
+    
+    # Create the prompt
+    prompt = f"""
+    Rank the following titles based on suspected relevance for finding more information about {topic}.
+    Assign each title a relevance score from 0-100, where 100 means highly relevant and 0 means not relevant at all.
+    
+    TITLES:
+    {titles_text}
+    
+    Return the response as a JSON object with one attribute, "rankings", which is an array of objects, each containing the title ID and a relevance score.
+    Example format:
+
+    {{
+        "rankings": [
+            {{"id": "title-1", "relevance": 85}},
+            {{"id": "title-2", "relevance": 20}}
+        ]
+    }}
+    """
+    
+    try:
+        # Call the OpenAI API
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that ranks titles by relevance to a topic."},
+                {"role": "user", "content": prompt}
+            ],
+            response_format={"type": "json_object"}
+        )
+
+        print("Response:", response.choices[0].message.content)
+        
+        # Parse the response
+        result = json.loads(response.choices[0].message.content)
+        rankings = result.get("rankings", None)
+        if rankings is None:
+            raise Exception("No rankings found in response")
+        
+
+        
+        # Add rankings to the titles
+        ranked_titles = []
+        for title in titles:
+            title_copy = title.copy()
+            # Find the ranking for this title
+            for ranking in rankings:
+                if ranking["id"] == title["id"]:
+                    title_copy["relevance"] = ranking["relevance"]
+                    break
+            else:
+                # Default relevance if not found
+                title_copy["relevance"] = 0
+            ranked_titles.append(title_copy)
+        
+        # Sort titles by relevance (highest first)
+        ranked_titles.sort(key=lambda x: x.get("relevance", 0), reverse=True)
+        
+        return ranked_titles
+    except Exception as e:
+        print(f"Error ranking titles: {e}")
+        # Fallback: return original titles without ranking
+        for title in titles:
+            title["relevance"] = 50  # Default relevance
+        return titles
+
+def get_most_relevant_title(titles):
+    """Get the most relevant title."""
+    return rank_titles_by_relevance(titles)[0]
+
+def get_table_of_contents(html_document: str, most_relevant_title_name: str):
     """Extract table of contents from HTML document."""
     soup = BeautifulSoup(html_document, 'html.parser')
     
@@ -54,7 +150,10 @@ def get_table_of_contents(html_document: str):
     title_elements = soup.select('.Title.rbox, .rbox.Title')
     for i, title_element in enumerate(title_elements):
         title_text = title_element.text.strip() or f"Title {i + 1}"
-        
+        if title_text != most_relevant_title_name:
+            print(f"Skipping title {title_text} because it is not the most relevant title ({most_relevant_title_name})")
+            continue
+
         title_entry = {
             "title": title_text,
             "type": "Title",
@@ -174,6 +273,9 @@ class ContentState(BaseModel):
     html_document: str = ""
     table_of_contents: Dict[str, Any] = {}
     relevant_sections: List[str] = []
+    titles: List[Dict[str, Any]] = []
+    ranked_titles: List[Dict[str, Any]] = []
+    most_relevant_title: Dict[str, Any] = {}
 
 class ContentFlow(Flow[ContentState]):
 
@@ -182,7 +284,13 @@ class ContentFlow(Flow[ContentState]):
     def retrieve_and_process_html_document(self):
         print("Getting HTML document")
         self.state.html_document = get_html_document()
-        self.state.table_of_contents = get_table_of_contents(self.state.html_document)
+        self.state.titles = get_all_titles(self.state.html_document)
+        print("Titles:", self.state.titles)
+        self.state.ranked_titles = rank_titles_by_relevance(self.state.titles)
+        print("Ranked titles:", self.state.ranked_titles)
+        self.state.most_relevant_title = get_most_relevant_title(self.state.ranked_titles)
+        print("Most relevant title:", self.state.most_relevant_title)
+        self.state.table_of_contents = get_table_of_contents(self.state.html_document, self.state.most_relevant_title["title"])
 
     @listen(retrieve_and_process_html_document)
     def get_relevant_sections(self):
