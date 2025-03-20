@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List
-from tools.section_extractor import SectionExtractorTool
+from tools.table_of_contents_tools import TableOfContentsExtractorTool, SectionExtractorTool
 load_dotenv()
 
 class SectionItem(BaseModel):
@@ -12,6 +12,7 @@ class SectionItem(BaseModel):
 	section_title: str = Field(description="The title of the section without the section number")
 	relevance_score: int = Field(description="A number from 1-10 indicating relevance (10 being highest)", ge=1, le=10)
 	reason: str = Field(description="A brief explanation of why this section is relevant")
+	content: str = Field(description="The full extracted content of the section")
 
 class SectionsOutput(BaseModel):
 	root: List[SectionItem] = Field(description="Array of relevant sections")
@@ -29,13 +30,13 @@ class ExtractionCrew():
 		return Agent(
 			config=self.agents_config['municipal_code_section_extractor'],
 			llm=self.llm,
-			tools=[SectionExtractorTool()]
+			tools=[TableOfContentsExtractorTool(), SectionExtractorTool()]
 		)
 	
 	@task
-	def find_sections(self) -> Task:
+	def find_and_extract_sections(self) -> Task:
 		return Task(
-			config=self.tasks_config['find_sections'],
+			config=self.tasks_config['find_and_extract_sections'],
 			output_json=SectionsOutput
 		)
 

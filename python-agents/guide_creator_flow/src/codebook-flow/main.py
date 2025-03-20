@@ -13,12 +13,11 @@ from crewai import Crew, Task, Agent
 import agentops
 from crews.extraction_crew.extraction_crew import ExtractionCrew
 from instructions import hints
-from alp import get_html_codebook
+from alp_scraper import scrape_html_from_alp
 import requests
 from openai import OpenAI
+from alp_html_processor import extract_table_of_contents
 
-# Initialize agentops with API key and tags - this automatically starts a session
-# Load environment variables
 load_dotenv()
 
 agentops.init(
@@ -26,272 +25,67 @@ agentops.init(
     default_tags=['crewai']
 )
 
+input_municipality = "Sellersburg"
+input_state = "IN"
+storage_path = "./html_storage"
+html_content = ""
 
-def get_html_document():
-        municipality = "Sellersburg"
-        state = "IN"
-        html_url = get_html_codebook(municipality, state)
- 
-        print(f"HTML URL: {html_url}")
-        try:
-            response = requests.get(html_url)
-            response.raise_for_status()  # Raise exception for HTTP errors
-            # print(f"Response: {response.text}")
-            return response.text
-        except Exception as e:
-            print(f"Error fetching URL: {e}")
-            # Fallback to local file if URL fetch fails
-            with open("gas_city.html", "r") as f:
-                return f.read()
-            
-def get_all_titles(html_document: str):
-    """Extract all titles from HTML document."""
-    soup = BeautifulSoup(html_document, 'html.parser')
-        
-    titles = []
-    title_elements = soup.select('.Title.rbox, .rbox.Title')
-    for i, title_element in enumerate(title_elements):
-        if i > 0:
-            # skip 'Code of Ordinances' title
-            title_text = title_element.text.strip() or f"Title {i + 1}"
-            
-            title_entry = {
-                "title": title_text,
-                "id": f"title-{i}"
-            }
-            titles.append(title_entry)
-    return titles
-
-def rank_titles_by_relevance(titles, topic="Permitted Use Matrix"):
-    """Rank titles by relevance to a given topic using an AI API."""
-    # Initialize OpenAI client
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    
-    # Format titles for the prompt
-    titles_text = "\n".join([f"- {title['title']} (ID: {title['id']})" for title in titles])
-    
-    # Create the prompt
-    prompt = f"""
-    Rank the following titles based on suspected relevance for finding more information about {topic}.
-    Assign each title a relevance score from 0-100, where 100 means highly relevant and 0 means not relevant at all.
-    
-    TITLES:
-    {titles_text}
-    
-    Return the response as a JSON object with one attribute, "rankings", which is an array of objects, each containing the title ID and a relevance score.
-    Example format:
-
-    {{
-        "rankings": [
-            {{"id": "title-1", "relevance": 85}},
-            {{"id": "title-2", "relevance": 20}}
-        ]
-    }}
+def get_html_document_id():
     """
+    Retrieves an HTML document from a municipal code website or falls back to a local file.
+    Stores the HTML in a temporary file and returns a reference ID.
+    Returns:
+        str: A document ID reference to the stored HTML
+    """
+    municipality = input_municipality
+    state = input_state
+    document_id = f"{municipality.lower().replace(' ', '_')}_{state.lower()}"
+    
+    # Create a storage directory if it doesn't exist
+    os.makedirs(storage_path, exist_ok=True)
     
     try:
-        # Call the OpenAI API
-        response = client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that ranks titles by relevance to a topic."},
-                {"role": "user", "content": prompt}
-            ],
-            response_format={"type": "json_object"}
-        )
-
-        print("Response:", response.choices[0].message.content)
+        # Try to get the HTML from the web
+        html_url = scrape_html_from_alp(municipality, state)
+        response = requests.get(html_url)
+        response.raise_for_status()
         
-        # Parse the response
-        result = json.loads(response.choices[0].message.content)
-        rankings = result.get("rankings", None)
-        if rankings is None:
-            raise Exception("No rankings found in response")
-        
-
-        
-        # Add rankings to the titles
-        ranked_titles = []
-        for title in titles:
-            title_copy = title.copy()
-            # Find the ranking for this title
-            for ranking in rankings:
-                if ranking["id"] == title["id"]:
-                    title_copy["relevance"] = ranking["relevance"]
-                    break
-            else:
-                # Default relevance if not found
-                title_copy["relevance"] = 0
-            ranked_titles.append(title_copy)
-        
-        # Sort titles by relevance (highest first)
-        ranked_titles.sort(key=lambda x: x.get("relevance", 0), reverse=True)
-        
-        return ranked_titles
+        if response.status_code == 200:
+            print("Successfully fetched HTML document")
+            html_content = response.text            
+            with open(f"{storage_path}/{document_id}.html", "w", encoding="utf-8") as f:
+                f.write(html_content)
+            print(f"HTML document stored with ID: {document_id}")
+            return document_id
     except Exception as e:
-        print(f"Error ranking titles: {e}")
-        # Fallback: return original titles without ranking
-        for title in titles:
-            title["relevance"] = 50  # Default relevance
-        return titles
-
-def get_most_relevant_title(titles):
-    """Get the most relevant title."""
-    return rank_titles_by_relevance(titles)[0]
-
-def get_table_of_contents(html_document: str, most_relevant_title_name: str):
-    """Extract table of contents from HTML document."""
-    soup = BeautifulSoup(html_document, 'html.parser')
-    
-    # Define a function similar to your extractTableOfContents
-    toc = []
-    
-    # Extract titles
-    title_elements = soup.select('.Title.rbox, .rbox.Title')
-    for i, title_element in enumerate(title_elements):
-        title_text = title_element.text.strip() or f"Title {i + 1}"
-        if title_text != most_relevant_title_name:
-            print(f"Skipping title {title_text} because it is not the most relevant title ({most_relevant_title_name})")
-            continue
-
-        title_entry = {
-            "title": title_text,
-            "type": "Title",
-            "level": 0,
-            "children": [],
-            "id": f"title-{i}"
-        }
+        print(f"Error fetching URL: {e}")
+    try:
+        with open("gas-city.html", "r", encoding="utf-8") as f:
+            html_content = f.read()
+        # Store the fallback content
+        with open(f"{storage_path}/{document_id}.html", "w", encoding="utf-8") as f:
+            f.write(html_content)
         
-        # Extract chapters
-        chapter_elements = soup.select('.Chapter.rbox, .rbox.Chapter')
-        for j, chapter_element in enumerate(chapter_elements):
-            chapter_text = chapter_element.text.strip() or ""
-            
-            # Parse chapter info
-            import re
-            chapter_match = re.search(r"CHAPTER\s+(\d+):\s*(.*)", chapter_text, re.IGNORECASE)
-            if not chapter_match:
-                print(f"Chapter {j} doesn't match expected format: {chapter_text}")
-                continue
-            
-            chapter_number = chapter_match.group(1)
-            chapter_name = chapter_match.group(2).strip()
-            
-            chapter_entry = {
-                "title": chapter_text,
-                "type": "Chapter",
-                "level": 1,
-                "children": [],
-                "id": f"chapter-{chapter_number}",
-                "chapterNumber": chapter_number,
-                "chapterName": chapter_name
-            }
-            
-            # Extract sections
-            section_elements = soup.select('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section')
-            for k, section_element in enumerate(section_elements):
-                section_text = section_element.text.strip() or ""
-                
-                # Parse section info
-                section_match = re.search(r"§\s*(\d+)\.(\d+)\s*(.*)", section_text)
-                if not section_match:
-                    print(f"Section {k} doesn't match expected format: {section_text}")
-                    continue
-                
-                section_chapter_number = section_match.group(1)
-                section_number = section_match.group(2)
-                section_name = section_match.group(3).strip()
-                
-                # Skip sections that don't belong to this chapter
-                if section_chapter_number != chapter_number:
-                    continue
-                
-                section_entry = {
-                    "title": section_text,
-                    "type": "Section",
-                    # "level": 2,
-                    # "children": [],
-                    # "id": f"chapter-{chapter_number}-section-{section_number}",
-                    # "sectionNumber": section_number,
-                    # "sectionName": section_name,
-                    # "content": extract_content(section_element)
-                }
-                
-                # Add the section to the chapter
-                chapter_entry["children"].append(section_entry)
-            
-            # Add the chapter to the title
-            title_entry["children"].append(chapter_entry)
-        
-        # Add the title to the TOC
-        toc.append(title_entry)
-        with open("./toc.json", "w") as toc_file:
-            json.dump(toc, toc_file, indent=2)
-        return toc
+        print(f"Using fallback HTML document with ID: {document_id}")
+        return document_id
+    except Exception as e:
+        print(f"Error reading fallback file: {e}")
+        return None
 
-def extract_content(element):
-    """Extract content from an element."""
-    # This is simplified - you would need to adapt it to BeautifulSoup
-    return element.text.strip()
 
-# def identify_relevant_sections(toc_json):
-#     """Identify sections in TOC likely to contain target information."""
-#     toc = json.loads(toc_json)
-    
-#     # Flatten the TOC for analysis
-#     flattened_toc = []
-    
-#     def traverse(entries, path=None):
-#         if path is None:
-#             path = []
-        
-#         for entry in entries:
-#             current_path = path + [entry["title"]]
-            
-#             if entry["type"] == "Section":
-#                 flattened_toc.append({
-#                     "id": entry.get("id"),
-#                     "title": entry["title"],
-#                     "type": entry["type"],
-#                     "level": entry["level"],
-#                     "path": " > ".join(current_path),
-#                     "chapterNumber": entry.get("chapterNumber"),
-#                     "sectionNumber": entry.get("sectionNumber"),
-#                     "content": entry.get("content", "")
-#                 })
-            
-#             if "children" in entry and entry["children"]:
-#                 traverse(entry["children"], current_path)
-    
-#     traverse(toc)
-    
-#     # This would be done by the AI agent in CrewAI
-#     # For demonstration purposes, returning a simple result
-#     return json.dumps(flattened_toc, indent=2)
-        
 class ContentState(BaseModel):
-    html_document: str = ""
-    table_of_contents: Dict[str, Any] = {}
-    relevant_sections: List[str] = []
-    titles: List[Dict[str, Any]] = []
-    ranked_titles: List[Dict[str, Any]] = []
-    most_relevant_title: Dict[str, Any] = {}
+    html_document_id: str = ""
+    title_list: Dict[str, Any] = {}
 
 class ContentFlow(Flow[ContentState]):
 
     @start()
-    # TODO: @evan - retrieve the html document
     def retrieve_and_process_html_document(self):
         print("Getting HTML document")
-        self.state.html_document = get_html_document()
-        self.state.titles = get_all_titles(self.state.html_document)
-        print("Titles:", self.state.titles)
-        self.state.ranked_titles = rank_titles_by_relevance(self.state.titles)
-        print("Ranked titles:", self.state.ranked_titles)
-        self.state.most_relevant_title = get_most_relevant_title(self.state.ranked_titles)
-        print("Most relevant title:", self.state.most_relevant_title)
-        self.state.table_of_contents = get_table_of_contents(self.state.html_document, self.state.most_relevant_title["title"])
-
+        self.state.html_document_id = get_html_document_id()
+        self.state.title_list = extract_table_of_contents(self.state.html_document_id, titles_only=True)
+        print("Title list extracted")
+   
     @listen(retrieve_and_process_html_document)
     def get_relevant_sections(self):
         print("Getting relevant sections")
@@ -299,15 +93,13 @@ class ContentFlow(Flow[ContentState]):
             ExtractionCrew()
             .crew()
             .kickoff(inputs={
-                "table_of_contents": self.state.table_of_contents, 
+                "title_list": self.state.title_list, 
                 "topic": "Permitted Use Matrix", 
                 "hint": hints["permitted_use_matrix_extraction_hint"],
-                "html_document": self.state.html_document
+                "html_document_id": self.state.html_document_id
             })
         )
         print("Relevant sections generated", result.raw)
-        self.state.relevant_sections = result.raw
-
 
 def kickoff():
     content_flow = ContentFlow()
@@ -319,6 +111,5 @@ def plot():
     content_flow.plot()
 
 if __name__ == "__main__":
-    # No need to call start_session as it's already started by init()
     kickoff()
     # agentops.end_session(end_state="Success")
