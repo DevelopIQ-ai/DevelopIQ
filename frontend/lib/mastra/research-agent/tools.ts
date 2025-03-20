@@ -60,7 +60,7 @@ const searchMultipleQueries = async (queries: string[]) => {
 };
 
 const searchLocation = async (searchQuery: string) => {
-  console.log('searchQuery', searchQuery);
+  // console.log('searchQuery', searchQuery);
   const apiKey = process.env.GOOGLE_API_KEY;
   const searchEngineId = process.env.GOOGLE_CSE_ID;
   
@@ -97,7 +97,7 @@ const searchLocation = async (searchQuery: string) => {
     title: item.title,
     link: item.link
   })) || [];
-  console.log('pageInfo', pageInfo);
+  // console.log('pageInfo', pageInfo);
 
   return {
     results: pageInfo,

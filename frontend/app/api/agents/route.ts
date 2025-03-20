@@ -22,8 +22,6 @@ export async function POST(request: Request) {
     const { location } = await request.json();
 
     const result = await generateResponse(location);
-    console.log(result.results['fetch-news']);
-
     return NextResponse.json(result.results['fetch-news']);
   } catch (error: unknown) {
     console.error("[ATTOM] API Error:", (error as Error).message);

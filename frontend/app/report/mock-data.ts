@@ -42,6 +42,8 @@ export const mockPropertyData: Record<string, GeneralPropertyInfo> = {
         "Zoning Classification": {
           siteZoningIdent: dataPoint("CMX-5", "Demo Data", "Site Zoning Identifier"),
           zoningType: dataPoint("Central Business District", "Demo Data", "Zoning Type"),
+          zoneName: dataPoint("Market West", "Demo Data", "Zone Name"),
+          zoneSubType: dataPoint("Commercial", "Demo Data", "Zone Subtype"),
         },
         "Overlay Districts": {
           overlayDistricts: dataPoint("Center City Commercial Area", "Demo Data", "Overlay Districts"),
@@ -177,6 +179,8 @@ export const mockPropertyData: Record<string, GeneralPropertyInfo> = {
         "Zoning Classification": {
           siteZoningIdent: dataPoint("CMX-5", "Demo Data", "Site Zoning Identifier"),
           zoningType: dataPoint("Central Business District", "Demo Data", "Zoning Type"),
+          zoneName: dataPoint("Market West", "Demo Data", "Zone Name"),
+          zoneSubType: dataPoint("Commercial", "Demo Data", "Zone Subtype"),
         },
         "Overlay Districts": {
           overlayDistricts: dataPoint("Center City Commercial Area", "Demo Data", "Overlay Districts"),

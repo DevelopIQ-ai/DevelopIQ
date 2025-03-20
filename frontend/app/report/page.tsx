@@ -20,8 +20,8 @@ import Image from "next/image";
 import { NavBar } from "@/components/nav-bar";
 import { PropertyReportHandler } from "@/lib/report-handler";
 import { fetchAttomData } from "@/lib/attom-data-fetcher";
+import { fetchZoneomicsData } from "@/lib/zoneomics-data-fetcher";
 import { mockPropertyData } from "@/app/report/mock-data"
-import { fetchZoningData } from "@/lib/codebook-data-fetcher";
 import { NewsArticle } from "@/schemas/views/research-agent-schema";
 
 export default function PropertyAnalysisDashboard() {
@@ -39,34 +39,52 @@ export default function PropertyAnalysisDashboard() {
       setReportHandler(handler);
       const propertyAddress = localStorage.getItem("propertyAddress") || "";
       setPropertyAddress(propertyAddress);
-      
       const isDemo = localStorage.getItem("isDemo") === "true";
       
       if (isDemo) {
-        // Simulate loading delay
         setTimeout(() => {
           const propertyData = mockPropertyData[propertyAddress]
           handler.setGeneralInfo(propertyData);
-          
           setIsLoading(false);
         }, 1500);
       } else {
+        let attomSuccess = false;
+        
         try {
-          // Fetch ATTOM data
+          console.log("Fetching ATTOM data for", propertyAddress);
           await fetchAttomData(handler, propertyAddress);
-          // Extract county, state, and zoning code from property data
-          const propertyInfo = handler.getGeneralInfo();      
+          attomSuccess = true;
           
-          const county = propertyInfo?.["Property Identification & Legal Framework"]?.["Geospatial Information"]?.munName?.value as string || "";
-          const state = propertyInfo?.["Property Identification & Legal Framework"]?.["Geospatial Information"]?.countrySubd?.value as string || "";        
-          const zoningCode = propertyInfo?.["Property Identification & Legal Framework"]?.["Regulatory Status"]?.["Zoning Classification"]?.siteZoningIdent?.value as string || "";
-          if (county && state && zoningCode) {
-              await fetchZoningData(handler, county, state, zoningCode);
-          }
+          // Get location data from ATTOM response
+          const generalInfo = handler.getGeneralInfo();
+          if (generalInfo) {
+            const geospatialInfo = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"];
+            const latitude = geospatialInfo.latitude?.value as string;
+            const longitude = geospatialInfo.longitude?.value as string;
 
+            // Fetch Zoneomics data if we have coordinates
+            if (latitude && longitude) {
+              try {
+                console.log("Found coordinates, fetching Zoneomics data:", { latitude, longitude });
+                await fetchZoneomicsData(handler, latitude, longitude);
+                console.log("Zoneomics data fetch completed");
+              } catch (zoneomicsError) {
+                console.error("Error fetching Zoneomics data (isolated):", zoneomicsError);
+                // Don't set the main error state - we'll continue with just ATTOM data
+              }
+            } else {
+              console.log("No coordinates found in ATTOM data");
+            }
+          } else {
+            console.log("No general info found from ATTOM");
+          }
         } catch (error) {
-          setError(error instanceof Error ? error.message : "An unexpected error occurred");
-          setIsLoading(false);
+          console.error("Error in data fetching:", error);
+          
+          // Only set the error if ATTOM also failed
+          if (!attomSuccess) {
+            setError(error instanceof Error ? error.message : "An unexpected error occurred");
+          }
         } finally {
           setIsLoading(false);
         }

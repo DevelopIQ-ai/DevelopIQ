@@ -16,7 +16,7 @@ const fetchNews = new Step({
     }
 
     const prompt = `Find news articles that would appeal to a real estate developer looking for reasons to develop property in ${triggerData.location}.`;
-    console.log("Prompt: ", prompt);
+    // console.log("Prompt: ", prompt);
 
     const response = await researchAgent.generate([
       {
@@ -29,7 +29,7 @@ const fetchNews = new Step({
     // for await (const chunk of response.textStream) {
     //   process.stdout.write(chunk);
     // }
-    console.log('Response: ', response.text);
+    // console.log('Response: ', response.text);
     try {
       // Extract JSON from markdown code block
       const jsonMatch = response.text.match(/```json\n([\s\S]*?)\n```/);
@@ -43,7 +43,7 @@ const fetchNews = new Step({
       };
     } catch (error) {
       console.error('Failed to extract or parse JSON from response:', error);
-      console.log('Raw response:', response.text);
+      // console.log('Raw response:', response.text);
       throw new Error('Could not process the research agent response');
     }
     
