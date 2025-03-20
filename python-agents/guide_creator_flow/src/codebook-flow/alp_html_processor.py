@@ -1,7 +1,7 @@
 import json
 from bs4 import BeautifulSoup
 import re
-
+import os
 
 def extract_table_of_contents(html_document_id: str, include_sections: bool = False, target_title: str = None, titles_only: bool = False):
     """
@@ -20,7 +20,7 @@ def extract_table_of_contents(html_document_id: str, include_sections: bool = Fa
         list: A list of dictionaries representing the table of contents structure
               with titles, and optionally chapters and sections based on parameters
     """
-    storage_path = "./html_storage"
+    storage_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "html_storage")
     html_file_path = f"{storage_path}/{html_document_id}.html"
     
     try:

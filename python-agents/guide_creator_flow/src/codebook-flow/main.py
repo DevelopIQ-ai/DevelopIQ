@@ -17,6 +17,8 @@ from alp_scraper import scrape_html_from_alp
 import requests
 from openai import OpenAI
 from alp_html_processor import extract_table_of_contents
+import patronus
+from evals.permitted_use_matrix import PermittedUseMatrixEval
 
 load_dotenv()
 
@@ -25,9 +27,14 @@ agentops.init(
     default_tags=['crewai']
 )
 
-input_municipality = "Bargersville"
+patronus.init(
+    api_key=os.environ.get('PATRONUS_API_KEY')
+)
+
+input_municipality = "Aurora"
 input_state = "IN"
-storage_path = "./html_storage"
+# Update storage path to be relative to the script location rather than working directory
+storage_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "html_storage")
 html_content = ""
 
 def get_html_document_id():
@@ -100,6 +107,17 @@ class ContentFlow(Flow[ContentState]):
             })
         )
         print("Relevant sections generated", result.raw)
+
+        # init()
+        eval_permitted_use_matrix = PermittedUseMatrixEval()
+        eval_result = eval_permitted_use_matrix.evaluate(result.raw, self.state.html_document_id)
+        print(f"""
+            Permitted Use Matrix evaluation:
+            Passed: {eval_result.pass_}
+            Score: {eval_result.score}
+            Explanation: {eval_result.explanation}
+            """
+        )
 
 def kickoff():
     content_flow = ContentFlow()

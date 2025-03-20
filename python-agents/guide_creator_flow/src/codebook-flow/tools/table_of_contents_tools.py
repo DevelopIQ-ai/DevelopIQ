@@ -28,9 +28,9 @@ def load_html_from_storage(document_id: str) -> Tuple[Optional[str], Optional[Di
         - Error information (or None if successful)
         - BeautifulSoup object (or None if error)
     """
-    storage_path = "./html_storage"
+    storage_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "html_storage")
     html_file_path = f"{storage_path}/{document_id.lower()}.html"
-    
+
     # Check if file exists
     if not os.path.exists(html_file_path):
         error_msg = f"File not found: {html_file_path}"

@@ -25,6 +25,10 @@ class ExtractionCrew():
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
+	# def evaluate_task_output(self, task):
+	# 	print(f"\n----- Task '{task.description}' Output -----")
+	# 	print(f"Result: {task.raw}")
+
 	@agent	
 	def municipal_code_section_extractor(self) -> Agent:
 		return Agent(
@@ -35,9 +39,11 @@ class ExtractionCrew():
 	
 	@task
 	def find_and_extract_sections(self) -> Task:
+		# TODO: Evaluate the task output
 		return Task(
 			config=self.tasks_config['find_and_extract_sections'],
-			output_json=SectionsOutput
+			output_json=SectionsOutput,
+			# callback=self.evaluate_task_output
 		)
 
 	@crew
