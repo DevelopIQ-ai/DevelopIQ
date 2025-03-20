@@ -143,16 +143,16 @@ export default function PropertyAnalysisDashboard() {
     }
   }, [propertyAddress, newsArticles.length]);
 
-  if (isLoading) {
-    return (
-      <main className="property-demo min-h-screen pt-16">
-        <NavBar />
-        <div className="container mx-auto py-12 px-4 md:px-8">
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <main className="property-demo min-h-screen pt-16">
+  //       <NavBar />
+  //       <div className="container mx-auto py-12 px-4 md:px-8">
+  //         <p>Loading...</p>
+  //       </div>
+  //     </main>
+  //   );
+  // }
 
   if (error) {
     return (
@@ -286,13 +286,13 @@ export default function PropertyAnalysisDashboard() {
           </TabsList>
 
           <TabsContent value="property" className="m-0" data-section="property">
-            <div className="mb-8">
+            <div className="mb-4">
               <h2 className="text-2xl font-semibold mb-4">Detailed Property Analysis</h2>
               <p className="text-muted-foreground">
                 Comprehensive assessment of physical characteristics, zoning requirements, and development potential.
               </p>
             </div>
-            <GeneralPropertyTab reportHandler={reportHandler!} />
+            <GeneralPropertyTab reportHandler={reportHandler} parentLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="development" className="m-0" data-section="development">
