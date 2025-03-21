@@ -20,14 +20,9 @@ class SectionsOutput(BaseModel):
 @CrewBase
 class ExtractionCrew():
 	"""ExtractionCrew crew"""
-	# llm= LLM(model="ollama/llama3.2", base_url="http://localhost:11434")
 	llm = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
-
-	# def evaluate_task_output(self, task):
-	# 	print(f"\n----- Task '{task.description}' Output -----")
-	# 	print(f"Result: {task.raw}")
 
 	@agent	
 	def municipal_code_section_extractor(self) -> Agent:
@@ -39,11 +34,9 @@ class ExtractionCrew():
 	
 	@task
 	def find_and_extract_sections(self) -> Task:
-		# TODO: Evaluate the task output
 		return Task(
 			config=self.tasks_config['find_and_extract_sections'],
-			output_json=SectionsOutput,
-			# callback=self.evaluate_task_output
+			output_json=SectionsOutput
 		)
 
 	@crew

@@ -222,6 +222,8 @@ class TableOfContentsExtractorTool(BaseTool):
         if not title_entry:
             return {"error": f"Failed to process title: {target_title}"}
         
+        # TODO: Add an eval for this tool
+        
         return title_entry
 
 
@@ -277,6 +279,9 @@ class SectionExtractorTool(BaseTool):
                 content = self._extract_section_content(section_element)
                 
                 # Return the section with metadata and content
+
+                # TODO: Add an eval for this tool
+
                 return {
                     "section_number": f"{chapter_number}.{section_number}",
                     "section_title": section_name,

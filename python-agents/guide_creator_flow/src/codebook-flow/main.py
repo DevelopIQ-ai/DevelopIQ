@@ -18,7 +18,8 @@ import requests
 from openai import OpenAI
 from alp_html_processor import extract_table_of_contents
 import patronus
-from evals.permitted_use_matrix import PermittedUseMatrixEval
+from listeners.agent_event_listener import AgentEventListener
+from listeners.tool_event_listener import ToolEventListener
 
 load_dotenv()
 
@@ -31,7 +32,9 @@ patronus.init(
     api_key=os.environ.get('PATRONUS_API_KEY')
 )
 
-input_municipality = "Aurora"
+agent_event_listener = AgentEventListener()
+tool_event_listener = ToolEventListener()
+input_municipality = "Bargersville"
 input_state = "IN"
 # Update storage path to be relative to the script location rather than working directory
 storage_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "html_storage")
@@ -108,16 +111,6 @@ class ContentFlow(Flow[ContentState]):
         )
         print("Relevant sections generated", result.raw)
 
-        # init()
-        eval_permitted_use_matrix = PermittedUseMatrixEval()
-        eval_result = eval_permitted_use_matrix.evaluate(result.raw, self.state.html_document_id)
-        print(f"""
-            Permitted Use Matrix evaluation:
-            Passed: {eval_result.pass_}
-            Score: {eval_result.score}
-            Explanation: {eval_result.explanation}
-            """
-        )
 
 def kickoff():
     content_flow = ContentFlow()
