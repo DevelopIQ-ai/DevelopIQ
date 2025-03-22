@@ -301,13 +301,23 @@ class SectionExtractorTool(BaseTool):
             str: The text content of the section
         """
         # Get all text in the section, excluding the title
-        content_elements = section_element.find_all(text=True, recursive=True)
-        content = " ".join([elem.strip() for elem in content_elements if elem.strip()])
+        section_title = section_element.text.strip()
         
-        # Remove the section title from the content
-        section_title = section_element.select_one('.Section-title')
-        if section_title:
-            title_text = section_title.text.strip()
-            content = content.replace(title_text, "", 1).strip()
-        
-        return content
+        # Find all subsequent content divs until the next section
+        content_elements = []
+        next_element = section_element.next_sibling
+
+        while next_element:
+            # Check if we've reached the next section
+            if next_element.name == 'div' and 'Section' in next_element.get('class', []):
+                break
+                
+            # If it's a content div, add it to our list
+            if next_element.name == 'div' and 'Normal-Level' in next_element.get('class', []):
+                content_elements.append(next_element.text.strip())
+                
+            next_element = next_element.next_sibling
+
+        # Join all content elements and return
+        full_content = section_title + "\n\n" + "\n".join(content_elements)
+        return full_content

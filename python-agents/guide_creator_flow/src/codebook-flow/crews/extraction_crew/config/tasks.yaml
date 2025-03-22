@@ -40,3 +40,30 @@ find_and_extract_sections:
       }
     ]
   agent: municipal_code_section_extractor
+
+
+analyze_extracted_sections:
+  description: >
+    <GOAL>
+    Analyze the extracted sections and answer the user's query. The user wants information about: "{topic}".
+    </GOAL>
+
+    <STEPS>
+    Step 1: First, refer to the extracted sections. The user's query is: "{topic}". 
+    Step 2: Refer to the additional information provided about answering the user's query, which you will find in the "additional_information" field. This is key in understanding how to answer the query.
+    Step 3: Answer the user's query based on the extracted sections and the additional information.
+    </STEPS>
+
+    <ADDITIONAL INFORMATION>
+    Additional information:
+    {additional_information}
+    </ADDITIONAL INFORMATION>
+
+  expected_output: >
+    {expected_output}
+  agent: municipal_code_section_analyst
+  context: [find_and_extract_sections]
+
+
+    
+    

@@ -40,6 +40,19 @@ class ExtractionCrew():
 			output_json=SectionsOutput
 		)
 
+	@agent
+	def municipal_code_section_analyst(self) -> Agent:
+		return Agent(
+			config=self.agents_config['municipal_code_section_analyst'],
+			llm=self.llm
+		)
+	
+	@task
+	def analyze_extracted_sections(self) -> Task:
+		return Task(
+			config=self.tasks_config['analyze_extracted_sections'],
+		)
+
 	@crew
 	def crew(self) -> Crew:
 		"""Creates the ContentCrew crew"""
