@@ -4,6 +4,7 @@ from random import randint
 from typing import Dict, List, Any
 import os
 from dotenv import load_dotenv
+import time
 
 from pydantic import BaseModel
 
@@ -25,7 +26,7 @@ agentops.init(
     default_tags=['crewai']
 )
 
-input_municipality = "Sellersburg"
+input_municipality = "Bargersville"
 input_state = "IN"
 storage_path = "./html_storage"
 html_content = ""
@@ -76,6 +77,8 @@ def get_html_document_id():
 class ContentState(BaseModel):
     html_document_id: str = ""
     title_list: Dict[str, Any] = {}
+    extracted_sections: Dict[str, Any] = {}
+    analysis_results: Dict[str, Any] = {}
 
 class ContentFlow(Flow[ContentState]):
 
@@ -95,11 +98,14 @@ class ContentFlow(Flow[ContentState]):
             .kickoff(inputs={
                 "title_list": self.state.title_list, 
                 "topic": "Permitted Use Matrix", 
-                "hint": hints["permitted_use_matrix_extraction_hint"],
-                "html_document_id": self.state.html_document_id
+                "html_document_id": self.state.html_document_id,
+                "hint": hints["permitted_use_matrix"]["extraction_hint"],
+                "additional_information": hints["permitted_use_matrix"]["additional_information"],
+                "expected_output": hints["permitted_use_matrix"]["expected_output"]
             })
         )
-        print("Relevant sections generated", result.raw)
+        print("Relevant sections extracted")
+        
 
 def kickoff():
     content_flow = ContentFlow()
