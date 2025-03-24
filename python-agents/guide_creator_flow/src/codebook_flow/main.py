@@ -12,12 +12,12 @@ from crewai.flow.flow import Flow, listen, start
 from bs4 import BeautifulSoup
 from crewai import Crew, Task, Agent
 import agentops
-from crews.extraction_crew.extraction_crew import ExtractionCrew
-from instructions import hints
-from alp_scraper import scrape_html_from_alp
+from src.codebook_flow.crews.extraction_crew.extraction_crew import ExtractionCrew
+from src.codebook_flow.instructions import hints
+from src.codebook_flow.alp_scraper import scrape_html_from_alp
 import requests
 from openai import OpenAI
-from alp_html_processor import extract_table_of_contents
+from src.codebook_flow.alp_html_processor import extract_table_of_contents
 
 load_dotenv()
 
@@ -131,14 +131,42 @@ class ContentFlow(Flow[ContentState]):
         )
         print(result)
         print("Relevant sections extracted")
-        
+        return result
 
-def kickoff():
+def kickoff(municipality=None, state=None, zone_code="RR", use_test_mode=None):
+    """
+    Run the content flow process for a specified municipality, state, and zone code.
+    
+    Args:
+        municipality (str): The name of the municipality (e.g., "Bargersville")
+        state (str): The state code (e.g., "IN")
+        zone_code (str): The zoning code to analyze (default "RR")
+        use_test_mode (bool): Override the TEST_MODE environment variable
+        
+    Returns:
+        ContentState: The final state of the content flow
+    """
+    global input_municipality, input_state, test_mode
+    
+    # Override globals with parameters if provided
+    if municipality:
+        input_municipality = municipality
+    if state:
+        input_state = state
+    if use_test_mode is not None:
+        test_mode = use_test_mode
+    
     if test_mode:
         print("Running in test mode - will use existing HTML files")
+        
     content_flow = ContentFlow()
-    content_flow.kickoff()
+    content_flow.state.zone_code = zone_code  # Set the zone code in the state
+    
+    # Run the flow and get the final state
+    result = content_flow.kickoff()
+    
     agentops.end_session(end_state="Success")
+    return result
 
 def plot():
     content_flow = ContentFlow()
