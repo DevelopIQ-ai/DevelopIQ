@@ -30,6 +30,8 @@ input_municipality = "Bargersville"
 input_state = "IN"
 storage_path = "./html_storage"
 html_content = ""
+# Get test mode from environment variables
+test_mode = os.environ.get('TEST_MODE', 'False').lower() == 'true'
 
 def get_html_document_id():
     """
@@ -45,26 +47,43 @@ def get_html_document_id():
     # Create a storage directory if it doesn't exist
     os.makedirs(storage_path, exist_ok=True)
     
-    try:
-        # Try to get the HTML from the web
-        html_url = scrape_html_from_alp(municipality, state)
-        response = requests.get(html_url)
-        response.raise_for_status()
-        
-        if response.status_code == 200:
-            print("Successfully fetched HTML document")
-            html_content = response.text            
-            with open(f"{storage_path}/{document_id}.html", "w", encoding="utf-8") as f:
-                f.write(html_content)
-            print(f"HTML document stored with ID: {document_id}")
+    # In test mode, check if the file already exists in storage and use it
+    if test_mode:
+        storage_file_path = f"{storage_path}/{document_id}.html"
+        if os.path.exists(storage_file_path):
+            print(f"Test mode: Using existing HTML document with ID: {document_id}")
             return document_id
-    except Exception as e:
-        print(f"Error fetching URL: {e}")
+    
+    # Only try to fetch from web if not in test mode
+    if not test_mode:
+        try:
+            # Try to get the HTML from the web
+            html_url = scrape_html_from_alp(municipality, state)
+            response = requests.get(html_url)
+            response.raise_for_status()
+            
+            if response.status_code == 200:
+                print("Successfully fetched HTML document")
+                html_content = response.text            
+                with open(f"{storage_path}/{document_id}.html", "w", encoding="utf-8") as f:
+                    f.write(html_content)
+                print(f"HTML document stored with ID: {document_id}")
+                return document_id
+        except Exception as e:
+            print(f"Error fetching URL: {e}")
+    
+    # Fallback logic - try to use existing file in storage first
+    storage_file_path = f"{storage_path}/{document_id}.html"
+    if os.path.exists(storage_file_path):
+        print(f"Using existing HTML document with ID: {document_id}")
+        return document_id
+    
+    # If no existing file, try the gas-city.html fallback
     try:
         with open("gas-city.html", "r", encoding="utf-8") as f:
             html_content = f.read()
         # Store the fallback content
-        with open(f"{storage_path}/{document_id}.html", "w", encoding="utf-8") as f:
+        with open(storage_file_path, "w", encoding="utf-8") as f:
             f.write(html_content)
         
         print(f"Using fallback HTML document with ID: {document_id}")
@@ -79,6 +98,8 @@ class ContentState(BaseModel):
     title_list: Dict[str, Any] = {}
     extracted_sections: Dict[str, Any] = {}
     analysis_results: Dict[str, Any] = {}
+    zone_code: str = "RR"
+
 
 class ContentFlow(Flow[ContentState]):
 
@@ -92,22 +113,29 @@ class ContentFlow(Flow[ContentState]):
     @listen(retrieve_and_process_html_document)
     def get_relevant_sections(self):
         print("Getting relevant sections")
+        info = "development_standards"
         result = (
             ExtractionCrew()
             .crew()
             .kickoff(inputs={
                 "title_list": self.state.title_list, 
-                "topic": "Permitted Use Matrix", 
+                "topic": "Development Standards", 
                 "html_document_id": self.state.html_document_id,
-                "hint": hints["permitted_use_matrix"]["extraction_hint"],
-                "additional_information": hints["permitted_use_matrix"]["additional_information"],
-                "expected_output": hints["permitted_use_matrix"]["expected_output"]
+                "zone_code": self.state.zone_code,
+                "title_finding_hint": hints[info]["title_finding_hint"],
+                "section_finding_hint": hints[info]["section_finding_hint"],
+                "verification_hint": hints[info]["verification_hint"],
+                # "additional_information": hints[info]["additional_information"],
+                # "expected_output": hints[info]["expected_output"]
             })
         )
+        print(result)
         print("Relevant sections extracted")
         
 
 def kickoff():
+    if test_mode:
+        print("Running in test mode - will use existing HTML files")
     content_flow = ContentFlow()
     content_flow.kickoff()
     agentops.end_session(end_state="Success")
