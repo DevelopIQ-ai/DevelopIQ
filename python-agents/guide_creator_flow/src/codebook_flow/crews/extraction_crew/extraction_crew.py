@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List, Dict
-from tools.table_of_contents_tools import TableOfContentsExtractorTool, SectionExtractorTool
+from src.codebook_flow.tools.table_of_contents_tools import TableOfContentsExtractorTool, SectionExtractorTool
 load_dotenv()
 
 class SubTopicItem(BaseModel):
