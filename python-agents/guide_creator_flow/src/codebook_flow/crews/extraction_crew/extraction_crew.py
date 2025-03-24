@@ -22,36 +22,38 @@ class ExtractionCrew():
 	"""ExtractionCrew crew"""
 	# llm= LLM(model="ollama/llama3.2", base_url="http://localhost:11434")
 	llm = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
+	llm_o1 = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
 	@agent	
-	def municipal_code_section_extractor(self) -> Agent:
+	def municipal_code_section_finder(self) -> Agent:
 		return Agent(
-			config=self.agents_config['municipal_code_section_extractor'],
+			config=self.agents_config['municipal_code_section_finder'],
 			llm=self.llm,
 			tools=[TableOfContentsExtractorTool()]
 		)
 	
 	@task
-	def find_and_extract_sections(self) -> Task:
+	def find_sections(self) -> Task:
 		return Task(
-			config=self.tasks_config['find_and_extract_sections'],
+			config=self.tasks_config['find_sections'],
 			output_json=TopicOutput
 		)
 
-	# @agent
-	# def municipal_code_section_analyst(self) -> Agent:
-	# 	return Agent(
-	# 		config=self.agents_config['municipal_code_section_analyst'],
-	# 		llm=self.llm
-	# 	)
+	@agent
+	def municipal_code_section_analyst(self) -> Agent:
+		return Agent(
+			config=self.agents_config['municipal_code_section_analyst'],
+			llm=self.llm_o1,
+			tools=[SectionExtractorTool()]
+		)
 	
-	# @task
-	# def analyze_extracted_sections(self) -> Task:
-	# 	return Task(
-	# 		config=self.tasks_config['analyze_extracted_sections'],
-	# 	)
+	@task
+	def extract_and_analyze_sections(self) -> Task:
+		return Task(
+			config=self.tasks_config['extract_and_analyze_sections'],
+		)
 
 	@crew
 	def crew(self) -> Crew:

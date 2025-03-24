@@ -113,20 +113,21 @@ class ContentFlow(Flow[ContentState]):
     @listen(retrieve_and_process_html_document)
     def get_relevant_sections(self):
         print("Getting relevant sections")
-        info = "development_standards"
+        info = "permitted_use"
         result = (
             ExtractionCrew()
             .crew()
             .kickoff(inputs={
                 "title_list": self.state.title_list, 
-                "topic": "Development Standards", 
+                "topic": "Permitted Uses", 
                 "html_document_id": self.state.html_document_id,
                 "zone_code": self.state.zone_code,
                 "title_finding_hint": hints[info]["title_finding_hint"],
                 "section_finding_hint": hints[info]["section_finding_hint"],
                 "verification_hint": hints[info]["verification_hint"],
-                # "additional_information": hints[info]["additional_information"],
-                # "expected_output": hints[info]["expected_output"]
+                "examples": hints[info]["examples"],
+                "thought_process": hints[info]["thought_process"],
+                "expected_output": hints[info]["expected_output"]
             })
         )
         print(result)

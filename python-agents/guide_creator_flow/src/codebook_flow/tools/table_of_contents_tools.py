@@ -290,34 +290,65 @@ class SectionExtractorTool(BaseTool):
             "content": ""
         }
 
+    
+        
+
     def _extract_section_content(self, section_element):
         """
-        Extract the content text from a section element.
-        
-        Parameters:
-            section_element: BeautifulSoup element representing a section
-            
-        Returns:
-            str: The text content of the section
+        Extract the content text from a section element, including any nested tables, until the next section.
+        Returns one big string that includes leftover text and JSON-serialized tables (delimited).
         """
-        # Get all text in the section, excluding the title
-        section_title = section_element.text.strip()
-        
-        # Find all subsequent content divs until the next section
-        content_elements = []
+        # The heading (e.g. "§ 154.040  PERMITTED USE TABLE.")
+        section_title = section_element.get_text(strip=True)
+
+        content_chunks = []
         next_element = section_element.next_sibling
 
         while next_element:
-            # Check if we've reached the next section
-            if next_element.name == 'div' and 'Section' in next_element.get('class', []):
+            # If we hit another .Section, that means a new section is starting
+            if next_element.name == 'div' and 'Section' in (next_element.get('class') or []):
                 break
-                
-            # If it's a content div, add it to our list
-            if next_element.name == 'div' and 'Normal-Level' in next_element.get('class', []):
-                content_elements.append(next_element.text.strip())
-                
+
+            if next_element.name in ['div', 'p', 'ul', 'ol', 'table']:
+                # If it's a <table> directly
+                if next_element.name == 'table':
+                    table_data = self._parse_table(next_element)
+                    if table_data:
+                        # Convert to JSON, then wrap with delimiters
+                        table_json = json.dumps(table_data)
+                        content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+                else:
+                    # This element may contain nested tables
+                    nested_tables = next_element.find_all('table', recursive=True)
+                    for tbl in nested_tables:
+                        tbl_data = self._parse_table(tbl)
+                        if tbl_data:
+                            table_json = json.dumps(tbl_data)
+                            content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+                        tbl.decompose()
+
+                    # After removing tables, any leftover text remains
+                    leftover = next_element.get_text(strip=True).replace('\xa0', ' ')
+                    if leftover:
+                        content_chunks.append(leftover)
+            
             next_element = next_element.next_sibling
 
-        # Join all content elements and return
-        full_content = section_title + "\n\n" + "\n".join(content_elements)
-        return full_content
+        # Merge them all into one giant string. Prepend the section title at the top.
+        final_string = section_title + "\n\n" + "\n".join(content_chunks)
+        return final_string
+
+
+    def _parse_table(self, table_element):
+        """
+        Return a Python list-of-lists for each table row,
+        which we'll later serialize to JSON in _extract_section_content.
+        """
+        table_data = []
+        for row in table_element.find_all('tr'):
+            cells = row.find_all(['th', 'td'])
+            row_texts = [c.get_text(strip=True).replace('\xa0',' ')
+                        for c in cells]
+            if row_texts:
+                table_data.append(row_texts)
+        return table_data
