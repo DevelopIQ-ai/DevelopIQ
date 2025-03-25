@@ -69,7 +69,7 @@ def load_html_from_storage(document_id: str) -> Tuple[Optional[str], Optional[Di
 class TableOfContentsExtractorInput(BaseModel):
     """Input schema for TableOfContentsExtractorTool."""
     html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
-    target_title: str = Field(..., description="The specific title to extract detailed contents for")
+    target_title: str = Field(..., description="The full name of the title to extract detailed contents for")
 
 class TableOfContentsExtractorTool(BaseTool):
     name: str = "table_of_contents_extractor_tool"
@@ -125,7 +125,7 @@ class TableOfContentsExtractorTool(BaseTool):
             if normalize_whitespace(title_text) == normalize_whitespace(target_title):
                 print(f"Found target title: '{target_title}'")
                 title_entry = {
-                    "title": title_text,
+                    "full_name": title_text,
                     "type": "Title",
                     "level": 0,
                     "children": [],
@@ -158,7 +158,7 @@ class TableOfContentsExtractorTool(BaseTool):
                     chapter_number = chapter_match.group(1)
                     chapter_name = chapter_match.group(2).strip()                    
                     chapter_entry = {
-                        "title": chapter_text,
+                        "full_name": chapter_text,
                         "type": "Chapter",
                         "level": 1,
                         "children": [],
@@ -201,7 +201,7 @@ class TableOfContentsExtractorTool(BaseTool):
                         
                         
                         section_entry = {
-                            "title": section_text,
+                            "full_name": section_text,
                             "type": "Section",
                             "level": 2,
                             "id": f"chapter-{chapter_number}-section-{section_number}",
@@ -226,169 +226,262 @@ class TableOfContentsExtractorTool(BaseTool):
 
 
 # Tool 2: Section Extractor Tool
-class SectionExtractorInput(BaseModel):
-    """Input schema for SectionExtractorTool."""
+# class SectionExtractorInput(BaseModel):
+#     """Input schema for SectionExtractorTool."""
+#     html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
+#     chapter_number: str = Field(..., description="The chapter number of the section to extract")
+#     section_number: str = Field(..., description="The section number to extract")
+
+# class SectionExtractorTool(BaseTool):
+#     name: str = "section_extractor_tool"
+#     description: str = "Extracts the complete content of a specific section from the municipal code"
+#     args_schema: Type[BaseModel] = SectionExtractorInput
+
+#     def _run(self, html_document_id: str, chapter_number: str, section_number: str) -> dict:
+#         """
+#         Extract the complete content of a specific section from the municipal code.
+        
+#         Returns:
+#             dict: A dictionary containing the section metadata and content
+#         """
+#         # Load HTML using the shared function
+#         _, error, soup = load_html_from_storage(html_document_id)
+#         if error:
+#             return error
+        
+#         # Find all section elements
+#         section_elements = soup.select('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section')
+        
+#         if len(section_elements) == 0:
+#             return {
+#                 "error": "No section elements found in the document",
+#                 "section_number": f"{chapter_number}.{section_number}",
+#                 "content": ""
+#             }
+        
+#         # Look for the specific section
+#         for section_element in section_elements:
+#             section_text = section_element.text.strip() or ""
+            
+#             # Parse section info
+#             section_match = re.search(r"§\s*(\d+)\.(\d+)\s*(.*)", section_text)
+#             if not section_match:
+#                 continue
+            
+#             section_chapter_num = section_match.group(1)
+#             section_num = section_match.group(2)
+#             section_name = section_match.group(3).strip()
+            
+#             # Check if this is the section we're looking for
+#             if section_chapter_num == chapter_number and section_num == section_number:                
+#                 content = self._extract_section_content(section_element)
+                
+#                 # Return the section with metadata and content
+#                 return {
+#                     "section_number": f"{chapter_number}.{section_number}",
+#                     "section_title": section_name,
+#                     "chapter_number": chapter_number,
+#                     "content": content
+#                 }
+        
+#         return {
+#             "error": f"Section {chapter_number}.{section_number} not found in the document",
+#             "section_number": f"{chapter_number}.{section_number}",
+#             "content": ""
+#         }
+
+    
+        
+
+#     def _extract_section_content(self, section_element):
+#         """
+#         Extract the content text from a section element, including any nested tables, until the next section.
+#         Returns one big string that includes leftover text and JSON-serialized tables (delimited).
+#         """
+#         # The heading (e.g. "§ 154.040  PERMITTED USE TABLE.")
+#         section_title = section_element.get_text(strip=True)
+
+#         content_chunks = []
+#         next_element = section_element.next_sibling
+
+#         while next_element:
+#             # If we hit another .Section, that means a new section is starting
+#             if next_element.name == 'div' and 'Section' in (next_element.get('class') or []):
+#                 break
+
+#             if next_element.name in ['div', 'p', 'ul', 'ol', 'table']:
+#                 # If it's a <table> directly
+#                 if next_element.name == 'table':
+#                     table_data = self._parse_table(next_element)
+#                     if table_data:
+#                         # Convert to JSON, then wrap with delimiters
+#                         table_json = json.dumps(table_data)
+#                         content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+#                 else:
+#                     # This element may contain nested tables
+#                     nested_tables = next_element.find_all('table', recursive=True)
+#                     for tbl in nested_tables:
+#                         tbl_data = self._parse_table(tbl)
+#                         if tbl_data:
+#                             table_json = json.dumps(tbl_data)
+#                             content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+#                         tbl.decompose()
+
+#                     # After removing tables, any leftover text remains
+#                     leftover = next_element.get_text(strip=True).replace('\xa0', ' ')
+#                     if leftover:
+#                         content_chunks.append(leftover)
+            
+#             next_element = next_element.next_sibling
+
+#         # Merge them all into one giant string. Prepend the section title at the top.
+#         final_string = section_title + "\n\n" + "\n".join(content_chunks)
+#         return final_string
+
+
+#     def _parse_table(self, table_element):
+#         """
+#         Parse an HTML table into a structured format that enhances AI understanding
+#         without relying on any hardcoded patterns or assumptions.
+        
+#         Returns a dictionary with enhanced structural information about the table.
+#         """
+#         # Extract all rows
+#         rows = table_element.find_all('tr')
+#         if not rows:
+#             return None
+        
+#         # First pass: collect raw data and basic structural information
+#         table_data = []
+#         row_metadata = []
+        
+#         for row_idx, row in enumerate(rows):
+#             cells = row.find_all(['th', 'td'])
+#             row_texts = [c.get_text(strip=True).replace('\xa0', ' ') for c in cells]
+            
+#             if not row_texts:
+#                 continue
+            
+#             # Add the raw row data
+#             table_data.append(row_texts)
+            
+#             # Collect structural metadata
+#             spans = []
+#             for cell in cells:
+#                 # Check for column spans which often indicate headers/categories
+#                 colspan = cell.get('colspan')
+#                 if colspan and int(colspan) > 1:
+#                     spans.append({
+#                         'index': len(spans),
+#                         'text': cell.get_text(strip=True).replace('\xa0', ' '),
+#                         'colspan': int(colspan)
+#                     })
+            
+#             # Record metadata about this row
+#             row_metadata.append({
+#                 'row_index': row_idx,
+#                 'cell_count': len(row_texts),
+#                 'spans': spans,
+#                 'first_cell': row_texts[0] if row_texts else "",
+#                 'is_all_caps': all(c.isupper() for c in row_texts[0] if c.isalpha()) if row_texts else False,
+#                 'empty_cells': sum(1 for text in row_texts if not text)
+#             })
+        
+#         # Return enhanced data structure
+#         return {
+#             'raw_data': table_data,
+#             'row_metadata': row_metadata
+#         }
+
+# Tool 3: Chapter Extractor Tool
+class ChapterExtractorInput(BaseModel):
+    """Input schema for ChapterExtractorTool."""
     html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
-    chapter_number: str = Field(..., description="The chapter number of the section to extract")
-    section_number: str = Field(..., description="The section number to extract")
+    chapter_number: str = Field(..., description="The chapter number to extract contents for. Parse the full_name and send in only the number, not the name.")
 
-class SectionExtractorTool(BaseTool):
-    name: str = "section_extractor_tool"
-    description: str = "Extracts the complete content of a specific section from the municipal code"
-    args_schema: Type[BaseModel] = SectionExtractorInput
+class ChapterExtractorTool(BaseTool):
+    name: str = "chapter_extractor_tool"
+    description: str = "Extracts detailed table of contents for a specific chapter from an HTML document"
+    args_schema: Type[BaseModel] = ChapterExtractorInput
 
-    def _run(self, html_document_id: str, chapter_number: str, section_number: str) -> dict:
+    def _run(self, html_document_id: str, chapter_number: str) -> dict:
         """
-        Extract the complete content of a specific section from the municipal code.
+        Extract detailed table of contents for a specific chapter from an HTML document.
         
         Returns:
-            dict: A dictionary containing the section metadata and content
+            dict: A detailed structure of the chapter, including all sections
         """
         # Load HTML using the shared function
         _, error, soup = load_html_from_storage(html_document_id)
         if error:
             return error
         
-        # Find all section elements
-        section_elements = soup.select('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section')
+        # Find the specified chapter
+        chapter_elements = soup.select('.Chapter.rbox, .rbox.Chapter')
+        target_chapter = None
+        chapter_text = ""
         
-        if len(section_elements) == 0:
-            return {
-                "error": "No section elements found in the document",
-                "section_number": f"{chapter_number}.{section_number}",
-                "content": ""
-            }
-        
-        # Look for the specific section
-        for section_element in section_elements:
-            section_text = section_element.text.strip() or ""
+        for chapter_element in chapter_elements:
+            chapter_text = chapter_element.text.strip()
+            chapter_match = re.search(r"CHAPTER\s+(\d+):\s*(.*)", chapter_text, re.IGNORECASE)
             
-            # Parse section info
+            if chapter_match and chapter_match.group(1) == chapter_number:
+                target_chapter = chapter_element
+                chapter_name = chapter_match.group(2).strip()
+                break
+        
+        if not target_chapter:
+            return {"error": f"Chapter {chapter_number} not found"}
+            
+        # Create chapter entry
+        chapter_entry = {
+            "title": chapter_text,
+            "type": "Chapter",
+            "chapterNumber": chapter_number,
+            "chapterName": chapter_name,
+            "sections": []
+        }
+        
+        # Find sections for this chapter
+        next_chapter_element = target_chapter.find_next_sibling('.Chapter.rbox, .rbox.Chapter')
+        section_elements = []
+        
+        # Get sections between this chapter and the next chapter
+        current_element = target_chapter.find_next_sibling()
+        while current_element and current_element != next_chapter_element:
+            if current_element.select_one('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section'):
+                section_elements.append(current_element)
+            current_element = current_element.find_next_sibling()
+        
+        # Process sections
+        for section_element in section_elements:
+            section_text = section_element.text.strip()
             section_match = re.search(r"§\s*(\d+)\.(\d+)\s*(.*)", section_text)
+            
             if not section_match:
                 continue
             
-            section_chapter_num = section_match.group(1)
-            section_num = section_match.group(2)
+            section_chapter_number = section_match.group(1)
+            section_number = section_match.group(2)
             section_name = section_match.group(3).strip()
             
-            # Check if this is the section we're looking for
-            if section_chapter_num == chapter_number and section_num == section_number:                
-                content = self._extract_section_content(section_element)
-                
-                # Return the section with metadata and content
-                return {
-                    "section_number": f"{chapter_number}.{section_number}",
-                    "section_title": section_name,
-                    "chapter_number": chapter_number,
-                    "content": content
-                }
-        
-        return {
-            "error": f"Section {chapter_number}.{section_number} not found in the document",
-            "section_number": f"{chapter_number}.{section_number}",
-            "content": ""
-        }
-
-    
-        
-
-    def _extract_section_content(self, section_element):
-        """
-        Extract the content text from a section element, including any nested tables, until the next section.
-        Returns one big string that includes leftover text and JSON-serialized tables (delimited).
-        """
-        # The heading (e.g. "§ 154.040  PERMITTED USE TABLE.")
-        section_title = section_element.get_text(strip=True)
-
-        content_chunks = []
-        next_element = section_element.next_sibling
-
-        while next_element:
-            # If we hit another .Section, that means a new section is starting
-            if next_element.name == 'div' and 'Section' in (next_element.get('class') or []):
-                break
-
-            if next_element.name in ['div', 'p', 'ul', 'ol', 'table']:
-                # If it's a <table> directly
-                if next_element.name == 'table':
-                    table_data = self._parse_table(next_element)
-                    if table_data:
-                        # Convert to JSON, then wrap with delimiters
-                        table_json = json.dumps(table_data)
-                        content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
-                else:
-                    # This element may contain nested tables
-                    nested_tables = next_element.find_all('table', recursive=True)
-                    for tbl in nested_tables:
-                        tbl_data = self._parse_table(tbl)
-                        if tbl_data:
-                            table_json = json.dumps(tbl_data)
-                            content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
-                        tbl.decompose()
-
-                    # After removing tables, any leftover text remains
-                    leftover = next_element.get_text(strip=True).replace('\xa0', ' ')
-                    if leftover:
-                        content_chunks.append(leftover)
-            
-            next_element = next_element.next_sibling
-
-        # Merge them all into one giant string. Prepend the section title at the top.
-        final_string = section_title + "\n\n" + "\n".join(content_chunks)
-        return final_string
-
-
-    def _parse_table(self, table_element):
-        """
-        Parse an HTML table into a structured format that enhances AI understanding
-        without relying on any hardcoded patterns or assumptions.
-        
-        Returns a dictionary with enhanced structural information about the table.
-        """
-        # Extract all rows
-        rows = table_element.find_all('tr')
-        if not rows:
-            return None
-        
-        # First pass: collect raw data and basic structural information
-        table_data = []
-        row_metadata = []
-        
-        for row_idx, row in enumerate(rows):
-            cells = row.find_all(['th', 'td'])
-            row_texts = [c.get_text(strip=True).replace('\xa0', ' ') for c in cells]
-            
-            if not row_texts:
+            # Skip sections that don't belong to this chapter
+            if section_chapter_number != chapter_number:
                 continue
             
-            # Add the raw row data
-            table_data.append(row_texts)
+            # Get the section content
+            content_element = section_element.find_next_sibling('div', class_='content')
+            section_content = content_element.get_text(strip=True) if content_element else ""
             
-            # Collect structural metadata
-            spans = []
-            for cell in cells:
-                # Check for column spans which often indicate headers/categories
-                colspan = cell.get('colspan')
-                if colspan and int(colspan) > 1:
-                    spans.append({
-                        'index': len(spans),
-                        'text': cell.get_text(strip=True).replace('\xa0', ' '),
-                        'colspan': int(colspan)
-                    })
+            section_entry = {
+                "title": section_text,
+                "type": "Section",
+                "sectionNumber": section_number,
+                "sectionName": section_name,
+                "fullSectionNumber": f"{chapter_number}.{section_number}",
+                "content": section_content
+            }
             
-            # Record metadata about this row
-            row_metadata.append({
-                'row_index': row_idx,
-                'cell_count': len(row_texts),
-                'spans': spans,
-                'first_cell': row_texts[0] if row_texts else "",
-                'is_all_caps': all(c.isupper() for c in row_texts[0] if c.isalpha()) if row_texts else False,
-                'empty_cells': sum(1 for text in row_texts if not text)
-            })
+            chapter_entry["sections"].append(section_entry)
         
-        # Return enhanced data structure
-        return {
-            'raw_data': table_data,
-            'row_metadata': row_metadata
-        }
+        return chapter_entry

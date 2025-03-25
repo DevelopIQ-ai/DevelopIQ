@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from typing import List, Dict
-from tools.table_of_contents_tools import TableOfContentsExtractorTool, SectionExtractorTool
+from tools.table_of_contents_tools import TableOfContentsExtractorTool
 load_dotenv()
 
 class SubTopicItem(BaseModel):
@@ -46,7 +46,7 @@ class ExtractionCrew():
 		return Agent(
 			config=self.agents_config['municipal_code_section_analyst'],
 			llm=self.llm,
-			tools=[SectionExtractorTool()]
+			tools=[]
 		)
 	
 	@task

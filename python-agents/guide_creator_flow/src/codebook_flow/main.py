@@ -12,7 +12,8 @@ from crewai.flow.flow import Flow, listen, start
 from bs4 import BeautifulSoup
 from crewai import Crew, Task, Agent
 import agentops
-from crews.extraction_crew.extraction_crew import ExtractionCrew
+# from crews.extraction_crew.extraction_crew import ExtractionCrew
+from crews.development_standards_crew.development_standards_crew import DevelopmentStandardsCrew
 from instructions import hints
 from alp_scraper import scrape_html_from_alp
 import requests
@@ -113,7 +114,25 @@ class ContentFlow(Flow[ContentState]):
     @listen(retrieve_and_process_html_document)
     def get_relevant_sections(self):
         print("Getting relevant sections")
-        info = "permitted_use"
+        info = "development_standards"
+        
+        # Create and run the Development Standards Crew
+        crew = DevelopmentStandardsCrew().crew()
+        result = crew.kickoff(inputs={
+            "topic": "Development Standards",
+            "zone_code": self.state.zone_code,
+            "title_list": self.state.title_list,
+            "html_document_id": self.state.html_document_id,
+            "title_finding_hint": hints[info]["title_finding_hint"],
+            "chapter_finding_hint": hints[info]["chapter_finding_hint"],
+            "section_finding_hint": hints[info]["section_finding_hint"]
+        })
+        
+        print("Results from Development Standards Crew:")
+        print(json.dumps(result, indent=2))
+        
+        # Comment out the old ExtractionCrew code
+        """
         result = (
             ExtractionCrew()
             .crew()
@@ -131,9 +150,8 @@ class ContentFlow(Flow[ContentState]):
                 "expected_output": hints[info]["expected_output"]
             })
         )
-        print(result)
+        """
         print("Relevant sections extracted")
-        
 
 def kickoff():
     if test_mode:

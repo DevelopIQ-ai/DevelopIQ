@@ -195,7 +195,13 @@ hints = {
                 • “Building and Zoning Code"
                 • “Urban Development Code"
         """,
-        
+       "chapter_finding_hint": """
+        Look for chapters that include development standards. Development standards are often labeled under different titles depending on the municipality such as:
+                • “Land Use"
+                • “Zoning Code"
+                • “Land Use Code"
+                • “Unified Development Ordinance (UDO)"
+        """,
         "section_finding_hint": """
             1. LOT REQUIREMENTS: This section may include information such as: Maximum Density, Minimum Lot Size, Minimum Frontage, Minimum Living Area, and more.
             2. BUILDING PLACEMENT REQUIREMENTS: This section may include information such as: Minimum Front Setback, Minimum Street Side Setback, Minimum Rear Setback, Accessory Building Setback, and more.
