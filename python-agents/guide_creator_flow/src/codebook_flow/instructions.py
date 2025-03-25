@@ -23,6 +23,11 @@ hints = {
                 • PERMITTED USES: Activities allowed by right without additional review for residential, commercial, or industrial zoning classifications. Include special exceptions. Can also look for: “allowed by right,” “permitted activity,” or “use classification.”                
              """,
                     
+        "analysis_goal": """
+         Extract and analyze the permitted use tables to identify all permitted uses and special exceptions for the given zone code.
+        """,
+
+
         "verification_hint": """
 
         Verify that the section has the following information. 
@@ -34,48 +39,41 @@ hints = {
         We will want to return the list of permitted uses corresponding to those for {zone_code}. 
         """,
 
+        "analysis_process": """
+        The permitted uses are typically shown in a table. When analyzing table data, use the following algorithm. 
+            a) Identify all table structures in the section content, which is denoted by --BEGIN-TABLE-- and --END-TABLE-- delimiters
+            b) For each table, determine if it contains zoning information by looking for:
+                - Headers containing zoning district designations
+                - Columns with values like "P", "S", "Y", "N", or similar indicators
+            c) Locate the target zone code column by finding exact or normalized matches (e.g., both "XX" and "X-X" could be valid)
+            d) Identify classification headers by looking for:
+                - Rows that span multiple columns
+                - Rows in all capital letters
+                - Rows containing terms like "USES", "RESIDENTIAL", "COMMERCIAL", etc.
+            e) Extract use names and their corresponding permissions by:
+                - Finding rows where the first cell contains a specific use name
+                - Checking the value in the target zone code column
+                - Categorizing based on the permission indicator (e.g., "P", "S", "Y", etc.)
 
-        "thought_process": """
+        Note: When parsing table data, note that each table has two components:
+            - "raw_data": contains the actual text content of each cell
+            - "row_metadata": contains structural information about each row
 
+            Use the "row_metadata" to identify:
+            - Rows with spans/colspan (look for "spans" array in the metadata)
+            - All-caps text (check the "is_all_caps" field)
+            - The number of empty cells (see "empty_cells" count)
+        Also, combine tables that contain "(CONT'D)" or other variations of "continued" in their classification to ensure uses from the same classification are grouped together. 
         """,
 
         "examples": """
-            See the example below for a codebook with {zone_code} set to 'DT':
+            See the example below for a codebook with zone_code set to 'DT':
 
         <INPUT>
         {'root': {'Permitted Uses': [{'sub_topic': 'Permitted Uses', 'section_number': ['154.039', '154.040'], 'section_title': ['PERMITTED USES', 'PERMITTED USE TABLE'], 'relevance_score': [10, 10], 'reason': ['Defines the uses allowed by right in the RR zoning classification.', 'Provides a table outlining various permitted activities and use classifications.']}]}}
         </INPUT>
         Note: this input is coming from the find_sections task.
-        
-       <OUTPUT> 
-
-       <THOUGHT PROCESS>
-        I understand that I have access to content relating to the permitted use matrix for all zone codes.
-        I will now list out all of the primary use classifications.
-        <LIST OF PRIMARY USE CLASSIFICATIONS>
-        [Residential Primary Uses, Commercial Sales, Services, and Repair Primary Uses, Industrial, Manufacturing, and Wholesale Primary Uses, Agriculture Primary Uses]
-        </LIST OF PRIMARY USE CLASSIFICATIONS>
-        I will now look at the content and find the column or subsection that relates to zone code {zone_code}.
-        For Residential Primary Uses, the column or subsection that relates to zone code {zone_code} is labeled as "DT".
-        I will now extract the permitted uses and special exceptions for zone code {zone_code}.
-        I see that under the "DT" column, there are several rows that either have a "P", "S" or are blank. I know that "P" represents a permitted use and the "S" represents a special exception. So now I know which rows to extract, and which values to return.
-        The rows that have a "P" are:
-        Therefore, these must be the permitted uses for zone code {zone_code} for Residential Primary Uses.
-        <PERMITTED USES>
-        [Dwelling - Bungalow Court, Dwelling - Townhouse, Dwelling - Apartment Building: Small, Dwelling - Apartment Building: Large, Live/Work Dwelling, Upper Story Residential]
-        </PERMITTED USES>
-        The rows that have a "S" are:
-        Therefore, these must be the special exceptions for zone code {zone_code} for Residential Primary Uses.
-        <SPECIAL EXCEPTIONS>
-        [Dwelling - Single-Family Detached: Standard, Dwelling - Single-Family Detached: Compact, Dwelling - Duplex, Accessory Dwelling Unit, Assissted Living Facilities, Childcare Home, Group Residential Facility, Rooming or Boarding House]
-        </SPECIAL EXCEPTIONS>
-        I will ignore the rows that have a blank value.
-        I have now extracted the permitted uses and special exceptions for zone code {zone_code} for Residential Primary Uses.
-        Okay, now I will do this for the remaining primary use classifications.
-        The next one to look at is Commercial Sales, Services, and Repair Primary Uses. 
-        ... (continue this process for all primary use classifications)
-        </THOUGHT PROCESS>
-        
+                
         <OUTPUT>
         {
         "permitted_uses": [
@@ -199,27 +197,133 @@ hints = {
         """,
         
         "section_finding_hint": """
-            1. HEIGHT AND AREA REQUIREMENTS (looking for information on setbacks, building height, lot coverage, and lot size)
-            2. PARKING REGULATIONS (looking for details on parking stall dimensions, required ADA spaces, and total parking requirements)
-            3. LANDSCAPE REQUIREMENTS (looking for standards for tree types, plant sizes, and placement)
-            4. FLOOD ZONE REGULATIONS (looking for rules for preventing flood damage in designated areas)
-            5. SIGN REQUIREMENTS (looking for rules for what type of signs are permitted and prohibited and design charateristics for signs)       """,
-                    
+            1. LOT REQUIREMENTS: This section may include information such as: Maximum Density, Minimum Lot Size, Minimum Frontage, Minimum Living Area, and more.
+            2. BUILDING PLACEMENT REQUIREMENTS: This section may include information such as: Minimum Front Setback, Minimum Street Side Setback, Minimum Rear Setback, Accessory Building Setback, and more.
+            3. BUILDING REQUIREMENTS: This section may include information such as: Maximum Building Height, Maximum Lot Coverage, and more.
+            4. LANDSCAPING REQUIREMENTS: This section may include information such as: A table of minumum/maximum plant sizes, landscape plan review summary, species variation requirements, performance guarantee/warranty information, tree information, and more.
+            5. PARKING REQUIREMENTS: This section may include information such as: Aisle width requirements, curbing requirements, parking stall minimums or maximums (number of parking stalls required), ADA parking requirements, parking lot striping and lighting requirements, parking stall size requirements, and more. 
+            6. LIGHTING REQUIREMENTS: This section may include information such as: Lighting fixture design requirements, lumonesence requirements, and light density requirements, and more.
+            7. SIGNAGE REQUIREMENTS: This section may include information such as: Prohibited sign types, permitted sign types, and a summary of design requirements including size and color and shape. 
+        """,
+
+        "all_sections_hint": """
+        Look for sections that have may use cases for the given zone code.
+        """,
+
+        "analysis_goal": """
+         Find and return the relevant information in development standards for the given zone code.
+        """,
+
+        "analysis_process": """
+          
+        """,
+
         "verification_hint": """
-            • For setbacks key words will appear such as: “front yard,” “side yard,” “rear yard,” or “minimum distance.” Verify that this info
+           •  For setbacks key words will appear such as: “front yard,” “side yard,” “rear yard,” or “minimum distance.” 
             • For building height: “maximum height,” “vertical envelope,” or “height limits.”
             • For parking: “parking stall dimensions,” “ADA compliance,” or “off-street parking.”
             • For landscaping: “tree canopy,” “planting requirements,” or “screening standards.”
             • For signs: "master sign plan", "comprehensive sign plan", "placement", "quantity", "size", "design".
 
          """,
+
+        "thought_process": """
+            The thought process here is simple. Look at the expected output and see what information we need to extract. Keep filling it up. Whatever you cannot find, return empty. You should be able to find most things if not all.
+            Expected output: {expected_output}
+        """,
         
         "examples": """
            
         """,
         
         "expected_output": """
-            Return the development standards
+        Return your findings for zone code: {zone_code}. Return JSON in the following format:
+            "{
+            "lot_requirements": {
+                "maximum_density": {
+                    "units_per_acre": "The maximum number of housing units allowed per acre."
+                },
+                "minimum_lot_size": {
+                    "square_feet": "The smallest permissible lot area, measured in square feet."
+                },
+                "minimum_lot_width": {
+                    "feet": "The minimum width of the lot, measured in feet."
+                },
+                "minimum_lot_frontage": {
+                    "feet": "The minimum frontage (front yard) of the lot, measured in feet."
+                },
+                "minimum_living_area": {
+                    "square_feet": "The minimum required living area inside the building, measured in square feet."
+                }
+            },
+            "building_placement_requirements": {
+                "minimum_front_setback": {
+                    "feet": "The minimum distance the building must be set back from the front property line, measured in feet."
+                },
+                "minimum_street_side_setback": {
+                    "feet": "The minimum setback required from the street side of the property, measured in feet."
+                },
+                "minimum_side_yard_setback": {    
+                    "feet": "The minimum distance required from the property’s side boundaries, measured in feet."
+                },
+                "minimum_rear_setback": {
+                    "feet": "The minimum setback required from the rear property line, measured in feet."
+                },
+                "accessory_building_setback": {
+                    "feet": "The minimum setback required for accessory buildings from the primary structure or property lines, measured in feet."
+                }
+            },
+            "building_requirements": {  
+                "maximum_building_height": {
+                    "feet": "The tallest permissible building height, measured in feet."
+                },
+                "maximum_lot_coverage": {
+                    "percentage": "The maximum percentage of the lot that can be covered by the building footprint."
+                }
+            },
+        ""landscaping_requirements"": {
+            ""minimum_plant_sizes"": {
+            ""feet"": ""A table or guideline specifying the minimum plant sizes allowed or recommended, measured in feet.""
+            },
+            ""landscape_plan_review_summary"": {
+            ""summary"": ""A summary outlining the requirements or review criteria for the landscaping plan.""
+            },
+            ""species_variation_requirement_summary"": {
+            ""summary"": ""A description of the requirements for species diversity in the landscaping plan.""
+            },
+            ""performance_guarantee_warranty_requirements_summary"": {
+            ""summary"": ""A summary of any performance guarantee or warranty requirements related to landscaping.""
+            }
+        },
+        ""parking_requirements"": {
+            ""minimum_aisle_width"": {
+            ""feet"": ""The minimum aisle width required in the parking area, measured in feet.""
+            },
+            ""curbing_requirements"": {
+            ""summary"": ""A description of the curbing standards and specifications for the parking lot.""
+            },
+            ""striping_requirements"": {
+            ""summary"": ""A summary of the requirements for parking lot striping, including layout and dimensions.""
+            },
+            ""drainage_requirements"": {
+            ""summary"": ""A summary of the drainage standards that must be met within the parking area.""
+            },
+            ""parking_stalls_required"": {
+            ""summary"": ""A description of the number or configuration of parking stalls required, including any specifics such as ADA stalls.""
+            }
+        },
+        ""signage_requirements"": {
+            ""permitted_sign_types"": {
+            ""summary"": ""A summary of the types of signs that are allowed under the zoning or planning guidelines.""
+            },
+            ""prohibited_sign_types"": {
+            ""summary"": ""A summary of the types of signs that are not allowed under the zoning or planning guidelines.""
+            },
+            ""design_requirements"": {
+            ""summary"": ""A description of the design requirements for signage, including specifications on size, color, and shape.""
+            }
+        }
+}"
         """
     },
     "entitlements": {

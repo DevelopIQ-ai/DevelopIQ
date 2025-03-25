@@ -341,14 +341,54 @@ class SectionExtractorTool(BaseTool):
 
     def _parse_table(self, table_element):
         """
-        Return a Python list-of-lists for each table row,
-        which we'll later serialize to JSON in _extract_section_content.
+        Parse an HTML table into a structured format that enhances AI understanding
+        without relying on any hardcoded patterns or assumptions.
+        
+        Returns a dictionary with enhanced structural information about the table.
         """
+        # Extract all rows
+        rows = table_element.find_all('tr')
+        if not rows:
+            return None
+        
+        # First pass: collect raw data and basic structural information
         table_data = []
-        for row in table_element.find_all('tr'):
+        row_metadata = []
+        
+        for row_idx, row in enumerate(rows):
             cells = row.find_all(['th', 'td'])
-            row_texts = [c.get_text(strip=True).replace('\xa0',' ')
-                        for c in cells]
-            if row_texts:
-                table_data.append(row_texts)
-        return table_data
+            row_texts = [c.get_text(strip=True).replace('\xa0', ' ') for c in cells]
+            
+            if not row_texts:
+                continue
+            
+            # Add the raw row data
+            table_data.append(row_texts)
+            
+            # Collect structural metadata
+            spans = []
+            for cell in cells:
+                # Check for column spans which often indicate headers/categories
+                colspan = cell.get('colspan')
+                if colspan and int(colspan) > 1:
+                    spans.append({
+                        'index': len(spans),
+                        'text': cell.get_text(strip=True).replace('\xa0', ' '),
+                        'colspan': int(colspan)
+                    })
+            
+            # Record metadata about this row
+            row_metadata.append({
+                'row_index': row_idx,
+                'cell_count': len(row_texts),
+                'spans': spans,
+                'first_cell': row_texts[0] if row_texts else "",
+                'is_all_caps': all(c.isupper() for c in row_texts[0] if c.isalpha()) if row_texts else False,
+                'empty_cells': sum(1 for text in row_texts if not text)
+            })
+        
+        # Return enhanced data structure
+        return {
+            'raw_data': table_data,
+            'row_metadata': row_metadata
+        }

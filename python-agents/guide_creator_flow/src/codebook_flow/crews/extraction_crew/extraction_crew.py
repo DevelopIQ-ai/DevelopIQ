@@ -22,7 +22,7 @@ class ExtractionCrew():
 	"""ExtractionCrew crew"""
 	# llm= LLM(model="ollama/llama3.2", base_url="http://localhost:11434")
 	llm = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
-	llm_o1 = LLM(model="gpt-4o-mini", api_key=os.environ.get('OPENAI_API_KEY'))
+	#llm_good = LLM(model="anthropic/claude-3-haiku-20240307", api_key=os.environ.get('ANTHROPIC_API_KEY'), max_tokens=40000, temperature=0.1)
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
@@ -45,7 +45,7 @@ class ExtractionCrew():
 	def municipal_code_section_analyst(self) -> Agent:
 		return Agent(
 			config=self.agents_config['municipal_code_section_analyst'],
-			llm=self.llm_o1,
+			llm=self.llm,
 			tools=[SectionExtractorTool()]
 		)
 	

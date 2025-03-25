@@ -124,9 +124,10 @@ class ContentFlow(Flow[ContentState]):
                 "zone_code": self.state.zone_code,
                 "title_finding_hint": hints[info]["title_finding_hint"],
                 "section_finding_hint": hints[info]["section_finding_hint"],
+                "analysis_goal": hints[info]["analysis_goal"],
+                "analysis_process": hints[info]["analysis_process"],
                 "verification_hint": hints[info]["verification_hint"],
                 "examples": hints[info]["examples"],
-                "thought_process": hints[info]["thought_process"],
                 "expected_output": hints[info]["expected_output"]
             })
         )
