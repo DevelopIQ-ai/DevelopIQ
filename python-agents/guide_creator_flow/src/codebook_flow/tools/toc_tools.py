@@ -3,7 +3,6 @@ from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 from bs4 import BeautifulSoup
 import re
-import json
 import os
 
 def normalize_whitespace(text):
@@ -64,17 +63,15 @@ def load_html_from_storage(document_id: str) -> Tuple[Optional[str], Optional[Di
         print(error_msg)
         return None, {"error": error_msg}, None
 
-
-# Tool 1: Table of Contents Extractor Tool
-class TableOfContentsExtractorInput(BaseModel):
+class TitleExtractorInput(BaseModel):
     """Input schema for TableOfContentsExtractorTool."""
     html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
     target_title: str = Field(..., description="The full name of the title to extract detailed contents for")
 
-class TableOfContentsExtractorTool(BaseTool):
-    name: str = "table_of_contents_extractor_tool"
+class TitleExtractorTool(BaseTool):
+    name: str = "title_extractor_tool "
     description: str = "Extracts detailed table of contents for a specific title from an HTML document"
-    args_schema: Type[BaseModel] = TableOfContentsExtractorInput
+    args_schema: Type[BaseModel] = TitleExtractorInput
 
     def _run(self, html_document_id: str, target_title: str) -> dict:
         """
@@ -223,6 +220,101 @@ class TableOfContentsExtractorTool(BaseTool):
             return {"error": f"Failed to process title: {target_title}"}
         
         return title_entry
+
+
+class ChapterExtractorInput(BaseModel):
+    """Input schema for ChapterExtractorTool."""
+    html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
+    chapter_number: str = Field(..., description="The chapter number to extract contents for. Parse the full_name and send in only the number, not the name.")
+
+class ChapterExtractorTool(BaseTool):
+    name: str = "chapter_extractor_tool"
+    description: str = "Extracts detailed table of contents for a specific chapter from an HTML document"
+    args_schema: Type[BaseModel] = ChapterExtractorInput
+
+    def _run(self, html_document_id: str, chapter_number: str) -> dict:
+        """
+        Extract detailed table of contents for a specific chapter from an HTML document.
+        
+        Returns:
+            dict: A detailed structure of the chapter, including all sections
+        """
+        print(chapter_number)
+        # Load HTML using the shared function
+        _, error, soup = load_html_from_storage(html_document_id)
+        if error:
+            return error
+        
+        # Find the specified chapter
+        chapter_elements = soup.select('.Chapter.rbox, .rbox.Chapter')
+        target_chapter = None
+        chapter_text = ""
+        
+        for chapter_element in chapter_elements:
+            chapter_text = chapter_element.text.strip()
+            chapter_match = re.search(r"CHAPTER\s+(\d+)[:\s]+(.*)", chapter_text, re.IGNORECASE)
+    
+            if chapter_match:
+                found_chapter_number = chapter_match.group(1)
+                
+                if found_chapter_number == chapter_number:
+                    target_chapter = chapter_element
+                    chapter_name = chapter_match.group(2).strip()
+                    break
+        
+        if not target_chapter:
+            return {"error": f"Chapter {chapter_number} not found"}
+            
+        # Create chapter entry
+        chapter_entry = {
+            "chapter": chapter_text,
+            "chapterNumber": chapter_number,
+            "chapterName": chapter_name,
+            "sections": []
+        }
+        
+        # Find sections for this chapter
+        next_chapter_element = target_chapter.find_next_sibling('.Chapter.rbox, .rbox.Chapter')
+        section_elements = []
+        
+        # Get sections between this chapter and the next chapter
+        current_element = target_chapter.find_next_sibling()
+        while current_element and current_element != next_chapter_element:
+            if current_element.select_one('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section'):
+                section_elements.append(current_element)
+            current_element = current_element.find_next_sibling()
+        
+        # Process sections
+        for section_element in section_elements:
+            section_text = section_element.text.strip()
+            section_match = re.search(r"§\s*(\d+)\.(\d+)\s*(.*)", section_text)
+            
+            if not section_match:
+                continue
+            
+            section_chapter_number = section_match.group(1)
+            section_number = section_match.group(2)
+            section_name = section_match.group(3).strip()
+            
+            # Skip sections that don't belong to this chapter
+            if section_chapter_number != chapter_number:
+                continue
+            
+            # Get the section content
+            # content_element = section_element.find_next_sibling('div', class_='content')
+            # section_content = content_element.get_text(strip=True) if content_element else ""
+            
+            section_entry = {
+                "section": section_text,
+                "sectionNumber": section_number,
+                "sectionName": section_name,
+                "fullSectionNumber": f"{chapter_number}.{section_number}",
+            }
+            
+            chapter_entry["sections"].append(section_entry)
+        
+        return chapter_entry
+    
 
 
 # Tool 2: Section Extractor Tool
@@ -394,94 +486,3 @@ class TableOfContentsExtractorTool(BaseTool):
 #         }
 
 # Tool 3: Chapter Extractor Tool
-class ChapterExtractorInput(BaseModel):
-    """Input schema for ChapterExtractorTool."""
-    html_document_id: str = Field(..., description="The ID of the municipal code document to parse")
-    chapter_number: str = Field(..., description="The chapter number to extract contents for. Parse the full_name and send in only the number, not the name.")
-
-class ChapterExtractorTool(BaseTool):
-    name: str = "chapter_extractor_tool"
-    description: str = "Extracts detailed table of contents for a specific chapter from an HTML document"
-    args_schema: Type[BaseModel] = ChapterExtractorInput
-
-    def _run(self, html_document_id: str, chapter_number: str) -> dict:
-        """
-        Extract detailed table of contents for a specific chapter from an HTML document.
-        
-        Returns:
-            dict: A detailed structure of the chapter, including all sections
-        """
-        # Load HTML using the shared function
-        _, error, soup = load_html_from_storage(html_document_id)
-        if error:
-            return error
-        
-        # Find the specified chapter
-        chapter_elements = soup.select('.Chapter.rbox, .rbox.Chapter')
-        target_chapter = None
-        chapter_text = ""
-        
-        for chapter_element in chapter_elements:
-            chapter_text = chapter_element.text.strip()
-            chapter_match = re.search(r"CHAPTER\s+(\d+):\s*(.*)", chapter_text, re.IGNORECASE)
-            
-            if chapter_match and chapter_match.group(1) == chapter_number:
-                target_chapter = chapter_element
-                chapter_name = chapter_match.group(2).strip()
-                break
-        
-        if not target_chapter:
-            return {"error": f"Chapter {chapter_number} not found"}
-            
-        # Create chapter entry
-        chapter_entry = {
-            "title": chapter_text,
-            "type": "Chapter",
-            "chapterNumber": chapter_number,
-            "chapterName": chapter_name,
-            "sections": []
-        }
-        
-        # Find sections for this chapter
-        next_chapter_element = target_chapter.find_next_sibling('.Chapter.rbox, .rbox.Chapter')
-        section_elements = []
-        
-        # Get sections between this chapter and the next chapter
-        current_element = target_chapter.find_next_sibling()
-        while current_element and current_element != next_chapter_element:
-            if current_element.select_one('.Section.toc-destination.rbox, .Section.rbox, .rbox.Section'):
-                section_elements.append(current_element)
-            current_element = current_element.find_next_sibling()
-        
-        # Process sections
-        for section_element in section_elements:
-            section_text = section_element.text.strip()
-            section_match = re.search(r"§\s*(\d+)\.(\d+)\s*(.*)", section_text)
-            
-            if not section_match:
-                continue
-            
-            section_chapter_number = section_match.group(1)
-            section_number = section_match.group(2)
-            section_name = section_match.group(3).strip()
-            
-            # Skip sections that don't belong to this chapter
-            if section_chapter_number != chapter_number:
-                continue
-            
-            # Get the section content
-            content_element = section_element.find_next_sibling('div', class_='content')
-            section_content = content_element.get_text(strip=True) if content_element else ""
-            
-            section_entry = {
-                "title": section_text,
-                "type": "Section",
-                "sectionNumber": section_number,
-                "sectionName": section_name,
-                "fullSectionNumber": f"{chapter_number}.{section_number}",
-                "content": section_content
-            }
-            
-            chapter_entry["sections"].append(section_entry)
-        
-        return chapter_entry
