@@ -53,7 +53,6 @@ def check_if_export_is_ready(token, latest_codebook_uuid, export_id):
             and export_request["version"] == latest_codebook_uuid
             and export_request["task"]["post_state"] == "SUCCESS"):
             return True
-
     return False
 
 def scrape_html_from_alp(municipality, state):

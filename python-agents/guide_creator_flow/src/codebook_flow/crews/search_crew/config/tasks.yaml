@@ -1,0 +1,37 @@
+find_chapter:
+  description: >
+    <GOAL>
+    Examine the provided JSON structure representing a list of titles, labeled as "title_list".
+    Find the most relevant title for the given query: "{topic}". Then extract the full table of contents for the selected title.
+    </GOAL>
+
+    <APPROACH>
+    <Step_1> Determine which title in the list is most relevant to finding information about "{topic}" with respect to the zone code: "{zone_code}". 
+    Here is some additional information to help you: {title_finding_hint} </Step_1>
+    <Step_2> Extract the detailed table of contents for the title you have chosen. You can use the title_extractor_tool to do this. Remember, you have to pass in a Title, not a Chapter. Avoid using new lines and trailing spaces. </Step_2>
+    <Step 3> Look at the table of contents you have extracted and identify the actual chapters that exist in the document (e.g., CHAPTER 14, CHAPTER 155, CHAPTER 156). Don't assume sequential chapter numbering from 1. </Step_3>
+    <Step_4> Analyze these chapter names (and their children sections) in the context of the following hint: {chapter_finding_hint}, and determine which chapter is most relevant. Keep the hint and topic in mind. </Step_4>
+    <Step_5> Use the chapter_extractor_tool to get detailed chapter information for the chapter you have selected. Avoid using new lines and trailing spaces. Make sure the chapter number is in the table of contents, and is relevant. You shouldn't have to use this tool more than once.</Step_5>
+    </APPROACH>
+ 
+
+    <JSON_STRUCTURE>
+    List of titles:
+    {title_list}
+    </JSON_STRUCTURE>
+
+    <HTML DOCUMENT ID>
+    HTML document ID:
+    {html_document_id}
+    </HTML DOCUMENT ID>
+
+  expected_output: >
+    Return a JSON object with the selected title information:
+    {
+      "selected_title": "The label of the selected title. Make sure to include the title name and number as it appears in the title list. .",
+      "title_reason": "Explanation for why this title was selected",
+      "selected_chapter": "The label of the selected chapter. Make sure to include the chapter number and name as it appears in the table of contents.",
+      "chapter_reason": "Explanation for why this chapter was selected",
+      "chapter_contents": A list of sections in the chapter. For each section, include the full section number (eg. 126.001), and name as it appears in the table of contents.
+    }
+  agent: municipal_code_finder

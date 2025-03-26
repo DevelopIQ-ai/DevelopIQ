@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 
 
-def extract_table_of_contents(html_document_id: str, include_sections: bool = False, target_title: str = None, titles_only: bool = False):
+def extract_alp_table_of_contents_full(html_document_id: str, include_sections: bool = False, target_title: str = None, titles_only: bool = False):
     """
     Extract table of contents from an HTML document containing municipal code.
     
@@ -151,7 +151,7 @@ def extract_table_of_contents(html_document_id: str, include_sections: bool = Fa
     
     return toc
 
-def extract_section_content(section_element):
+def alp_extract_section_content(section_element):
     """
     Extract the content text from a section element.
     
