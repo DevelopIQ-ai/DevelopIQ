@@ -29,11 +29,14 @@ async def read_root():
 @app.post("/run")
 async def run_codebook(params: CodebookParams):
     # Run the kickoff function in a separate thread to avoid event loop conflicts
-    loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(
-        executor, 
-        lambda: kickoff(state_code=params.state_code, municipality=params.municipality, zone_code=params.zone_code)
-    )
-    return {"status": "success", "result": result}
+    try:
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(
+            executor, 
+            lambda: kickoff(state_code=params.state_code, municipality=params.municipality, zone_code=params.zone_code)
+        )
+        return {"status": "success", "result": result}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 # Start the server with: uvicorn main:app --reload
