@@ -102,8 +102,11 @@ def extract_section_text(section_element):
                     table_json = json.dumps(table_data)
                     content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
             else:
-                # This element may contain nested tables
-                nested_tables = next_element.find_all('table', recursive=True)
+                nested_tables = []
+                for table in next_element.find_all('table', recursive=True):
+                    header_parent = table.find_parent('div', class_='xsl-table--header')
+                    if not header_parent:
+                        nested_tables.append(table)
                 for tbl in nested_tables:
                     tbl_data = parse_table(tbl)
                     if tbl_data:
