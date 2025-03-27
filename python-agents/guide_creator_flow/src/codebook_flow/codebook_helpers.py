@@ -73,7 +73,7 @@ def parse_table(table_element):
     # Return enhanced data structure
     return {
         'raw_data': table_data,
-        'row_metadata': row_metadata
+        # 'row_metadata': row_metadata
     }
 
 
@@ -92,6 +92,8 @@ def extract_section_text(section_element):
         # If we hit another .Section, that means a new section is starting
         if next_element.name == 'div' and 'Section' in (next_element.get('class') or []):
             break
+
+        # <div class="xsl-table xsl-table--header"><table cellSpacing="0" style="width: &#10;                  700px&#10;                ;">
         
         if next_element.name in ['div', 'p', 'ul', 'ol', 'table']:
             # If it's a <table> directly
@@ -103,7 +105,15 @@ def extract_section_text(section_element):
                     content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
             else:
                 # This element may contain nested tables
-                nested_tables = next_element.find_all('table', recursive=True)
+                # print(next_element.get('class'))
+                # Find all tables, but filter out ones inside header divs
+                nested_tables = []
+                for table in next_element.find_all('table', recursive=True):
+                    # Check if this table is inside a header div
+                    header_parent = table.find_parent('div', class_='xsl-table--header')
+                    if not header_parent:
+                        nested_tables.append(table)
+                
                 for tbl in nested_tables:
                     tbl_data = parse_table(tbl)
                     if tbl_data:
@@ -112,6 +122,7 @@ def extract_section_text(section_element):
                     tbl.decompose()
                 
                 # After removing tables, any leftover text remains
+                # This is getting the xsl-table--header text, might need to remove it
                 leftover = next_element.get_text(strip=True).replace('\xa0', ' ')
                 if leftover:
                     content_chunks.append(leftover)
@@ -120,6 +131,7 @@ def extract_section_text(section_element):
     
     # Merge them all into one giant string. Prepend the section title at the top.
     final_string = section_title + "\n\n" + "\n".join(content_chunks)
+    print(final_string)
     return final_string
 
 

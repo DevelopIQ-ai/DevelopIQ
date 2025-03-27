@@ -20,7 +20,7 @@ from crews.search_crew.search_hints import search_hints
 from alp_scraper import scrape_html_from_alp
 import requests
 from codebook_helpers import extract_alp_table_of_contents_full
-from RAG.codebook_retriever import CodebookRetriever
+from rag.codebook_retriever import CodebookRetriever
 load_dotenv()
 
 agentops.init(
@@ -175,12 +175,12 @@ if __name__ == "__main__":
 }
 
     sections = section_list["chapter_contents"]
-    zone_code = "RR"
+    zone_code = "R-R"
     html_id = "bargersville_in"
     subtopic = "LOT REQUIREMENTS"
     retriever = CodebookRetriever(html_document_id=html_id)
     retriever.process_all_sections(sections, extract_alp_section_content_from_section_number)
-    answer = retriever.query_codebook("List the prohibited signs.")
+    answer = retriever.query_codebook("What uses are allowed in the R-R zone? Specifically list them. If the cell value in the R-R column is 'P', then they are permitted. If they are an 'S' or are empty, then they are not. Hint: The information likely comes from a table in section 154.040.")
     print(answer)
 
     # content = extract_alp_section_content_from_section_number("bargersville_in", "154.040")
