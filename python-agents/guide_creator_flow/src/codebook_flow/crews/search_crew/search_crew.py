@@ -38,7 +38,7 @@ class SearchCrew:
         """Task to find the most relevant chapter"""
         return Task(
             config=self.tasks_config['find_chapter'],
-            output_json=ChapterOutput,
+            output_pydantic=ChapterOutput,
             tools=[TitleExtractorTool(), ChapterExtractorTool()]
         )
 
