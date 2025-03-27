@@ -128,15 +128,33 @@ class ContentFlow(Flow[ContentState]):
             "chapter_finding_hint": search_hints["chapter_finding_hint"],
         })
         
-        self.state.section_list = result
+        result = result.pydantic
         print("Section list extracted", result)
+        # Convert the Pydantic model to a dict and get chapter_contents
+        section_list_json = [section.dict() for section in result.chapter_contents]
+        self.state.section_list = section_list_json
+        print("Section list JSON", section_list_json)
     
     @listen(get_section_list)
     def extract_section_content_and_chunk(self):
         print("Extracting section content and chunking")
         
         retriever = CodebookRetriever(html_document_id=self.state.html_document_id)
-        # retriever.process_all_sections(self.state.section_list)
+        if not retriever.codebook_exists_and_is_indexed(self.state.html_document_id):
+            retriever.process_all_sections(self.state.section_list, extract_alp_section_content_from_section_number)
+        else:
+            print("Codebook already exists, skipping processing")
+
+        prohibited_signs = retriever.query_codebook("List the prohibited signs.")
+        permitted_signs = retriever.query_codebook("List the permitted signs.")
+
+        self.state.analysis_results = {
+            "prohibited_signs": prohibited_signs,
+            "permitted_signs": permitted_signs
+        }
+        print("Analysis results", self.state.analysis_results)
+
+
        
 
 def kickoff():
@@ -152,38 +170,38 @@ def plot():
 
 
 if __name__ == "__main__":
-    # kickoff()
-    section_list =  {
-  "selected_title": "TITLE XV: LAND USAGE",
-  "selected_chapter": "CHAPTER 154: DEVELOPMENT CODE",
-  "chapter_reason": "This chapter contains specific regulations and standards regarding development, directly addressing the user's inquiry about Development Standards.",
-  "chapter_contents": [
-    {"section_number": "154.015", "section_name": "EFFECTIVE DATE; TRANSITIONAL PROVISIONS."},
-    {"section_number": "154.030", "section_name": "ESTABLISHMENT OF ZONING DISTRICTS."},
-    {"section_number": "154.031", "section_name": "RURAL DISTRICTS STANDARDS AND USES."},
-    {"section_number": "154.032", "section_name": "RESIDENTIAL DISTRICTS STANDARDS AND USES."},
-    {"section_number": "154.033", "section_name": "COMMERCIAL DISTRICTS STANDARDS AND USES."},
-    {"section_number": "154.034", "section_name": "INDUSTRIAL DEVELOPMENT STANDARDS AND USES."},
-    {"section_number": "154.035", "section_name": "SPECIAL DISTRICT DEVELOPMENT STANDARDS."},
-    {"section_number": "154.036", "section_name": "FLOODPLAIN REGULATIONS."},
-    {"section_number": "154.037", "section_name": "ARTERIAL CORRIDOR OVERLAY."},
-    {"section_number": "154.038", "section_name": "I-69 INTERCHANGE OVERLAY."},
-    {"section_number": "154.039", "section_name": "PERMITTED USES."},
-    {"section_number": "154.040", "section_name": "PERMITTED USE TABLE."},
-    {"section_number": "154.113", "section_name": "SIGNAGE."},
-  ]
-}
+    kickoff()
+#     section_list =  {
+#   "selected_title": "TITLE XV: LAND USAGE",
+#   "selected_chapter": "CHAPTER 154: DEVELOPMENT CODE",
+#   "chapter_reason": "This chapter contains specific regulations and standards regarding development, directly addressing the user's inquiry about Development Standards.",
+#   "chapter_contents": [
+#     {"section_number": "154.015", "section_name": "EFFECTIVE DATE; TRANSITIONAL PROVISIONS."},
+#     {"section_number": "154.030", "section_name": "ESTABLISHMENT OF ZONING DISTRICTS."},
+#     {"section_number": "154.031", "section_name": "RURAL DISTRICTS STANDARDS AND USES."},
+#     {"section_number": "154.032", "section_name": "RESIDENTIAL DISTRICTS STANDARDS AND USES."},
+#     {"section_number": "154.033", "section_name": "COMMERCIAL DISTRICTS STANDARDS AND USES."},
+#     {"section_number": "154.034", "section_name": "INDUSTRIAL DEVELOPMENT STANDARDS AND USES."},
+#     {"section_number": "154.035", "section_name": "SPECIAL DISTRICT DEVELOPMENT STANDARDS."},
+#     {"section_number": "154.036", "section_name": "FLOODPLAIN REGULATIONS."},
+#     {"section_number": "154.037", "section_name": "ARTERIAL CORRIDOR OVERLAY."},
+#     {"section_number": "154.038", "section_name": "I-69 INTERCHANGE OVERLAY."},
+#     {"section_number": "154.039", "section_name": "PERMITTED USES."},
+#     {"section_number": "154.040", "section_name": "PERMITTED USE TABLE."},
+#     {"section_number": "154.113", "section_name": "SIGNAGE."},
+#   ]
+# }
 
-    sections = section_list["chapter_contents"]
-    zone_code = "RR"
-    html_id = "bargersville_in"
-    subtopic = "LOT REQUIREMENTS"
-    retriever = CodebookRetriever(html_document_id=html_id)
-    retriever.process_all_sections(sections, extract_alp_section_content_from_section_number)
-    answer = retriever.query_codebook("List the prohibited signs.")
-    print(answer)
+#     sections = section_list["chapter_contents"]
+#     zone_code = "RR"
+#     html_id = "bargersville_in"
+#     subtopic = "LOT REQUIREMENTS"
+#     retriever = CodebookRetriever(html_document_id=html_id)
+#     retriever.process_all_sections(sections, extract_alp_section_content_from_section_number)
+#     answer = retriever.query_codebook("List the prohibited signs.")
+#     print(answer)
 
-    # content = extract_alp_section_content_from_section_number("bargersville_in", "154.040")
-    # print(content)
+#     # content = extract_alp_section_content_from_section_number("bargersville_in", "154.040")
+#     # print(content)
 
     

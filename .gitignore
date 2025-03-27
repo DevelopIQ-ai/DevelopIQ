@@ -63,6 +63,29 @@ ENV/
 *.log.*
 
 # ----------------------------------------
+# Chroma DB ignores
+# ----------------------------------------
+.chroma/
+chroma/
+chromadb/
+*.chroma
+*.chromadb
+chroma.log
+codebook_db/
+codebook_db/*/
+codebook_db/*.sqlite3
+codebook_db/*/data_level0.bin
+codebook_db/*/header.bin
+codebook_db/*/index_metadata.pickle
+codebook_db/*/length.bin
+codebook_db/*/link_lists.bin
+
+# ----------------------------------------
+# Output files
+# ----------------------------------------
+crews/search_crew/chapter_output.json
+
+# ----------------------------------------
 # Misc
 # ----------------------------------------
 coverage/

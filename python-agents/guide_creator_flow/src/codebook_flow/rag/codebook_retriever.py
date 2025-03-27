@@ -14,6 +14,8 @@ from pathlib import Path
 load_dotenv()
 
 class CodebookRetriever:
+
+    
     def __init__(self, persist_directory="./codebook_db", html_document_id=None, reset_db=False):
         """
         Initialize the CodebookRetriever
@@ -40,22 +42,20 @@ class CodebookRetriever:
         self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
         self.chroma_client = chromadb.PersistentClient(path=persist_directory)
         
-        try:
-            self.collection_name = f"{self.html_document_id}_codebook"
+   
+        self.collection_name = f"{self.html_document_id}"
             
             # Try to get the collection directly
-            try:
-                self.collection = self.chroma_client.get_collection(self.collection_name)
-                print(f"Using existing collection: {self.collection_name}")
-            except ValueError:
-                # Collection doesn't exist, create it
-                self.collection = self.chroma_client.create_collection(
-                    self.collection_name,
-                    metadata={"hnsw:space": "cosine"}  # Ensure consistent embedding space
-                )
-                print(f"Created new collection: {self.collection_name}")
-        except Exception as e:
-            print(f"Error with collection: {str(e)}")
+        try:
+            self.collection = self.chroma_client.get_collection(self.collection_name)
+            print(f"Using existing collection: {self.collection_name}")
+        except Exception as e: # tried to do value error but it was not working
+            print("Collection does not exist, creating new collection")
+            self.collection = self.chroma_client.create_collection(
+                self.collection_name,
+                metadata={"hnsw:space": "cosine"}  # Ensure consistent embedding space
+            )
+            print(f"Created new collection: {self.collection_name}")
             
         self.db = Chroma(
             client=self.chroma_client,
@@ -70,7 +70,26 @@ class CodebookRetriever:
         
         self.llm = ChatOpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"))
         print("CodebookRetriever initialized")
-    
+
+    def codebook_exists_and_is_indexed(self, collection_name):
+        """
+        Check if the codebook exists and is indexed
+        """
+        print("Checking if codebook exists and is indexed", collection_name)
+        try:
+            self.chroma_client.get_collection(collection_name)
+            if self.collection.count() > 0:
+                print("Codebook exists and is indexed", collection_name)
+                return True
+            else:
+                print("Codebook exists but is empty", collection_name)
+                return False
+        except Exception as e:
+            print("Codebook does not exist or is not indexed", collection_name)
+            return False
+        
+
+        
     def process_all_sections(self, sections_list, extract_section_content):
         """
         Process all sections in the provided list
