@@ -17,25 +17,25 @@ interface DevelopmentInfoTabProps {
 
 export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, developmentInfoError }: DevelopmentInfoTabProps) {
   const [reportData, setReportData] = useState<DevelopmentInfo | null>(null)
-  // const [error, setError] = useState<string | null>(null)
-  // const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // useEffect(() => {
-  //   if (reportHandler) {
-  //     try {
-  //       const data = reportHandler.getDevelopmentInfo()
-  //       setReportData(data)
-  //       setIsLoading(false)
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : "Failed to load development data")
-  //       setIsLoading(false)
-  //     }
-  //   } else {
-  //     setIsLoading(false)
-  //   }
-  // }, [reportHandler])
+  useEffect(() => {
+    if (reportHandler) {
+      try {
+        const data = reportHandler.getDevelopmentInfo()
+        setReportData(data)
+        setIsLoading(false)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load development data")
+        setIsLoading(false)
+      }
+    } else {
+      setIsLoading(false)
+    }
+  }, [reportHandler])
 
-  if (developmentInfoLoading) {
+  if (developmentInfoLoading || isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -43,7 +43,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
     )
   }
 
-  if (developmentInfoError) {
+  if (developmentInfoError || error) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />

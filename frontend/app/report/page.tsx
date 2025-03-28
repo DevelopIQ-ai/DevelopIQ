@@ -34,7 +34,6 @@ export default function PropertyAnalysisDashboard() {
   const [newsError, setNewsError] = useState<string | null>(null);
   const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
   const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
-  const [developmentInfoFetched, setDevelopmentInfoFetched] = useState(false);
 
 
   const hasFetchedDevelopmentInfo = useRef(false);
@@ -124,7 +123,6 @@ export default function PropertyAnalysisDashboard() {
           console.log('DEVELOPMENT INFO: ', data);
           
           if (!hasFetchedDevelopmentInfo.current) {
-            setDevelopmentInfoFetched(true);
             hasFetchedDevelopmentInfo.current = true;
           }
         } catch (error) {
