@@ -2,6 +2,7 @@ from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+from fastapi.middleware.cors import CORSMiddleware
 from src.codebook_flow.main import kickoff
 
 # Initialize FastAPI app
@@ -9,6 +10,15 @@ app = FastAPI(
     title="Codebook Flow API",
     description="API for running codebook flow",
     version="0.1.0"
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 # Create a thread pool executor for running blocking functions

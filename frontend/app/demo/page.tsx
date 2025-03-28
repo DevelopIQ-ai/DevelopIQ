@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import "@/styles/report.css";
+import { NavBar } from "@/components/nav-bar";
 
 // Sample conversation starters for property addresses
 const conversationStarters = [
@@ -17,6 +18,11 @@ const conversationStarters = [
   {
     id: 2,
     propertyAddress: "1206 W 186th St, Westfield, IN 46074, USA",
+    propertyType: "Residential",
+  },
+  {
+    id: 3,
+    propertyAddress: "238 Easy St, Bargersville, IN 46106, USA",
     propertyType: "Residential",
   },
 ];
@@ -185,15 +191,8 @@ export default function Demo() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900">
-      <header className="px-4 py-6">
-        <Link href="/" className="flex items-center gap-2 w-fit">
-          <div className="w-8 h-8 bg-orange-500/10 rounded flex items-center justify-center">
-            <div className="w-4 h-4 bg-orange-500 rounded-sm" />
-          </div>
-          <span className="font-medium">DevelopIQ</span>
-        </Link>
-      </header>
-      <main className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] py-12">
+      <NavBar />
+      <main className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] py-12 mt-20">
         <div className="w-full space-y-8 mb-12">
           <h1 className="text-2xl font-bold text-center">
             Select a property address to begin
