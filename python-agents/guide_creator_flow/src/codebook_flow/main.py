@@ -7,20 +7,19 @@ import os
 from dotenv import load_dotenv
 import time
 
-from codebook_helpers import extract_alp_section_content_from_section_number
-# from rag.rag import CodebookRetriever
 
 from pydantic import BaseModel
 
 from crewai.flow.flow import Flow, listen, start
 from bs4 import BeautifulSoup
 import agentops
-from crews.search_crew.search_crew import SearchCrew
-from crews.search_crew.search_hints import search_hints
-from alp_scraper import scrape_html_from_alp
+from src.codebook_flow.crews.search_crew.search_crew import SearchCrew
+from src.codebook_flow.crews.search_crew.search_hints import search_hints
+from src.codebook_flow.alp_scraper import scrape_html_from_alp
 import requests
-from codebook_helpers import extract_alp_table_of_contents_full
-from RAG.codebook_retriever import CodebookRetriever
+from src.codebook_flow.codebook_helpers import extract_alp_section_content_from_section_number
+from src.codebook_flow.codebook_helpers import extract_alp_table_of_contents_full
+from src.codebook_flow.rag.codebook_retriever import CodebookRetriever
 load_dotenv()
 
 agentops.init(
@@ -30,7 +29,7 @@ agentops.init(
 
 input_municipality = "Bargersville"
 input_state = "IN"
-storage_path = "./html_storage"
+storage_path = "src/codebook_flow/html_storage"
 html_content = ""
 model = "gpt-4o-mini"
 
@@ -101,7 +100,7 @@ class ContentState(BaseModel):
     title_list: Dict[str, Any] = {}
     extracted_sections: Dict[str, Any] = {}
     analysis_results: Dict[str, Any] = {}
-    zone_code: str = "RR"
+    zone_code: str = "R-R"
     section_list: Dict[str, Any] = {}
 
 
@@ -154,15 +153,24 @@ class ContentFlow(Flow[ContentState]):
         }
         print("Analysis results", self.state.analysis_results)
 
+        return self.state.analysis_results
+
 
        
 
-def kickoff():
+def kickoff(state_code = "IN", municipality = "Bargersville", zone_code = "R-R"):
+    global input_municipality, input_state
+    input_municipality = municipality
+    input_state = state_code
+    
     if test_mode:
         print("Running in test mode - will use existing HTML files")
     content_flow = ContentFlow()
-    content_flow.kickoff()
+    content_flow.state.zone_code = zone_code
+    result = content_flow.kickoff()
+    print("Final result:", result)
     agentops.end_session(end_state="Success")
+    return result
 
 def plot():
     content_flow = ContentFlow()

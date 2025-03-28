@@ -1,14 +1,12 @@
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
+import Image from "next/image"
 
 export const NavBar = () => {
   return (
-    <header className="container mx-auto px-4 py-6 flex justify-between items-center fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm header-nav">
+    <header className="w-full mx-auto px-4 py-2 flex justify-between items-center fixed top-0 left-0 right-0 z-50 bg-background backdrop-blur-sm header-nav shadow-sm">
       <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
-            <div className="w-4 h-4 bg-primary rounded-sm" />
-          </div>
-          <span className="font-medium">DevelopIQ</span>
+          <Image src="/logos/developiq_logo_large.png" alt="DevelopIQ Logo" width={150} height={50} />
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />

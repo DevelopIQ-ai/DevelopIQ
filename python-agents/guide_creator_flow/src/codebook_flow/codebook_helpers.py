@@ -13,7 +13,7 @@ def load_html_from_storage(html_document_id):
     Returns:
         BeautifulSoup: A BeautifulSoup object of the HTML document, or None if loading fails
     """
-    storage_path = "./html_storage"
+    storage_path = "src/codebook_flow/html_storage"
     html_file_path = f"{storage_path}/{html_document_id}.html"
     
     try:

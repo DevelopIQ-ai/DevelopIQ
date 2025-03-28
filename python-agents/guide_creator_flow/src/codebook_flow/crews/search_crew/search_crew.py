@@ -2,7 +2,7 @@ from typing import List, Dict, Any
 from crewai import Agent, Task, Crew, Process, LLM
 from crewai.project import CrewBase, agent, crew, task
 from pydantic import BaseModel, Field
-from tools.toc_tools import (
+from src.codebook_flow.tools.toc_tools import (
     TitleExtractorTool,
     ChapterExtractorTool
 )

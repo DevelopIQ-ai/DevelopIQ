@@ -27,7 +27,7 @@ def load_html_from_storage(document_id: str) -> Tuple[Optional[str], Optional[Di
         - Error information (or None if successful)
         - BeautifulSoup object (or None if error)
     """
-    storage_path = "./html_storage"
+    storage_path = "src/codebook_flow/html_storage"
     html_file_path = f"{storage_path}/{document_id.lower()}.html"
     
     # Check if file exists

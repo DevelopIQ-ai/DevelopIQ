@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
@@ -32,6 +32,11 @@ export default function PropertyAnalysisDashboard() {
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [newsError, setNewsError] = useState<string | null>(null);
+  const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
+  const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
+
+
+  const hasFetchedDevelopmentInfo = useRef(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,9 +47,11 @@ export default function PropertyAnalysisDashboard() {
       const isDemo = localStorage.getItem("isDemo") === "true";
       
       if (isDemo) {
+        console.log('DEMO');
         setTimeout(() => {
           const propertyData = mockPropertyData[propertyAddress]
           handler.setGeneralInfo(propertyData);
+          console.log('PROPERTY DATA', propertyData);
           setIsLoading(false);
         }, 1500);
       } else {
@@ -91,6 +98,45 @@ export default function PropertyAnalysisDashboard() {
       }
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchDevelopmentInfo() {
+      if (!hasFetchedDevelopmentInfo.current) {
+        try {
+          setDevelopmentInfoLoading(true);
+          console.log('Fetching development info');
+          const response = await fetch('https://developiq-production.up.railway.app/run', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+              { 
+                "state_code": "IN",
+                "municipality": "Bargersville",
+                "zone_code": "R-R" 
+              }
+            ),
+          });
+          const data = await response.json();
+          console.log('DEVELOPMENT INFO: ', data);
+          
+          if (!hasFetchedDevelopmentInfo.current) {
+            hasFetchedDevelopmentInfo.current = true;
+          }
+        } catch (error) {
+          console.error("Error fetching development info:", error);
+          setDevelopmentInfoError(
+            error instanceof Error ? error.message : "An unexpected error occurred"
+          );
+        } finally {
+          setDevelopmentInfoLoading(false);
+        }
+      }
+    }
+  
+    fetchDevelopmentInfo();
   }, []);
 
   useEffect(() => {
@@ -302,7 +348,7 @@ export default function PropertyAnalysisDashboard() {
                 Detailed overview of zoning parameters, building requirements, and development standards.
               </p>
             </div>
-            <DevelopmentInfoTab reportHandler={reportHandler!} />
+            <DevelopmentInfoTab reportHandler={reportHandler!} developmentInfoLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">

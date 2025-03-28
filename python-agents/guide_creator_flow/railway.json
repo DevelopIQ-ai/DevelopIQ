@@ -1,0 +1,19 @@
+{
+    "$schema": "https://railway.com/railway.schema.json",
+    "build": {
+      "builder": "NIXPACKS",
+      "buildCommand": "{   \"$schema\": \"https://railway.com/railway.schema.json\",   \"build\": {     \"builder\": \"NIXPACKS\",     \"buildCommand\": \"apt-get update && apt-get install -y python3-dev build-essential libssl-dev libffi-dev && \\\\ python -m venv /opt/venv && \\\\ . /opt/venv/bin/activate && \\\\ pip install --upgrade pip setuptools wheel && \\\\ pip install poetry==2.1.1 && \\\\ poetry config virtualenvs.create true && \\\\ poetry install --no-interaction --no-ansi\"   },   \"deploy\": {     \"runtime\": \"V2\",     \"numReplicas\": 1,     \"startCommand\": \"poetry run uvicorn main:app --host 0.0.0.0 --port $PORT\",     \"sleepApplication\": false,     \"multiRegionConfig\": {       \"us-west2\": {         \"numReplicas\": 1       }     },     \"restartPolicyType\": \"ON_FAILURE\",     \"restartPolicyMaxRetries\": 10   } }"
+    },
+    "deploy": {
+      "runtime": "V2",
+      "numReplicas": 1,
+      "sleepApplication": false,
+      "multiRegionConfig": {
+        "us-west2": {
+          "numReplicas": 1
+        }
+      },
+      "restartPolicyType": "ON_FAILURE",
+      "restartPolicyMaxRetries": 10
+    }
+  }

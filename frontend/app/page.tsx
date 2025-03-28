@@ -41,9 +41,9 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="landing-page min-h-screen bg-background text-foreground flex flex-col opacity-0 animate-fade-in">
-      <NavBar />
+    <div className="min-h-screen bg-background text-foreground flex flex-col opacity-0 animate-fade-in">
 
+      <NavBar />
       <main className="flex-1 flex flex-col">
         <section
           ref={(el) => {
