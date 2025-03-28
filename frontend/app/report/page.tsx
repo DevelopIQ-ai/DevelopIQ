@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
@@ -34,6 +34,10 @@ export default function PropertyAnalysisDashboard() {
   const [newsError, setNewsError] = useState<string | null>(null);
   const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
   const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
+  const [developmentInfoFetched, setDevelopmentInfoFetched] = useState(false);
+
+
+  const hasFetchedDevelopmentInfo = useRef(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -93,35 +97,48 @@ export default function PropertyAnalysisDashboard() {
           setIsLoading(false);
         }
       }
-
-      // fetch development info regardless of demo or not
-      // current dev info schema from backend does not match the required schema, so just
-      // fetching to make sure it works
-      try {
-        setDevelopmentInfoLoading(true);
-        const response = await fetch('https://developiq-production.up.railway.app/run', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(
-            { 
-              "state_code": "IN",
-              "municipality": "Bargersville",
-              "zone_code": "R-R" 
-            }
-          ),
-        });
-        const data = await response.json();
-        console.log('DEVELOPMENT INFO: ', data);
-        setDevelopmentInfoLoading(false);
-      } catch (error) {
-        console.error("Error fetching development info:", error);
-        setDevelopmentInfoError(error instanceof Error ? error.message : "An unexpected error occurred");
-        setDevelopmentInfoLoading(false);
-      }
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchDevelopmentInfo() {
+      if (!hasFetchedDevelopmentInfo.current) {
+        try {
+          setDevelopmentInfoLoading(true);
+          console.log('Fetching development info');
+          const response = await fetch('https://developiq-production.up.railway.app/run', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+              { 
+                "state_code": "IN",
+                "municipality": "Bargersville",
+                "zone_code": "R-R" 
+              }
+            ),
+          });
+          const data = await response.json();
+          console.log('DEVELOPMENT INFO: ', data);
+          
+          if (!hasFetchedDevelopmentInfo.current) {
+            setDevelopmentInfoFetched(true);
+            hasFetchedDevelopmentInfo.current = true;
+          }
+        } catch (error) {
+          console.error("Error fetching development info:", error);
+          setDevelopmentInfoError(
+            error instanceof Error ? error.message : "An unexpected error occurred"
+          );
+        } finally {
+          setDevelopmentInfoLoading(false);
+        }
+      }
+    }
+  
+    fetchDevelopmentInfo();
   }, []);
 
   useEffect(() => {
