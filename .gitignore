@@ -52,6 +52,11 @@ pip-log.txt
 env/
 ENV/
 
+# Langgraph API files
+.langgraph_api/
+.langgraph_api/*.pckl
+.langgraph_api/*.vectors
+
 # local env files
 .env
 .env.*
@@ -84,6 +89,8 @@ codebook_db/*/link_lists.bin
 # Output files
 # ----------------------------------------
 crews/search_crew/chapter_output.json
+html_storage/
+html_storage/*
 
 # ----------------------------------------
 # Misc
@@ -96,3 +103,6 @@ coverage/
 
 # Ignore the entire property-ai-agent folder
 property-ai-agent/
+
+# Ignore tables folder
+codebook_agent/tables/
