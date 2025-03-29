@@ -109,9 +109,9 @@ function processZoningData(data: ZoningApiResponse): DevelopmentInfo {
       const { section, subsection, dataPoint } = mapping;
       
       try {
-        // Type assertion for safer access
-        const sectionData = developmentInfo[section];
-        const subsectionData = sectionData[subsection];
+        // Type assertion to handle dynamic section access
+        const sectionData = developmentInfo[section as keyof typeof developmentInfo];
+        const subsectionData = sectionData?.[subsection as keyof typeof sectionData];
         
         if (subsectionData) {
           // First try to use the AI-generated summary if available

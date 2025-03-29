@@ -13,6 +13,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: false, // Strict mode fetches all API calls twice in dev mode
 };
 
 export default nextConfig;

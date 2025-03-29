@@ -15,84 +15,97 @@ export const dataPointWithAlias = (defaultAlias: string) =>
 
 // New schema for the additional sections with mocked variables.
 export const DevelopmentInfoSchema = z.object({
-  "Zoning & Use Parameter": z.object({
-    "Permitted Use Matrix": z.object({
-      permittedUses: dataPointWithAlias("Permitted Uses"),
-      restrictions: dataPointWithAlias("Restrictions"),
-    }).default(() => ({
-      permittedUses: dataPointWithAlias("Permitted Uses").parse(undefined),
-      restrictions: dataPointWithAlias("Restrictions").parse(undefined),
-    })),
-    "Overlay District Implications": z.object({
-      overlayDetails: dataPointWithAlias("Overlay Details"),
-      impactAssessment: dataPointWithAlias("Impact Assessment"),
-    }).default(() => ({
-      overlayDetails: dataPointWithAlias("Overlay Details").parse(undefined),
-      impactAssessment: dataPointWithAlias("Impact Assessment").parse(undefined),
-    })),
-  }).default(() => ({
-    "Permitted Use Matrix": {
-      permittedUses: dataPointWithAlias("Permitted Uses").parse(undefined),
-      restrictions: dataPointWithAlias("Restrictions").parse(undefined),
-    },
-    "Overlay District Implications": {
-      overlayDetails: dataPointWithAlias("Overlay Details").parse(undefined),
-      impactAssessment: dataPointWithAlias("Impact Assessment").parse(undefined),
-    },
+  "Permitted Uses": z.array(z.object({
+      "primary_use_classification": dataPointWithAlias("Primary Use Classification"),
+      "permitted_uses": z.array(dataPointWithAlias("Permitted Uses")),
+      "special_exceptions": z.array(dataPointWithAlias("Special Exceptions")),
   })),
-  "Setback & Lot Coverage Standards": z.object({
-    "Primary Setback Ratios": z.object({
-      frontSetback: dataPointWithAlias("Front Setback"),
-      sideSetback: dataPointWithAlias("Side Setback"),
-      rearSetback: dataPointWithAlias("Rear Setback"),
-    }).default(() => ({
-      frontSetback: dataPointWithAlias("Front Setback").parse(undefined),
-      sideSetback: dataPointWithAlias("Side Setback").parse(undefined),
-      rearSetback: dataPointWithAlias("Rear Setback").parse(undefined),
-    })),
-    "Buildable Area Calculations": z.object({
-      totalBuildableArea: dataPointWithAlias("Total Buildable Area"),
-      setbackAdjustedArea: dataPointWithAlias("Setback Adjusted Area"),
-    }).default(() => ({
-      totalBuildableArea: dataPointWithAlias("Total Buildable Area").parse(undefined),
-      setbackAdjustedArea: dataPointWithAlias("Setback Adjusted Area").parse(undefined),
-    })),
-  }).default(() => ({
-    "Primary Setback Ratios": {
-      frontSetback: dataPointWithAlias("Front Setback").parse(undefined),
-      sideSetback: dataPointWithAlias("Side Setback").parse(undefined),
-      rearSetback: dataPointWithAlias("Rear Setback").parse(undefined),
-    },
-    "Buildable Area Calculations": {
-      totalBuildableArea: dataPointWithAlias("Total Buildable Area").parse(undefined),
-      setbackAdjustedArea: dataPointWithAlias("Setback Adjusted Area").parse(undefined),
-    },
-  })),
-  "Facade & Exterior Requirements": z.object({
-    "Design Mandates": z.object({
-      facadeMaterials: dataPointWithAlias("Facade Materials"),
-      architecturalStyle: dataPointWithAlias("Architectural Style"),
-    }).default(() => ({
-      facadeMaterials: dataPointWithAlias("Facade Materials").parse(undefined),
-      architecturalStyle: dataPointWithAlias("Architectural Style").parse(undefined),
-    })),
-    "Maintainence Compliance": z.object({
-      maintenanceFrequency: dataPointWithAlias("Maintenance Frequency"),
-      complianceScore: dataPointWithAlias("Compliance Score"),
-    }).default(() => ({
-      maintenanceFrequency: dataPointWithAlias("Maintenance Frequency").parse(undefined),
-      complianceScore: dataPointWithAlias("Compliance Score").parse(undefined),
-    })),
-  }).default(() => ({
-    "Design Mandates": {
-      facadeMaterials: dataPointWithAlias("Facade Materials").parse(undefined),
-      architecturalStyle: dataPointWithAlias("Architectural Style").parse(undefined),
-    },
-    "Maintainence Compliance": {
-      maintenanceFrequency: dataPointWithAlias("Maintenance Frequency").parse(undefined),
-      complianceScore: dataPointWithAlias("Compliance Score").parse(undefined),
-    },
-  })),
+  "Development Standards": z.object({
+      "Lot Requirements": z.object({
+        "Maximum Density": z.object({
+          "units_per_acre": dataPointWithAlias("Units per Acre"),
+        }),
+        "Minimum Lot Size": z.object({
+          "square_feet": dataPointWithAlias("Square Feet"),
+        }),
+        "Minimum Lot Width": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Lot Frontage": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Living Area": z.object({
+          "square_feet": dataPointWithAlias("Square Feet"),
+        }),
+      }),
+      "Building Placement Requirements": z.object({
+        "Minimum Front Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Street Side Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Side Yard Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Rear Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Accessory Building Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+      }),
+      "Building Requirements": z.object({
+        "Maximum Building Height": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Maximum Lot Coverage": z.object({
+          "percentage": dataPointWithAlias("Percentage"),
+        }),
+      }),
+      "Landscaping Requirements": z.object({
+        "Minimum Plant Sizes": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Landscape Plan Review Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Species Variation Requirement Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Performance Guarantee Warranty Requirements Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+      "Parking Requirements": z.object({
+        "Minimum Aisle Width": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Curbing Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Striping Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Drainage Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Parking Stalls Required": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+      "Signage Requirements": z.object({
+        "Permitted Sign Types": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Prohibited Sign Types": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Design Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+    })
 });
 
 // Exporting inferred types for further usage.
