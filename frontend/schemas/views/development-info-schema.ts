@@ -16,23 +16,96 @@ export const dataPointWithAlias = (defaultAlias: string) =>
 // New schema for the additional sections with mocked variables.
 export const DevelopmentInfoSchema = z.object({
   "Permitted Uses": z.array(z.object({
-      "primary_use_classification": z.string(),
-      "permitted_uses": z.array(z.string()),
-      "special_exceptions": z.array(z.string()),
+      "primary_use_classification": dataPointWithAlias("Primary Use Classification"),
+      "permitted_uses": z.array(dataPointWithAlias("Permitted Uses")),
+      "special_exceptions": z.array(dataPointWithAlias("Special Exceptions")),
   })),
   "Development Standards": z.object({
-      "signage_requirements": z.object({
-        "permitted_sign_types": z.object({
-          "summary": z.string(),
+      "Lot Requirements": z.object({
+        "Maximum Density": z.object({
+          "units_per_acre": dataPointWithAlias("Units per Acre"),
         }),
-        "prohibited_sign_types": z.object({
-          "summary": z.string(),
+        "Minimum Lot Size": z.object({
+          "square_feet": dataPointWithAlias("Square Feet"),
         }),
-        "design_requirements": z.object({
-          "summary": z.string(),
-        })
+        "Minimum Lot Width": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Lot Frontage": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Living Area": z.object({
+          "square_feet": dataPointWithAlias("Square Feet"),
+        }),
       }),
-  })
+      "Building Placement Requirements": z.object({
+        "Minimum Front Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Street Side Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Side Yard Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Minimum Rear Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Accessory Building Setback": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+      }),
+      "Building Requirements": z.object({
+        "Maximum Building Height": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Maximum Lot Coverage": z.object({
+          "percentage": dataPointWithAlias("Percentage"),
+        }),
+      }),
+      "Landscaping Requirements": z.object({
+        "Minimum Plant Sizes": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Landscape Plan Review Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Species Variation Requirement Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Performance Guarantee Warranty Requirements Summary": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+      "Parking Requirements": z.object({
+        "Minimum Aisle Width": z.object({
+          "feet": dataPointWithAlias("Feet"),
+        }),
+        "Curbing Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Striping Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Drainage Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Parking Stalls Required": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+      "Signage Requirements": z.object({
+        "Permitted Sign Types": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Prohibited Sign Types": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+        "Design Requirements": z.object({
+          "summary": dataPointWithAlias("Summary"),
+        }),
+      }),
+    })
 });
 
 // Exporting inferred types for further usage.
