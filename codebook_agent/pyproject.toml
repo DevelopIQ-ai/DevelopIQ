@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "codebook_agent"
+version = "0.0.1"
+description = "Agent for analyzing municipal codebooks using LangGraph."
+authors = ["William Fu-Hinthorn <13333726+hinthornw@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+langgraph = ">=0.2.6"
+python-dotenv = ">=1.0.1"
+requests = ">=2.31.0"
+langchain-openai = ">=0.0.5"
+langchain-core = ">=0.1.27"
+
+[tool.poetry.group.dev.dependencies]
+mypy = ">=1.11.1"
+ruff = ">=0.6.1"
+
+[tool.ruff]
+lint.select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "D",    # pydocstyle
+    "D401", # First line should be in imperative mood
+    "T201",
+    "UP",
+]
+lint.ignore = [
+    "UP006",
+    "UP007",
+    "UP035",
+    "D417",
+    "E501",
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "UP"]
+[tool.ruff.lint.pydocstyle]
+convention = "google"
