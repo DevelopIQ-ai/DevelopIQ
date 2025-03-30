@@ -56,15 +56,116 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {Object.entries(reportData).map(([sectionTitle, sectionData]) => (
-          <DevelopmentSection
-            key={sectionTitle}
-            title={sectionTitle}
-            icon={getSectionIcon(sectionTitle)}
-            data={sectionData}
-            isLoading={isLoading}
-          />
-        ))}
+        {/* Permitted Uses section - using array implementation */}
+        {reportData["Permitted Uses"] && (
+          <div className="rounded-lg border bg-card shadow-sm">
+            <div className="flex items-center gap-2 border-b px-6 py-4">
+              <Building2 className="h-5 w-5" />
+              <h2 className="text-lg font-semibold">Permitted Uses</h2>
+            </div>
+            <div className="p-4">
+              <div className="space-y-4">
+                {(reportData["Permitted Uses"] as any[]).map((dataPoint, index) => (
+                  <div key={index} className="border border-gray-100 rounded p-4">
+                    <h3 className="text-base font-medium mb-3">
+                      {dataPoint.primary_use_classification.value}
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-600 mb-2">Permitted Uses</h4>
+                        <div className="space-y-1">
+                          {dataPoint.permitted_uses.map((use: any, useIndex: number) => (
+                            <div key={useIndex} className="border border-gray-100 rounded p-2">
+                              {use.value}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-600 mb-2">Special Exceptions</h4>
+                        <div className="space-y-1">
+                          {dataPoint.special_exceptions.map((exception: any, exceptionIndex: number) => (
+                            <div key={exceptionIndex} className="border border-gray-100 rounded p-2">
+                              {exception.value}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Development Standards section - using object implementation */}
+        {reportData["Development Standards"] && (
+          <div className="rounded-lg border bg-card shadow-sm">
+            <div className="flex items-center gap-2 border-b px-6 py-4">
+              <Ruler className="h-5 w-5" />
+              <h2 className="text-lg font-semibold">Development Standards</h2>
+            </div>
+            <div className="p-4">
+              {Object.entries(reportData["Development Standards"] as Record<string, any>).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
+                <div
+                  key={subSectionTitle}
+                  className={subIndex < subArray.length - 1 ? "mb-4 pb-4 border-b border-gray-100" : "mb-4"}
+                >
+                  <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
+                  <div className="space-y-1">
+                    {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
+                      // Check if nestedData is an object with datapoints or a datapoint itself
+                      if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
+                        // It's a datapoint
+                        return (
+                          <div key={nestedTitle} className="border border-gray-100 rounded">
+                            <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
+                          </div>
+                        )
+                      } else {
+                        // It's a nested section
+                        return (
+                          <div key={nestedTitle} className="mb-2">
+                            {/* <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4> */}
+                            <div className="border border-gray-100 rounded divide-y divide-gray-100">
+                              {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => {
+                                // Display logic for unit-based values vs summaries
+                                if (dataPointKey === "summary") {
+                                  return (
+                                    <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+                                  )
+                                } else {
+                                  return (
+                                    <div key={dataPointKey} className="grid grid-cols-12 divide-x divide-gray-100">
+                                      <div className="col-span-4 text-sm px-4 py-2">
+                                        <span>{nestedTitle}</span>
+                                      </div>
+                                      <div className="col-span-5 text-sm px-4 py-2">
+                                        <span>{dataPoint.value} {dataPoint.alias} 👍 | 👎</span>
+                                      </div>
+                                      <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
+                                        {isLoading ? (
+                                          <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                                        ) : (
+                                          dataPoint.source && <span>{dataPoint.source}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )
+                                }
+                              })}
+                            </div>
+                          </div>
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

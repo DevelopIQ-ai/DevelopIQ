@@ -249,46 +249,46 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
               "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
             },
             "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Lot Size"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             },
             "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Width"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Frontage"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Living Area"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             }
           },
           "Building Placement Requirements": {
             "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Front Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Street Side Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Side Yard Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Rear Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Accessory Building Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             }
           },
           "Building Requirements": {
             "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Maximum Building Height"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "Maximum Lot Coverage"),
+              "percentage": dataPoint(100, "Demo Data", "%"),
             }
           },
           "Landscaping Requirements": {
             "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Plant Sizes"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Landscape Plan Review Summary": {
               "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
@@ -302,7 +302,7 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
           },
           "Parking Requirements": {
             "Minimum Aisle Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Aisle Width"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Curbing Requirements": {
               "summary": dataPoint("A description of the curbing standards and specifications for the parking lot.", "Demo Data", "Curbing Requirements"),
@@ -552,46 +552,46 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
               "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
             },
             "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Lot Size"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             },
             "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Width"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Frontage"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Living Area"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             }
           },
           "Building Placement Requirements": {
             "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Front Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Street Side Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Side Yard Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Rear Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Accessory Building Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             }
           },
           "Building Requirements": {
             "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Maximum Building Height"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "Maximum Lot Coverage"),
+              "percentage": dataPoint(100, "Demo Data", "%"),
             }
           },
           "Landscaping Requirements": {
             "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Plant Sizes"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Landscape Plan Review Summary": {
               "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
@@ -605,7 +605,7 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
           },
           "Parking Requirements": {
             "Minimum Aisle Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Aisle Width"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Curbing Requirements": {
               "summary": dataPoint("A description of the curbing standards and specifications for the parking lot.", "Demo Data", "Curbing Requirements"),
@@ -855,46 +855,46 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
               "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
             },
             "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Lot Size"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             },
             "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Width"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Lot Frontage"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Minimum Living Area"),
+              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
             }
           },
           "Building Placement Requirements": {
             "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Front Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Street Side Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Side Yard Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Rear Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Accessory Building Setback"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             }
           },
           "Building Requirements": {
             "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Maximum Building Height"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "Maximum Lot Coverage"),
+              "percentage": dataPoint(100, "Demo Data", "%"),
             }
           },
           "Landscaping Requirements": {
             "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Plant Sizes"),
+              "feet": dataPoint(100, "Demo Data", "Ft."),
             },
             "Landscape Plan Review Summary": {
               "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
