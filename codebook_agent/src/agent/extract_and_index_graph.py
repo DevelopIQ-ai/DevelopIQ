@@ -32,7 +32,7 @@ def get_config(config: RunnableConfig) -> Configuration:
     return Configuration.from_runnable_config(config)
 
 # Define node functions
-def initialize_state(state: DocumentState, config: RunnableConfig) -> DocumentState:
+def init_state(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Initialize the state from configuration."""
     configuration = get_config(config)
     
@@ -45,7 +45,7 @@ def initialize_state(state: DocumentState, config: RunnableConfig) -> DocumentSt
         "html_document_id": document_id,
     }
 
-def retrieve_html_document(state: DocumentState, config: RunnableConfig) -> DocumentState:
+def get_alp_codebook(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Retrieve the HTML document."""
     configuration = get_config(config)
     document_id = state["html_document_id"]
@@ -80,7 +80,7 @@ def retrieve_html_document(state: DocumentState, config: RunnableConfig) -> Docu
     # If we reach here, we couldn't get the document
     raise ValueError(f"Could not retrieve HTML document for {configuration.municipality}, {configuration.state}")
 
-def get_section_list(state: DocumentState, config: RunnableConfig) -> DocumentState:
+def get_sections(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Get the list of relevant sections by identifying the most relevant chapter."""
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
@@ -134,7 +134,7 @@ def get_section_list(state: DocumentState, config: RunnableConfig) -> DocumentSt
     print(f"Found {len(section_list)} sections in {selection['selected_chapter']}")
     return {**state, "section_list": section_list}
 
-def extract_section_content_and_index(state: DocumentState, config: RunnableConfig) -> DocumentState:
+def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Extract section content and index it in the vector database."""
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
@@ -151,46 +151,22 @@ def extract_section_content_and_index(state: DocumentState, config: RunnableConf
         retriever.process_all_sections(sections, get_section_content)
     else:
         print("Codebook already exists, using cached version")
-    
-def analyze_municipal_code(state: DocumentState, config: RunnableConfig) -> DocumentState:
-    """Query the indexed codebook and analyze results."""
-    configuration = get_config(config)
-    html_document_id = state["html_document_id"]
-    use_cache = configuration.use_query_cache
-    
-    # Initialize retriever (using the same database as the previous node)
-    retriever = CodebookRetriever(html_document_id=html_document_id)
-    
-    # Query the codebook
-    prohibited_signs = retriever.query_codebook("List the prohibited signs.")
-    permitted_signs = retriever.query_codebook("List the permitted signs.")
-
-    # Update state with analysis results
-    analysis_results = {
-        "prohibited_signs": prohibited_signs,
-        "permitted_signs": permitted_signs
-    }
-    
-    print("Analysis results:", analysis_results)
-    return {**state, "analysis_results": analysis_results}
 
 def create_graph() -> StateGraph:
     """Create the graph for the municipal code retrieval and analysis system."""
     graph = StateGraph(DocumentState)
     
     # Add nodes and connect them
-    graph.add_node("initialize_state", initialize_state)
-    graph.add_node("retrieve_html_document", retrieve_html_document)
-    graph.add_node("get_section_list", get_section_list)
-    graph.add_node("extract_section_content_and_index", extract_section_content_and_index)
-    graph.add_node("analyze_municipal_code", analyze_municipal_code)
+    graph.add_node("init_state", init_state)
+    graph.add_node("get_alp_codebook", get_alp_codebook)
+    graph.add_node("get_sections", get_sections)
+    graph.add_node("chunk", chunk)
     
-    graph.add_edge(START, "initialize_state")
-    graph.add_edge("initialize_state", "retrieve_html_document")
-    graph.add_edge("retrieve_html_document", "get_section_list")
-    graph.add_edge("get_section_list", "extract_section_content_and_index")
-    graph.add_edge("extract_section_content_and_index", "analyze_municipal_code")
-    graph.add_edge("analyze_municipal_code", END)
+    graph.add_edge(START, "init_state")
+    graph.add_edge("init_state", "get_alp_codebook")
+    graph.add_edge("get_alp_codebook", "get_sections")
+    graph.add_edge("get_sections", "chunk")
+    graph.add_edge("chunk", END)
     
     return graph.compile()
 

@@ -9,6 +9,9 @@ import chromadb
 import sys
 import shutil
 from pathlib import Path
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -79,7 +82,7 @@ class CodebookRetriever:
             chunk_overlap=200
         )
                                                                             
-        self.llm = ChatOpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"))
+        self.llm = ChatOpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"), model="gpt-4o-mini")
         print("CodebookRetriever initialized")
 
     def codebook_exists_and_is_indexed(self, collection_name):
@@ -160,45 +163,54 @@ class CodebookRetriever:
             
         return len(chunks)
     
-    def query_codebook(self, question):
+    # In CodebookRetriever class
+    def query_codebook(self, question, structured_output):
         """
         Query the codebook with a natural language question
         
         Args:
             question: The question to ask
+            structured_output: Pydantic model class for structured output
         
         Returns:
             dict: The answer and source information
         """
         # Create retriever from vector store
-        print("INSPECTING METADATA SAMPLE:")
-        results = self.collection.get(limit=2)
-        if results and 'metadatas' in results and results['metadatas']:
-            for i, metadata in enumerate(results['metadatas']):
-                print(f"Document {i} metadata: {metadata}")
         retriever = self.db.as_retriever(search_kwargs={"k": 5})
-        # Set up the QA chain
-        qa_chain = RetrievalQA.from_chain_type(
-            llm=self.llm,
-            chain_type="stuff",
-            retriever=retriever,
-            return_source_documents=True
+        
+        # Create a prompt template
+        
+        prompt = ChatPromptTemplate.from_template(
+            """Answer the question based only on the following context:
+            {context}
+            
+            Question: {query}
+            """
+        )
+            
+        chain = (
+            {"context": retriever, "query": RunnablePassthrough()}
+            | prompt
+            | self.llm.with_structured_output(structured_output)
         )
         
-        # Get the answer
-        result = qa_chain.invoke({"query": question})
-        # Format the response
-        answer = result['result']
+        result = chain.invoke(question)
+        
+        # Get source documents
+        source_docs = []
+        if hasattr(chain, 'retriever') and hasattr(chain.retriever, 'get_relevant_documents'):
+            source_docs = chain.retriever.get_relevant_documents(question)
+        
         # Extract source information
         sources = []
-        for doc in result['source_documents']:
+        for doc in source_docs:
             sources.append({
                 'sectionName': doc.metadata['sectionName'],
                 'sectionNumber': doc.metadata['sectionNumber'],
                 'chapterNumber': doc.metadata['chapterNumber'],
             })
-
+        
         return {
-            'answer': answer,
+            'answer': result,
             'sources': sources
         }
