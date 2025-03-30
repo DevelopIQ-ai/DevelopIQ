@@ -82,7 +82,7 @@ class CodebookRetriever:
             chunk_overlap=200
         )
                                                                             
-        self.llm = ChatOpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"))
+        self.llm = ChatOpenAI(temperature=0, openai_api_key=os.getenv("OPENAI_API_KEY"), model="gpt-4o-mini")
         print("CodebookRetriever initialized")
 
     def codebook_exists_and_is_indexed(self, collection_name):

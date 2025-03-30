@@ -2,9 +2,9 @@
 
 # Signage Requirements Queries
 SIGNAGE_QUERIES = {
-    "permitted_signs": "What sign types are permitted. List all permitted signs.",
-    "prohibited_signs": "What sign types are prohibited. List all prohibited signs.",
-    "design_requirements": "What are the design requirements for signs. Include material, illumination, and size requirements."
+    "permitted_signs": "What sign types are permitted in {zone_code} zone? List all permitted signs.",
+    "prohibited_signs": "What sign types are prohibited in {zone_code}. List all prohibited signs.",
+    "design_requirements": "What are the design requirements for signs in {zone_code}. Include material, illumination, and size requirements."
 }
 
 # Parking Requirements Queries
@@ -51,9 +51,7 @@ LANDSCAPING_QUERIES = {
 # Enhanced query templates with more specific instructions for better extraction
 ENHANCED_QUERY_TEMPLATES = {
     "numeric_with_unit": "What is the {measurement_name} in {zone_code} zone? Please respond with ONLY the numeric value and unit (e.g., '10 feet'). If multiple values exist for different contexts, list each one with its specific context.",
-    
-    "list_items": "List all {item_type} in {zone_code} zone. Format your response as a bulleted list with each item on a new line preceded by a dash (-).",
-    
+    "list_items": "List all {item_type} in {zone_code} zone. Format your response as a bulleted list with each item on a new line preceded by a dash (-).",   
     "summary_with_key_points": "Summarize the {requirement_type} for {zone_code} zone. Include only the key points and requirements. Be specific and concise."
 }
 
