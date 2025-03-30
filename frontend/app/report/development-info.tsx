@@ -142,7 +142,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
                                         <span>{nestedTitle}</span>
                                       </div>
                                       <div className="col-span-5 text-sm px-4 py-2">
-                                        <span>{dataPoint.value} {dataPoint.alias} 👍 | 👎</span>
+                                        <span>{dataPoint.value} {dataPoint.alias}</span>
                                       </div>
                                       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
                                         {isLoading ? (
@@ -171,103 +171,103 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
   )
 }
 
-function getSectionIcon(title: string) {
-  switch (title) {
-    case "Permitted Uses":
-      return <Building2 className="h-5 w-5" />
-    case "Development Standards":
-      return <Ruler className="h-5 w-5" />
-    default:
-      return <Ruler className="h-5 w-5" />
-  }
-}
+// function getSectionIcon(title: string) {
+//   switch (title) {
+//     case "Permitted Uses":
+//       return <Building2 className="h-5 w-5" />
+//     case "Development Standards":
+//       return <Ruler className="h-5 w-5" />
+//     default:
+//       return <Ruler className="h-5 w-5" />
+//   }
+// }
 
-interface DevelopmentSectionProps {
-  title: string
-  icon: React.ReactNode
-  data: Record<string, any> | any[]
-  isLoading: boolean
-}
+// interface DevelopmentSectionProps {
+//   title: string
+//   icon: React.ReactNode
+//   data: Record<string, any> | any[]
+//   isLoading: boolean
+// }
 
-function DevelopmentSection({ title, icon, data, isLoading }: DevelopmentSectionProps) {
-  return (
-    <div className="rounded-lg border bg-card shadow-sm">
-      <div className="flex items-center gap-2 border-b px-6 py-4">
-        {icon}
-        <h2 className="text-lg font-semibold">{title}</h2>
-      </div>
-      <div className="p-4">
-        {Array.isArray(data) ? (
-          // Handle array data
-          <div className="">
-            {data.map((dataPoint, index) => (
-              <div className="border border-gray-100 rounded" key={index}>
-                {Object.entries(dataPoint).map(([nestedTitle, nestedData]) => {
-                  // Check if nestedData is an object with datapoints or a datapoint itself
-                  if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-                    // It's a datapoint
-                    return (
-                      <div key={nestedTitle} className="border border-gray-100 rounded">
-                        <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
-                      </div>
-                    )
-                  } else {
-                    // It's a nested section
-                    return (
-                      <div key={nestedTitle} className="mb-2">
-                        {/* <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4> */}
-                        <div className="border border-gray-100 rounded divide-y divide-gray-100">
-                          {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
-                            <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
-              </div>
-            ))}
-          </div>
-        ) : (
-          // Handle object data (original implementation)
-          Object.entries(data).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
-            <div
-              key={subSectionTitle}
-              className={subIndex < subArray.length - 1 ? "mb-4 pb-4 border-b border-gray-100" : "mb-0"}
-            >
-              <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
-              <div className="space-y-1">
-                {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
-                  // Check if nestedData is an object with datapoints or a datapoint itself
-                  if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-                    // It's a datapoint
-                    return (
-                      <div key={nestedTitle} className="border border-gray-100 rounded">
-                        <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
-                      </div>
-                    )
-                  } else {
-                    // It's a nested section
-                    return (
-                      <div key={nestedTitle} className="mb-2">
-                        <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4>
-                        <div className="border border-gray-100 rounded divide-y divide-gray-100">
-                          {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
-                            <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  }
-                })}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  )
-}
+// function DevelopmentSection({ title, icon, data, isLoading }: DevelopmentSectionProps) {
+//   return (
+//     <div className="rounded-lg border bg-card shadow-sm">
+//       <div className="flex items-center gap-2 border-b px-6 py-4">
+//         {icon}
+//         <h2 className="text-lg font-semibold">{title}</h2>
+//       </div>
+//       <div className="p-4">
+//         {Array.isArray(data) ? (
+//           // Handle array data
+//           <div className="">
+//             {data.map((dataPoint, index) => (
+//               <div className="border border-gray-100 rounded" key={index}>
+//                 {Object.entries(dataPoint).map(([nestedTitle, nestedData]) => {
+//                   // Check if nestedData is an object with datapoints or a datapoint itself
+//                   if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
+//                     // It's a datapoint
+//                     return (
+//                       <div key={nestedTitle} className="border border-gray-100 rounded">
+//                         <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
+//                       </div>
+//                     )
+//                   } else {
+//                     // It's a nested section
+//                     return (
+//                       <div key={nestedTitle} className="mb-2">
+//                         {/* <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4> */}
+//                         <div className="border border-gray-100 rounded divide-y divide-gray-100">
+//                           {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
+//                             <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+//                           ))}
+//                         </div>
+//                       </div>
+//                     )
+//                   }
+//                 })}
+//               </div>
+//             ))}
+//           </div>
+//         ) : (
+//           // Handle object data (original implementation)
+//           Object.entries(data).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
+//             <div
+//               key={subSectionTitle}
+//               className={subIndex < subArray.length - 1 ? "mb-4 pb-4 border-b border-gray-100" : "mb-0"}
+//             >
+//               <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
+//               <div className="space-y-1">
+//                 {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
+//                   // Check if nestedData is an object with datapoints or a datapoint itself
+//                   if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
+//                     // It's a datapoint
+//                     return (
+//                       <div key={nestedTitle} className="border border-gray-100 rounded">
+//                         <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
+//                       </div>
+//                     )
+//                   } else {
+//                     // It's a nested section
+//                     return (
+//                       <div key={nestedTitle} className="mb-2">
+//                         <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4>
+//                         <div className="border border-gray-100 rounded divide-y divide-gray-100">
+//                           {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
+//                             <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+//                           ))}
+//                         </div>
+//                       </div>
+//                     )
+//                   }
+//                 })}
+//               </div>
+//             </div>
+//           ))
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
 
 interface DataPointDisplayProps {
   dataPoint: DataPoint
