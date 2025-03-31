@@ -7,7 +7,10 @@
     "langchain-core>=0.1.27",
     "python-dotenv>=1.0.1",
     "requests>=2.31.0",
-    "langgraph>=0.2.6"
+    "langgraph>=0.2.6",
+    "setuptools>=78.1.0",
+    "langchain-chroma>=0.2.1",
+    "chromadb>=0.6.3"
   ],
   "graphs": {
     "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
