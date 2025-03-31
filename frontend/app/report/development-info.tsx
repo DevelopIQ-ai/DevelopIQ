@@ -11,9 +11,10 @@ import type { DevelopmentInfo, DataPoint, DataPointWithUnit } from "@/schemas/vi
 interface DevelopmentInfoTabProps {
   reportHandler: PropertyReportHandler | null
   parentLoading: boolean
+  developmentInfoError: string | null
 }
 
-export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: DevelopmentInfoTabProps) {
+export function DevelopmentInfoTab({ reportHandler, parentLoading = false, developmentInfoError }: DevelopmentInfoTabProps) {
   const [reportData, setReportData] = useState<DevelopmentInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -38,12 +39,12 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
     }
   }, [parentLoading, reportHandler, reportData])
 
-  if (error) {
+  if (error || developmentInfoError) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{error || developmentInfoError}</AlertDescription>
       </Alert>
     )
   }
