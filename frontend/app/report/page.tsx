@@ -33,9 +33,16 @@ export default function PropertyAnalysisDashboard() {
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
   const [newsError, setNewsError] = useState<string | null>(null);
+  const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
+  const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
   
+  // State flags to control the sequence
+  const [generalInfoLoaded, setGeneralInfoLoaded] = useState(false);
+  const [developmentInfoLoaded, setDevelopmentInfoLoaded] = useState(false);
+  
+  // First useEffect: Fetch general property information
   useEffect(() => {
-    async function fetchData() {
+    async function fetchGeneralData() {
       const handler = new PropertyReportHandler();
       setReportHandler(handler);
       const propertyAddress = localStorage.getItem("propertyAddress") || "";
@@ -52,6 +59,7 @@ export default function PropertyAnalysisDashboard() {
           console.log('PROPERTY DATA', propertyData);
           console.log('DEVELOPMENT INFO', developmentInfo);
           setIsLoading(false);
+          setGeneralInfoLoaded(true); // Signal that this step is complete
         }, 1500);
       } else {
         let attomSuccess = false;
@@ -93,13 +101,135 @@ export default function PropertyAnalysisDashboard() {
           }
         } finally {
           setIsLoading(false);
+          setGeneralInfoLoaded(true); // Signal that this step is complete
         }
       }
     }
-    fetchData();
+    fetchGeneralData();
   }, []);
 
+  // Second useEffect: Fetch development information after general info is loaded
+  useEffect(() => {
+    async function fetchDevelopmentInfo() {
+      if (!reportHandler || !generalInfoLoaded) {
+        return; // Only proceed when generalInfoLoaded is true and reportHandler exists
+      }
+      
+      try {
+        const generalInfo = reportHandler.getGeneralInfo();
+        
+        // If generalInfo doesn't exist, don't proceed
+        if (!generalInfo) {
+          console.log("No general info available, skipping development info fetch");
+          setDevelopmentInfoLoaded(true); // Signal completion even if we didn't do anything
+          return;
+        }
+        
+        // Extract required parameters from generalInfo
+        let stateCode;
+        let municipality;
+        let zoneCode;
+        
+        // Try to extract state
+        if (generalInfo["Property Identification & Legal Framework"] && 
+            generalInfo["Property Identification & Legal Framework"]["Geospatial Information"] &&
+            generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].countrySubd?.value) {
+          stateCode = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].countrySubd.value;
+        } 
+        
+        // Try to extract municipality
+        if (generalInfo["Property Identification & Legal Framework"] && 
+            generalInfo["Property Identification & Legal Framework"]["Geospatial Information"] &&
+            generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].munName?.value) {
+          municipality = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].munName.value;
+        } else if (generalInfo["Property Identification & Legal Framework"] && 
+                  generalInfo["Property Identification & Legal Framework"]["Geospatial Information"] &&
+                  generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].locality?.value) {
+          municipality = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"].locality.value;
+        }
+        
+        // Try to extract zone code
+        if (generalInfo["Property Identification & Legal Framework"] && 
+            generalInfo["Property Identification & Legal Framework"]["Regulatory Status"] &&
+            generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"] &&
+            generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].siteZoningIdent?.value) {
+          zoneCode = generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].siteZoningIdent.value;
+        } else if (generalInfo["Property Identification & Legal Framework"] && 
+                  generalInfo["Property Identification & Legal Framework"]["Regulatory Status"] &&
+                  generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"] &&
+                  generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].zoneSubType?.value) {
+          zoneCode = generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].zoneSubType.value;
+        }
+        
+        // If any required parameter is missing, log error and return
+        if (!stateCode) {
+          console.error("Missing state code from property data");
+          setDevelopmentInfoError("Could not determine property state");
+          setDevelopmentInfoLoaded(true); // Signal completion even though we had an error
+          return;
+        }
+        
+        if (!municipality) {
+          console.error("Missing municipality from property data");
+          setDevelopmentInfoError("Could not determine property municipality");
+          setDevelopmentInfoLoaded(true); // Signal completion even though we had an error
+          return;
+        }
+        
+        if (!zoneCode) {
+          console.error("Missing zone code from property data");
+          setDevelopmentInfoError("Could not determine property zone code");
+          setDevelopmentInfoLoaded(true); // Signal completion even though we had an error
+          return;
+        }
+        console.log("INPUTS: ", stateCode, municipality, zoneCode);
+        // Start loading
+        setDevelopmentInfoLoading(true);
+        console.log('DEVELOPMENT INFO ERROR: ', developmentInfoError);
+        console.log(`Fetching development info for ${municipality}, ${stateCode}, zone: ${zoneCode}`);
+        
+        // Call API route
+        const response = await fetch('/api/development-info', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            municipality: municipality,
+            state: stateCode,
+            zone_code: zoneCode
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('DEVELOPMENT INFO: ', result);
+        
+        // Set development info in the report handler
+        if (result.status === 'success' && result.requirements) {
+          console.log('DEVELOPMENT INFO: ', result.requirements);
+          reportHandler.setDevelopmentInfo(result.requirements);
+        } else if (result.status === 'error') {
+          throw new Error(result.error || "Unknown error fetching development info");
+        }
+      } catch (error) {
+        console.error("Error fetching development info:", error);
+        setDevelopmentInfoError(
+          error instanceof Error ? error.message : "An unexpected error occurred"
+        );
+      } finally {
+        setDevelopmentInfoLoading(false);
+        setDevelopmentInfoLoaded(true); // Signal that this step is complete
+      }
+    }
   
+    fetchDevelopmentInfo();
+  }, [reportHandler, generalInfoLoaded, developmentInfoError]);
+  
+  // Third useEffect: Fetch news articles after development info is loaded
   useEffect(() => { 
     function getLocality(address: string) {
         const addressParts = address.split(',');
@@ -114,10 +244,14 @@ export default function PropertyAnalysisDashboard() {
         return address; // Return full address if parsing fails
     }
 
-    async function fetchData() {
+    async function fetchNewsData() {
+        if (!developmentInfoLoaded || !propertyAddress) {
+          return; // Only proceed when development info is loaded and property address exists
+        }
+        
         try {
           setNewsLoading(true);
-          const locality = getLocality(propertyAddress || "");
+          const locality = getLocality(propertyAddress);
           const response = await fetch('/api/agents', {
             method: 'POST',
             headers: {
@@ -144,11 +278,8 @@ export default function PropertyAnalysisDashboard() {
         }
     }
   
-    if (propertyAddress && newsArticles.length === 0) {
-      console.log("Fetching data for", propertyAddress);
-      fetchData();
-    }
-  }, [propertyAddress, newsArticles.length]);
+    fetchNewsData();
+  }, [propertyAddress, developmentInfoLoaded]);
 
   if (error) {
     return (
@@ -298,7 +429,7 @@ export default function PropertyAnalysisDashboard() {
                 Detailed overview of zoning parameters, building requirements, and development standards.
               </p>
             </div>
-            <DevelopmentInfoTab reportHandler={reportHandler!} parentLoading={isLoading} />
+            <DevelopmentInfoTab reportHandler={reportHandler!} parentLoading={isLoading || developmentInfoLoading} />
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">
