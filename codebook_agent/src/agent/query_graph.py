@@ -177,7 +177,7 @@ def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any
         # Query for aisle width
         aisle_width_query = format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code)
         aisle_width_result = retriever.query_codebook(aisle_width_query, AisleWidth)
-        
+        #
         # Query for curbing requirements
         curbing_query = format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code)
         curbing_result = retriever.query_codebook(curbing_query, SummaryRequirement)
