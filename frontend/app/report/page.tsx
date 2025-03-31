@@ -27,10 +27,10 @@ import { useNewsArticles } from "@/hooks/useNewsArticles";
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
-
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler);
+
   
   // First useEffect: Fetch general property information
   useEffect(() => {
