@@ -173,9 +173,10 @@ def create_graph() -> StateGraph:
 # Create the graph instance for the LangGraph server
 graph = create_graph()
 
+# reinit
 # Main execution function for direct use
 def run_analysis(
-    municipality: str = "Bargersville",
+    municipality: str = "Gas-City",
     state: str = "IN",
     zone_code: str = "RR",
     use_html_cache: bool = True,
