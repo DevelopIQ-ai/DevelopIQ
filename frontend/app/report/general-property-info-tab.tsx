@@ -13,20 +13,21 @@ import type { DataPoint } from "@/schemas/views/general-property-info-schema"
 
 interface GeneralPropertyTabProps {
   reportHandler: PropertyReportHandler | null
-  parentLoading?: boolean
+  generalPropertyInfoLoading: boolean
+  generalPropertyInfoError: string | null
 }
 
-export function GeneralPropertyTab({ reportHandler, parentLoading = false }: GeneralPropertyTabProps) {
+export function GeneralPropertyTab({ reportHandler, generalPropertyInfoLoading, generalPropertyInfoError }: GeneralPropertyTabProps) {
   const [reportData, setReportData] = useState<GeneralPropertyInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (parentLoading) {
+    if (generalPropertyInfoLoading) {
       return
     }
     
-    // When parent finishes loading, fetch data if we don't have it yet
+    // When loading finishes, fetch data if we don't have it yet
     if (!reportData && reportHandler) {
       try {
         const data = reportHandler.getGeneralInfo()
@@ -39,9 +40,9 @@ export function GeneralPropertyTab({ reportHandler, parentLoading = false }: Gen
     } else if (!reportHandler) {
       setIsLoading(false)
     }
-  }, [parentLoading, reportHandler, reportData])
+  }, [generalPropertyInfoLoading, reportHandler, reportData])
 
-  if (error) {
+  if (generalPropertyInfoError || error) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
@@ -51,7 +52,7 @@ export function GeneralPropertyTab({ reportHandler, parentLoading = false }: Gen
     )
   }
 
-  if (isLoading || !reportData) {
+  if (generalPropertyInfoLoading || isLoading || !reportData) {
     return <PropertyReportSkeleton />
   }
 
