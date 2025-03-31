@@ -12,13 +12,16 @@ export async function fetchAttomData(handler: PropertyReportHandler, propertyAdd
 }> {
   const mode = process.env.NEXT_PUBLIC_MODE;
   const endpoint = mode === "test" ? "/api/mock-attom" : "/api/attom";
-  const params = { address: propertyAddress };
+  const address1 = propertyAddress.split(',')[0];
+  const address2 = propertyAddress.split(',')[1];
+  const params = { address1: address1, address2: address2 };
 
   const response = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ endpoint: "property/expandedprofile", params }),
   });
+  console.log("response", response);
   if (!response.ok) {
     console.error("Failed to fetch property data", response);
     throw new Error("Failed to fetch property data");

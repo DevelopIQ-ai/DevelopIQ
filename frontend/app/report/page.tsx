@@ -34,11 +34,6 @@ export default function PropertyAnalysisDashboard() {
   const [newsLoading, setNewsLoading] = useState(false);
   const [newsError, setNewsError] = useState<string | null>(null);
   
-  // USE IN PROD
-  // const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
-  // const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
-  // const hasFetchedDevelopmentInfo = useRef(false);
-
   useEffect(() => {
     async function fetchData() {
       const handler = new PropertyReportHandler();
@@ -104,46 +99,8 @@ export default function PropertyAnalysisDashboard() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   async function fetchDevelopmentInfo() {
-  //     if (!hasFetchedDevelopmentInfo.current) {
-  //       try {
-  //         setDevelopmentInfoLoading(true);
-  //         console.log('Fetching development info');
-  //         const response = await fetch('https://developiq-production.up.railway.app/run', {
-  //           method: 'POST',
-  //           headers: {
-  //             'Content-Type': 'application/json',
-  //           },
-  //           body: JSON.stringify(
-  //             { 
-  //               "state_code": "IN",
-  //               "municipality": "Bargersville",
-  //               "zone_code": "R-R" 
-  //             }
-  //           ),
-  //         });
-  //         const data = await response.json();
-  //         console.log('DEVELOPMENT INFO: ', data);
-          
-  //         if (!hasFetchedDevelopmentInfo.current) {
-  //           hasFetchedDevelopmentInfo.current = true;
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching development info:", error);
-  //         setDevelopmentInfoError(
-  //           error instanceof Error ? error.message : "An unexpected error occurred"
-  //         );
-  //       } finally {
-  //         setDevelopmentInfoLoading(false);
-  //       }
-  //     }
-  //   }
   
-  //   fetchDevelopmentInfo();
-  // }, []);
-
-  useEffect(() => {
+  useEffect(() => { 
     function getLocality(address: string) {
         const addressParts = address.split(',');
         // Extract city from second-to-last element and state from the state code in the next element
@@ -192,17 +149,6 @@ export default function PropertyAnalysisDashboard() {
       fetchData();
     }
   }, [propertyAddress, newsArticles.length]);
-
-  // if (isLoading) {
-  //   return (
-  //     <main className="property-demo min-h-screen pt-16">
-  //       <NavBar />
-  //       <div className="container mx-auto py-12 px-4 md:px-8">
-  //         <p>Loading...</p>
-  //       </div>
-  //     </main>
-  //   );
-  // }
 
   if (error) {
     return (
