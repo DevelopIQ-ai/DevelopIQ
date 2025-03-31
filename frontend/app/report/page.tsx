@@ -35,8 +35,6 @@ export default function PropertyAnalysisDashboard() {
   const [newsError, setNewsError] = useState<string | null>(null);
   const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(false);
   const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
-  
-  // State flags to control the sequence
   const [generalInfoLoaded, setGeneralInfoLoaded] = useState(false);
   const [developmentInfoLoaded, setDevelopmentInfoLoaded] = useState(false);
   

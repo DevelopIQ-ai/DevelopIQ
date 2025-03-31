@@ -2,16 +2,8 @@
 import { NextResponse } from 'next/server';
 import { Client } from "@langchain/langgraph-sdk";
 
-interface LangGraphClient {
-  invokeGraph: (params: {
-    graphName: string;
-    inputs: Record<string, unknown>;
-    config: Record<string, unknown>;
-  }) => Promise<Record<string, unknown>>;
-}
-
 // Get LangGraph client with server-side env variables
-function getLangGraphClient(): LangGraphClient {
+function getLangGraphClient() {
   const apiKey = process.env.LANGGRAPH_API_KEY;
   const apiUrl = process.env.LANGGRAPH_API_URL || "https://api.smith.langchain.com";
   
@@ -22,7 +14,7 @@ function getLangGraphClient(): LangGraphClient {
   return new Client({
     apiUrl,
     apiKey
-  }) as unknown as LangGraphClient;
+  });
 }
 
 export async function POST(request: Request) {
@@ -80,12 +72,15 @@ export async function POST(request: Request) {
       }
     };
     
-    // Run the document processing graph
-    const documentResult = await client.invokeGraph({
-      graphName: "agent", // Name of your first graph
-      inputs: initialState,
-      config
-    });
+    // Execute the first graph using wait method
+    const documentResult = await client.runs.wait(
+      null,  // null for stateless run
+      "extract_and_index_graph", // Assistant ID/Graph name
+      {
+        input: initialState,
+        config
+      }
+    );
     
     // 3. Query requirements with second graph
     console.log(`Querying requirements for ${documentId}, zone: ${zone_code}`);
@@ -104,12 +99,15 @@ export async function POST(request: Request) {
       }
     };
     
-    // Run the query graph
-    const queryResult = await client.invokeGraph({
-      graphName: "query", // Name of your second graph
-      inputs: queryInitialState,
-      config: queryConfig
-    });
+    // Execute the second graph using wait method
+    const queryResult = await client.runs.wait(
+      null, // null for stateless run
+      "query", // Assistant ID/Graph name
+      {
+        input: queryInitialState,
+        config: queryConfig
+      }
+    );
     
     // Return combined results
     return NextResponse.json({
