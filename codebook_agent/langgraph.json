@@ -1,12 +1,12 @@
 {
   "dependencies": [
-    "-e .",
+    ".",
     "langchain>=0.3.21",
     "beautifulsoup4>=4.13.3"
   ],
   "graphs": {
-    "extract_and_index_codebook": "./src/agent/extract_and_index_graph.py:graph",
-    "query_codebook": "./src/agent/query_graph.py:graph"
+    "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
+    "query_graph": "./src/agent/query_graph.py:graph"
   },
   "env": ".env"
 }
