@@ -1,0 +1,19 @@
+{
+  "entryPoints": [
+    "./app/**/*.ts",
+    "./app/**/*.tsx",
+    "./components/**/*.ts",
+    "./components/**/*.tsx",
+    "./lib/**/*.ts",
+    "./lib/**/*.tsx",
+    "./schemas/**/*.ts",
+    "./schemas/**/*.tsx",
+    "./*.ts",
+    "./*.tsx"
+  ],
+  "out": "docs",
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/node_modules/**", "**/.next/**"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "theme": "default"
+} 
