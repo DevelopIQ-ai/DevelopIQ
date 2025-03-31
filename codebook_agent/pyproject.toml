@@ -2,7 +2,7 @@
 name = "codebook_agent"
 version = "0.0.1"
 description = "Agent for analyzing municipal codebooks using LangGraph."
-authors = ["William Fu-Hinthorn <13333726+hinthornw@users.noreply.github.com>"]
+authors = ["Kush Bhuwalka, Evan Brooks, Logan McLaughlin"]
 readme = "README.md"
 packages = [{include = "src"}]
 
