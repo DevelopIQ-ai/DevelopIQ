@@ -61,18 +61,17 @@ export async function POST(request: Request) {
     
     const config = {
       configurable: {
-        municipality,
-        state,
-        zone_code,
+        municipality: "Bargersville",
+        state: "IN",
+        zone_code: "RR",
         use_html_cache: true,
         use_toc_cache: true,
-        use_chunk_cache: false,
+        use_chunk_cache: true,
         model_name: "gpt-4o-mini",
         storage_path: "./html_storage"
       }
     };
     
-    // Execute the first graph using wait method
     const documentResult = await client.runs.wait(
       null,  // null for stateless run
       "extract_and_index_graph", // Assistant ID/Graph name
@@ -102,7 +101,7 @@ export async function POST(request: Request) {
     // Execute the second graph using wait method
     const queryResult = await client.runs.wait(
       null, // null for stateless run
-      "query", // Assistant ID/Graph name
+      "query_graph", // Assistant ID/Graph name
       {
         input: queryInitialState,
         config: queryConfig
