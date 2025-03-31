@@ -15,6 +15,7 @@ langchain-openai = ">=0.0.5"
 langchain-core = ">=0.1.27"
 setuptools = "^78.1.0"
 beautifulsoup4 = "^4.13.3"
+langchain = "^0.3.21"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=1.11.1"
