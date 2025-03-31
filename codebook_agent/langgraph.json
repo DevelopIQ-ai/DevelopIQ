@@ -1,6 +1,6 @@
 {
   "dependencies": [
-    ".",
+    "./codebook_agent",
     "langchain>=0.3.21",
     "beautifulsoup4>=4.13.3"
   ],
