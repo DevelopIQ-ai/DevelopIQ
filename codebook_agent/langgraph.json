@@ -1,8 +1,9 @@
 {
   "dependencies": [
-    "e .",
+    ".",
     "langchain>=0.3.21",
-    "beautifulsoup4>=4.13.3"
+    "beautifulsoup4>=4.13.3",
+    "langchain-openai>=0.0.5"
   ],
   "graphs": {
     "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
