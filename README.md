@@ -86,3 +86,19 @@ MIT License
 - Kush Bhuwalka (rhit-bhuwalk)
 - Logan McLaughlin (loganmclaughlin)
 - Evan Brooks (evanbrooks)
+
+// {
+//   "dependencies": [
+//     "langgraph>=0.2.6",
+//     "python-dotenv>=1.0.1",
+//     "requests>=2.31.0",
+//     "langchain-openai>=0.0.5",
+//     "langchain-core>=0.1.27",
+//     "."
+//   ],
+//   "graphs": {
+//     "extract_and_index_codebook": "./src/agent/extract_and_index_graph.py:graph",
+//     "query_codebook": "./src/agent/query_graph.py:graph"
+//   },
+//   "env": ".env"
+// }
