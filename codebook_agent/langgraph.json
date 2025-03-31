@@ -3,7 +3,11 @@
     ".",
     "langchain>=0.3.21",
     "beautifulsoup4>=4.13.3",
-    "langchain-openai>=0.0.5"
+    "langchain-openai>=0.0.5",
+    "langchain-core>=0.1.27",
+    "python-dotenv>=1.0.1",
+    "requests>=2.31.0",
+    "langgraph>=0.2.6"
   ],
   "graphs": {
     "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
