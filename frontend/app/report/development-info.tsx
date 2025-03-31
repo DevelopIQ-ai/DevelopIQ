@@ -6,8 +6,7 @@ import { useEffect, useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Loader2, Ruler, Building2 } from "lucide-react"
 import type { PropertyReportHandler } from "@/lib/report-handler"
-import type { DevelopmentInfo } from "@/schemas/views/development-info-schema"
-import type { DataPoint } from "@/schemas/views/development-info-schema"
+import type { DevelopmentInfo, DataPoint, DataPointWithUnit } from "@/schemas/views/development-info-schema"
 
 interface DevelopmentInfoTabProps {
   reportHandler: PropertyReportHandler | null
@@ -56,7 +55,6 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {/* Permitted Uses section - using array implementation */}
         {reportData["Permitted Uses"] && (
           <div className="rounded-lg border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b px-6 py-4">
@@ -75,7 +73,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
                         <h4 className="text-sm font-medium text-gray-600 mb-2">Permitted Uses</h4>
                         <div className="space-y-1">
                           {dataPoint.permitted_uses.map((use: any, useIndex: number) => (
-                            <div key={useIndex} className="border border-gray-100 rounded p-2">
+                            <div key={useIndex} className="border border-gray-100 rounded p-2 text-sm">
                               {use.value}
                             </div>
                           ))}
@@ -85,7 +83,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
                         <h4 className="text-sm font-medium text-gray-600 mb-2">Special Exceptions</h4>
                         <div className="space-y-1">
                           {dataPoint.special_exceptions.map((exception: any, exceptionIndex: number) => (
-                            <div key={exceptionIndex} className="border border-gray-100 rounded p-2">
+                            <div key={exceptionIndex} className="border border-gray-100 rounded p-2 text-sm">
                               {exception.value}
                             </div>
                           ))}
@@ -99,60 +97,77 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
           </div>
         )}
 
-        {/* Development Standards section - using object implementation */}
-        {reportData["Development Standards"] && (
+        {reportData["requirements"] && (
           <div className="rounded-lg border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b px-6 py-4">
               <Ruler className="h-5 w-5" />
               <h2 className="text-lg font-semibold">Development Standards</h2>
             </div>
             <div className="p-4">
-              {Object.entries(reportData["Development Standards"] as Record<string, any>).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
+              {Object.entries(reportData["requirements"] as Record<string, any>).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
                 <div
                   key={subSectionTitle}
                   className={subIndex < subArray.length - 1 ? "mb-4 pb-4 border-b border-gray-100" : "mb-4"}
                 >
-                  <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
+                  <h3 className="mb-3 text-base font-medium">{getSectionTitle(subSectionTitle)}</h3>
                   <div className="space-y-1">
                     {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
-                      // Check if nestedData is an object with datapoints or a datapoint itself
                       if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-                        // It's a datapoint
                         return (
                           <div key={nestedTitle} className="border border-gray-100 rounded">
                             <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
                           </div>
                         )
                       } else {
-                        // It's a nested section
                         return (
                           <div key={nestedTitle} className="mb-2">
-                            {/* <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4> */}
                             <div className="border border-gray-100 rounded divide-y divide-gray-100">
-                              {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => {
+                              {Object.entries(nestedData as Record<string, DataPoint | DataPointWithUnit>).map(([dataPointKey, dataPoint]) => {
                                 // Display logic for unit-based values vs summaries
-                                if (dataPointKey === "summary") {
+                                if (dataPointKey === "summary" || dataPointKey === "requirements") {
                                   return (
                                     <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
                                   )
-                                } else {
+                                } else if (dataPointKey === "signs" && Array.isArray(dataPoint)) {
+                                  // Handle sign arrays for signage requirements
                                   return (
                                     <div key={dataPointKey} className="grid grid-cols-12 divide-x divide-gray-100">
                                       <div className="col-span-4 text-sm px-4 py-2">
-                                        <span>{nestedTitle}</span>
+                                        <span>{nestedTitle.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</span>
                                       </div>
                                       <div className="col-span-5 text-sm px-4 py-2">
-                                        <span>{dataPoint.value} {dataPoint.alias}</span>
+                                        {isLoading ? (
+                                          <div className="flex items-center space-x-2">
+                                            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                                            <span className="text-muted-foreground">Loading...</span>
+                                          </div>
+                                        ) : dataPoint.length > 0 ? (
+                                          <div className="space-y-1">
+                                            {dataPoint.map((sign: string, signIndex: number) => (
+                                              <div key={signIndex} className="py-1">
+                                                - {sign}
+                                              </div>
+                                            ))}
+                                          </div>
+                                        ) : (
+                                          <div className="text-sm text-gray-500">No signs listed</div>
+                                        )}
                                       </div>
                                       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-                                        {isLoading ? (
-                                          <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-                                        ) : (
-                                          dataPoint.source && <span>{dataPoint.source}</span>
-                                        )}
+                                        Demo Data
                                       </div>
                                     </div>
                                   )
+                                } else {
+                                  if ('unit' in dataPoint) {
+                                    return (
+                                      <DataPointDisplayWithUnit key={dataPointKey} dataPoint={dataPoint as DataPointWithUnit} isLoading={isLoading} />
+                                    )
+                                  } else {
+                                    return (
+                                      <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+                                    )
+                                  }                
                                 }
                               })}
                             </div>
@@ -171,113 +186,83 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false }: Dev
   )
 }
 
-// function getSectionIcon(title: string) {
-//   switch (title) {
-//     case "Permitted Uses":
-//       return <Building2 className="h-5 w-5" />
-//     case "Development Standards":
-//       return <Ruler className="h-5 w-5" />
-//     default:
-//       return <Ruler className="h-5 w-5" />
-//   }
-// }
-
-// interface DevelopmentSectionProps {
-//   title: string
-//   icon: React.ReactNode
-//   data: Record<string, any> | any[]
-//   isLoading: boolean
-// }
-
-// function DevelopmentSection({ title, icon, data, isLoading }: DevelopmentSectionProps) {
-//   return (
-//     <div className="rounded-lg border bg-card shadow-sm">
-//       <div className="flex items-center gap-2 border-b px-6 py-4">
-//         {icon}
-//         <h2 className="text-lg font-semibold">{title}</h2>
-//       </div>
-//       <div className="p-4">
-//         {Array.isArray(data) ? (
-//           // Handle array data
-//           <div className="">
-//             {data.map((dataPoint, index) => (
-//               <div className="border border-gray-100 rounded" key={index}>
-//                 {Object.entries(dataPoint).map(([nestedTitle, nestedData]) => {
-//                   // Check if nestedData is an object with datapoints or a datapoint itself
-//                   if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-//                     // It's a datapoint
-//                     return (
-//                       <div key={nestedTitle} className="border border-gray-100 rounded">
-//                         <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
-//                       </div>
-//                     )
-//                   } else {
-//                     // It's a nested section
-//                     return (
-//                       <div key={nestedTitle} className="mb-2">
-//                         {/* <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4> */}
-//                         <div className="border border-gray-100 rounded divide-y divide-gray-100">
-//                           {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
-//                             <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
-//                           ))}
-//                         </div>
-//                       </div>
-//                     )
-//                   }
-//                 })}
-//               </div>
-//             ))}
-//           </div>
-//         ) : (
-//           // Handle object data (original implementation)
-//           Object.entries(data).map(([subSectionTitle, subSectionData], subIndex, subArray) => (
-//             <div
-//               key={subSectionTitle}
-//               className={subIndex < subArray.length - 1 ? "mb-4 pb-4 border-b border-gray-100" : "mb-0"}
-//             >
-//               <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
-//               <div className="space-y-1">
-//                 {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
-//                   // Check if nestedData is an object with datapoints or a datapoint itself
-//                   if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-//                     // It's a datapoint
-//                     return (
-//                       <div key={nestedTitle} className="border border-gray-100 rounded">
-//                         <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
-//                       </div>
-//                     )
-//                   } else {
-//                     // It's a nested section
-//                     return (
-//                       <div key={nestedTitle} className="mb-2">
-//                         <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4>
-//                         <div className="border border-gray-100 rounded divide-y divide-gray-100">
-//                           {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
-//                             <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
-//                           ))}
-//                         </div>
-//                       </div>
-//                     )
-//                   }
-//                 })}
-//               </div>
-//             </div>
-//           ))
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
+function getSectionTitle(title: string) {
+  switch (title) {
+    case "lot_requirements":
+      return "Lot Requirements"
+    case "building_placement_requirements":
+      return "Building Placement Requirements"
+    case "building_requirements":
+      return "Building Requirements"
+    case "landscaping_requirements":
+      return "Landscaping Requirements"
+    case "parking_requirements":
+      return "Parking Requirements"
+    case "signage_requirements":
+      return "Signage Requirements"
+    default:
+      return title
+  }
+}
 
 interface DataPointDisplayProps {
   dataPoint: DataPoint
   isLoading: boolean
 }
 
+function parseTextValue(value: string): string {
+  if (!value) return "";
+  
+  // Replace colon with colon followed by space
+  let parsedValue = value.replace(/:/g, ": ");
+
+  // Remove pairs of asterisks (often used for bold formatting in markdown)
+  parsedValue = parsedValue.replace(/\*\*/g, "");
+  
+  return parsedValue;
+}
+
 function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
   const { alias, value, source } = dataPoint
   const displayValue = value === null ? "NOT FOUND" : value
   const displaySource = value === null ? "" : source
+
+  return (
+    <div className="grid grid-cols-12 divide-x divide-gray-100">
+      <div className="col-span-4 text-sm px-4 py-2">
+        <span>{alias}</span>
+      </div>
+      <div className="col-span-5 text-sm px-4 py-2 whitespace-pre-wrap">
+        {isLoading ? (
+          <div className="flex items-center space-x-2">
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+            <span className="text-muted-foreground">Loading...</span>
+          </div>
+        ) : (
+          <span className={value === null ? "text-red-500" : ""}>{parseTextValue(displayValue as string)}</span>
+        )}
+      </div>
+      <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
+        {isLoading ? (
+          <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+        ) : (
+          displaySource && <span>{displaySource}</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+interface DataPointDisplayWithUnitProps {
+  dataPoint: DataPointWithUnit
+  isLoading: boolean
+}
+
+function DataPointDisplayWithUnit({ dataPoint, isLoading }: DataPointDisplayWithUnitProps) {
+  const { alias, value, source, unit } = dataPoint
+  const displayValue = value === null ? "NOT FOUND" : value
+  const displaySource = value === null ? "" : source
+  const displayUnit = unit === null ? "x" : unit
 
   return (
     <div className="grid grid-cols-12 divide-x divide-gray-100">
@@ -291,7 +276,7 @@ function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
             <span className="text-muted-foreground">Loading...</span>
           </div>
         ) : (
-          <span className={value === null ? "text-red-500" : ""}>{displayValue}</span>
+          <span className={value === null ? "text-red-500" : ""}>{displayValue} {displayUnit}</span>
         )}
       </div>
       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
@@ -304,6 +289,42 @@ function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
     </div>
   )
 }
+
+// interface SignsDisplayProps {
+//   dataPoint: DataPoint
+//   isLoading: boolean
+// }
+
+// function SignsDisplay({ dataPoint, isLoading }: SignsDisplayProps) {
+//   const { alias, value, source } = dataPoint
+//   const displayValue = value === null ? "NOT FOUND" : value
+//   const displaySource = value === null ? "" : source
+
+//   return (
+//     <div className="grid grid-cols-12 divide-x divide-gray-100">
+//       <div className="col-span-4 text-sm px-4 py-2">
+//         <span>{alias}</span>
+//       </div>
+//       <div className="col-span-5 text-sm px-4 py-2">
+//         {isLoading ? (
+//           <div className="flex items-center space-x-2">
+//             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+//             <span className="text-muted-foreground">Loading...</span>
+//           </div>
+//         ) : (
+//           <span className={value === null ? "text-red-500" : ""}>{displayValue}</span>
+//         )}
+//       </div>
+//       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
+//         {isLoading ? (
+//           <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+//         ) : (
+//           displaySource && <span>{displaySource}</span>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
 
 function DevelopmentInfoSkeleton() {
   // Create skeleton sections for each typical property section

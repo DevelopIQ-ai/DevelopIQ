@@ -21,6 +21,13 @@ const dataPoint = (value: string | number | null, source: string | null = "Demo 
   alias: alias || "Property Data"
 })
 
+const dataPointWithUnit = (value: string | number | null, source: string | null = "Demo Data", alias?: string, unit?: string) => ({
+  value,
+  source,
+  alias: alias || "Property Data",
+  unit: unit || "Unit",
+})
+
 interface MockPropertyData {
   "General Property Information": GeneralPropertyInfo,
   "Development Information": DevelopmentInfo,
@@ -243,695 +250,151 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
             ]
           }
         ],
-        "Development Standards": {
-          "Lot Requirements": {
-            "Maximum Density": {
-              "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
+        "requirements": {
+          "lot_requirements": {
+            "maximum_density": {
+              "units": dataPointWithUnit(10, "Demo Data", "Maximum Density", "Units per Acre"),
             },
-            "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
+            "minimum_lot_size": {
+              "square_feet": dataPointWithUnit(1000, "Demo Data", "Minimum Lot Size", "Sq. Ft."),
             },
-            "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "minimum_lot_width": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Lot Width", "Ft."),
             },
-            "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "minimum_lot_frontage": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Lot Frontage", "Ft."),
             },
-            "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
+            "minimum_living_area": {
+              "square_feet": dataPointWithUnit(1000, "Demo Data", "Minimum Living Area", "Sq. Ft."),
             }
           },
-          "Building Placement Requirements": {
-            "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+          "building_placement_requirements": {
+            "minimum_front_setback": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Front Setback", "Ft."),
             },
-            "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "minimum_street_side_setback": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Street Side Setback", "Ft."),
             },
-            "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "minimum_side_yard_setback": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Side Yard Setback", "Ft."),
             },
-            "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "minimum_rear_setback": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Rear Setback", "Ft."),
             },
-            "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+            "accessory_building_setback": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Accessory Building Setback", "Ft."),
             }
           },
-          "Building Requirements": {
-            "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+          "building_requirements": {
+            "maximum_building_height": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Maximum Building Height", "Ft."),
             },
-            "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "%"),
+            "maximum_lot_coverage": {
+              "percentage": dataPointWithUnit(100, "Demo Data", "Maximum Lot Coverage", "%"),
             }
           },
-          "Landscaping Requirements": {
-            "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+          "landscaping_requirements": {
+            "minimum_plant_sizes": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Plant Sizes", "Ft."),
             },
-            "Landscape Plan Review Summary": {
-              "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
+            "landscape_plan_review_summary": {
+              "summary": dataPoint(`
+                The landscape plan review process for the RR (Rural Residential) zone involves several key steps and requirements as outlined in the regulations. A landscape plan must be submitted as part of all site plan and permit applications, detailing perimeter areas, buffer yards, common areas, entryways, and any other relevant open spaces. The plan must be drawn to the same scale as the site plan and include:
+
+                1. **Proposed Landscaping**: All proposed plants must be indicated with circles showing their anticipated size at maturity.
+                2. **Plant Table**: A table listing the scientific and common names, quantities, and sizes of all proposed plants.
+                3. **Compliance Calculations**: Calculations demonstrating how the plan meets the chapter's requirements.
+                4. **Existing Features**: Identification of existing natural and man-made landscape features, as well as proposed buildings and structures.
+                5. **Tree Management**: Existing trees of eight-inch caliper or greater must be labeled for removal or preservation, with protective measures noted for those to be saved.
+                6. **Contours**: Contours should be shown at two-foot intervals.
+
+                The submitted landscape plans are subject to review and approval by the Plan Commission or Administrator, who may modify requirements if existing vegetation or topography makes compliance difficult. Overall, the process aims to ensure that landscaping contributes positively to the community's health, attractiveness, and environmental sensitivity.
+                `, "Demo Data", "Landscape Plan Review Summary"),
             },
-            "Species Variation Requirement Summary": {
-              "summary": dataPoint("A description of the requirements for species diversity in the landscaping plan.", "Demo Data", "Species Variation Requirement Summary"),
+            "species_variation_requirement_summary": {
+              "summary": dataPoint(`
+                In the RR (Rural Residential) zone, the species variation requirements for landscaping stipulate that no single species of tree can constitute more than 35% of the total number of trees planted, and similarly, no single species of shrub can make up more than 35% of the total number of shrubs. This regulation is designed to promote biodiversity and prevent over-reliance on a single species in landscaping.
+                `, "Demo Data", "Species Variation Requirement Summary"),
             },
-            "Performance Guarantee Warranty Requirements Summary": {
-              "summary": dataPoint("A summary of any performance guarantee or warranty requirements related to landscaping.", "Demo Data", "Performance Guarantee Warranty Requirements Summary"),
+            "performance_guarantee_warranty_requirements_summary": {
+              "summary": dataPoint(`
+                In the RR (Rural Residential) zone, the performance guarantee for landscaping requires the applicant to provide a financial guarantee to ensure that all landscaping is installed according to the approved plan and in compliance with the relevant regulations. This guarantee is mandated by the Plan Commission and is outlined in §154.161. Additionally, landscaping materials must be installed before a certificate of occupancy is issued, although the Administrator may allow a delay of up to 120 days due to adverse weather or other scheduling conflicts. During any delay, a surety or guarantee may be required to cover the estimated installation costs. Furthermore, all landscaping must be maintained, with dead or damaged plants needing replacement by the end of the growing season to remain compliant.
+                `, "Demo Data", "Performance Guarantee Warranty Requirements Summary"),
             }
           },
-          "Parking Requirements": {
-            "Minimum Aisle Width": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
+          "parking_requirements": {
+            "minimum_aisle_width": {
+              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Aisle Width", "Ft."),
             },
-            "Curbing Requirements": {
-              "summary": dataPoint("A description of the curbing standards and specifications for the parking lot.", "Demo Data", "Curbing Requirements"),
+            "curbing_requirements": {
+              "summary": dataPoint(`
+                Curbing requirements for parking areas in the RR zone include the necessity for curbs and gutters to be built according to the town's construction standards. These curbs must be installed around the perimeter of all parking facilities and landscape islands within the parking facilities. The purpose of this requirement is to prevent parked vehicles from extending beyond the parking area onto a street right-of-way or adjacent property, as well as to protect landscaped areas.
+                `, "Demo Data", "Curbing Requirements"),
             },
-            "Striping Requirements": {
-              "summary": dataPoint("A summary of the requirements for parking lot striping, including layout and dimensions.", "Demo Data", "Striping Requirements"),
+            "striping_requirements": {
+              "summary": dataPoint(`
+                Parking areas in the RR (Residential Rural) zone must be striped and maintained to clearly identify each parking space. This requirement ensures that parking spaces are organized and easily recognizable for users.
+                `, "Demo Data", "Striping Requirements"),
             },
-            "Drainage Requirements": {
-              "summary": dataPoint("A summary of the drainage standards that must be met within the parking area.", "Demo Data", "Drainage Requirements"),
+            "drainage_requirements": {
+              "summary": dataPoint(`
+                Parking areas must be graded and drained to ensure that water does not flow onto adjacent property or public sidewalks. Additionally, runoff generated by parking areas must be collected in appropriate drainage facilities in accordance with the Bargersville storm water standards
+                `, "Demo Data", "Drainage Requirements"),
             },
-            "Parking Stalls Required": {
-              "summary": dataPoint("A description of the number or configuration of parking stalls required, including any specifics such as ADA stalls.", "Demo Data", "Parking Stalls Required"),
+            "parking_stalls_required": {
+              "summary": dataPoint(`
+                In the RR (Residential Rural) zone, the parking requirements are not explicitly detailed in the provided context. However, it is mentioned that except for certain residential uses, there are no minimum required parking spaces. Instead, the owner is responsible for providing parking spaces based on factors such as the number of employees, expected customer traffic, or actual counts at similar establishments. The presence of convenient municipal off-street parking or on-street spaces adjacent to the site, as well as pedestrian connections to nearby residential neighborhoods or employment centers, are also considered. 
+
+                For specific uses, the maximum number of parking spaces permitted is determined based on the gross square footage of the use or as outlined in the Permitted Use Table. If the calculation results in a fraction, it is rounded up to the next whole number. 
+
+                In summary, the RR zone does not have a fixed number of required parking stalls; instead, it allows flexibility based on the specific circumstances of each establishment.
+                `, "Demo Data", "Parking Stalls Required"),
             }
           },
-          "Signage Requirements": {
-            "Permitted Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are allowed under the zoning or planning guidelines.", "Demo Data", "Permitted Sign Types"),
+          "signage_requirements": {
+            "permitted_sign_types": {
+              "signs": [
+                "Door signs (not covering more than 25% of the door area and not illuminated)",
+                "Wall-mounted cabinet signs (in nonresidential districts, stylized in shape)"
+              ],
             },
-            "Prohibited Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are not allowed under the zoning or planning guidelines.", "Demo Data", "Prohibited Sign Types"),
+            "prohibited_sign_types": {
+              "signs": [
+                "Abandoned signs",
+                "Signs that are animated, blink, flash, move, rotate, or have scrolling text",
+                "Balloon or inflatable signs",
+                "Billboards or off-premise advertising signs",
+                "Pole signs",
+                "Reflective or fluorescent signs",
+                "Signs attached to or painted on trees or natural features",
+                "Signs within the right-of-way",
+                "Signs installed, attached to, or painted on fences",
+                "Signs or sign support structures obstructing a means of egress, including any fire escape, window, door opening, stairway, exit, walkway, any utility access, or fire department connection",
+                "Signs interfering with any opening required for ventilation",
+                "Signs resembling traffic control device signs",
+                "Signs with exposed raceways",
+                "Snipe or bandit signs",
+                "Unlawful vehicle signs",
+              ]
             },
-            "Design Requirements": {
-              "summary": dataPoint("A description of the design requirements for signage, including specifications on size, color, and shape.", "Demo Data", "Design Requirements"),
-            }
-          }
-        }
-      }
-  },
-  "1206 W 186th St, Westfield, IN 46074, USA": {
-    "General Property Information": {
-      "Property Identification & Legal Framework": {
-        "Geospatial Information": {
-          latitude: dataPoint(38.3782, "Demo Data", "Latitude"),
-          longitude: dataPoint(-85.7709, "Demo Data", "Longitude"),
-          munName: dataPoint("Sellersburg", "Demo Data", "Municipality Name"),
-          lotSize1: dataPoint("2.11 acres", "Demo Data", "Lot Size 1"),
-          lotSize2: dataPoint("91,911 sq ft", "Demo Data", "Lot Size 2"),
-          lotNum: dataPoint("A-1234", "Demo Data", "Lot Number"),
-          country: dataPoint("United States", "Demo Data", "Country"),
-          countrySubd: dataPoint("Indiana", "Demo Data", "Country Subdivision"),
-          oneline: dataPoint("7315 Hwy 311, Sellersburg, IN 47172, USA", "Demo Data", "One Line Address"),
-          locality: dataPoint("Sellersburg", "Demo Data", "Locality"),
-          subdName: dataPoint("Market West", "Demo Data", "Subdivision Name"),
-        },
-        "Legal Description": {
-          legal1: dataPoint("Lot 1, Block A, Market West Subdivision, City of Philadelphia, PA", "Demo Data", "Legal Description"),
-        },
-        "Regulatory Status": {
-          "Zoning Classification": {
-            siteZoningIdent: dataPoint("CMX-5", "Demo Data", "Site Zoning Identifier"),
-            zoningType: dataPoint("Central Business District", "Demo Data", "Zoning Type"),
-            zoneName: dataPoint("Market West", "Demo Data", "Zone Name"),
-            zoneSubType: dataPoint("Commercial", "Demo Data", "Zone Subtype"),
-          },
-          "Overlay Districts": {
-            overlayDistricts: dataPoint("Center City Commercial Area", "Demo Data", "Overlay Districts"),
-          },
-        },
-        "Tax Status": {
-          taxCodeArea: dataPoint("15-0023", "Demo Data", "Tax Code Area"),
-          taxAmt: dataPoint(145000, "Demo Data", "Tax Amount"),
-          taxYear: dataPoint(2023, "Demo Data", "Tax Year"),
-        },
-        "Tax Deliquincy": {
-          taxDeliquincy: dataPoint("None", "Demo Data", "Tax Deliquincy"),
-        },
-      },
-      "Physical Site Characteristics": {
-        "Lot Configuration": {
-          "Dimensional Analysis": {
-            depth: dataPoint("250 ft", "Demo Data", "Depth"),
-            frontage: dataPoint("180 ft", "Demo Data", "Frontage"),
-          },
-          "Topographical Profile": {
-            elevationDelta: dataPoint("5 ft", "Demo Data", "Elevation Delta"),
-            slope: dataPoint("2%", "Demo Data", "Slope"),
-          },
-        },
-        "Easements & Encumbrances": {
-          "Recorded Easements": {
-            recordedEasements: dataPoint("Utility easement on north property line, 15 ft width", "Demo Data", "Recorded Easements"),
-          },
-          "Deed Restrictions": {
-            deedRestrictions: dataPoint("None", "Demo Data", "Deed Restrictions"),
-          },
-        },
-        "Structural Inventory": {
-          "Existing Improvements": {
-            existingImprovements: dataPoint("35-story office tower", "Demo Data", "Existing Improvements"),
-            yearBuilt: dataPoint(1985, "Demo Data", "Year Built"),
-          },
-          "Building Metrics": {
-            bldgSize: dataPoint("850,000 sq ft", "Demo Data", "Building Size"),
-            horizontalFootprint: dataPoint("65,000 sq ft", "Demo Data", "Horizontal Footprint"),
-            totalStructureCount: dataPoint(1, "Demo Data", "Total Structure Count"),
-          },
-        },
-      },
-      "Zoning & Entitlements": {
-        "Entitlement Status": {
-          entitlementStatus: dataPoint("Fully entitled", "Demo Data", "Entitlement Status"),
-        },
-        "Current Approvals": {
-          currentApprovals: dataPoint("All zoning approvals in place", "Demo Data", "Current Approvals"),
-        },
-        "Required Permits": {
-          requiredPermits: dataPoint("Building permits required for renovations", "Demo Data", "Required Permits"),
-        },
-      },
-      "Construction & Systems Profile": {
-        "Structural Components": {
-          foundationType: dataPoint("Concrete pilings", "Demo Data", "Foundation Type"),
-          frameType: dataPoint("Steel frame", "Demo Data", "Frame Type"),
-        },
-        "Utilities": {
-          powerProvider: dataPoint("PECO", "Demo Data", "Power Provider"),
-          gasProvider: dataPoint("Philadelphia Gas Works", "Demo Data", "Gas Provider"),
-          tcommProvider: dataPoint("Comcast", "Demo Data", "Telecommunications Provider"),
-          waterProvider: dataPoint("Philadelphia Water Department", "Demo Data", "Water Provider"),
-        },
-      },
-      "Environmental & Geotechnical": {
-        "Environmental Assessment": {
-          environmentalAssessment: dataPoint("Phase I complete, no issues identified", "Demo Data", "Environmental Assessment"),
-        },
-        "Phase I ESA Findings (2024)": {
-          phaseIESA: dataPoint("No RECs identified", "Demo Data", "Phase I ESA"),
-        },
-        "Soil Contamination": {
-          soilContamination: dataPoint("None detected", "Demo Data", "Soil Contamination"),
-        },
-        "Flood Risk Assessment": {
-          floodRiskAssessment: dataPoint("Low risk", "Demo Data", "Flood Risk Assessment"),
-        },
-        "FEMA Designation": {
-          femaDesignation: dataPoint("Zone X", "Demo Data", "FEMA Designation"),
-        },
-        "Mitigation Requirements": {
-          mitigationRequirements: dataPoint("None required", "Demo Data", "Mitigation Requirements"),
-        },
-      },
-      "Development Economics": {
-        "Current Use Analysis": {
-          value: dataPoint("Class A office building with retail", "Demo Data", "Current Use Analysis"),
-          officeRents: dataPoint("$35-45 psf", "Demo Data", "Office Rents"),
-          NOI: dataPoint("$3.2M annually", "Demo Data", "NOI"),
-          capRate: dataPoint("6.5%", "Demo Data", "Cap Rate"),
-        },
-        "Reuse Potential": {
-          reusePotential: dataPoint("High potential for mixed-use redevelopment", "Demo Data", "Development Feasibility"),
-        },
-        "Tax History & Projections": {
-          taxHistory: dataPoint("Property taxes have increased 3% annually over the past 5 years", "Demo Data", "Tax History"),
-        },
-      },
-      "Insurance & Risk Assessment": {
-        "Insurance Profile": {
-          currentCoverage: dataPoint("Standard commercial property insurance", "Demo Data", "Current Coverage"),
-          lossHistory: dataPoint("No significant claims in past 5 years", "Demo Data", "Loss History"),
-        },
-        "Risk Assessment Matrix": {
-          riskAssessmentMatrix: dataPoint("Low overall risk profile", "Demo Data", "Risk Factors"),
-        },
-      },
-    },
-    "Development Information": {
-        "Permitted Uses": [
-        {
-          "primary_use_classification": dataPoint("Residential Primary Uses", "Demo Data", "Primary Use Classification"),
-          "permitted_uses": [
-              dataPoint("Dwelling - Bungalow Court", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Townhouse", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Small", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Large", "Demo Data", "Permitted Uses"),
-              dataPoint("Live/Work Dwelling", "Demo Data", "Permitted Uses"),
-              dataPoint("Upper Story Residential", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Dwelling - Single-Family Detached: Standard", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Single-Family Detached: Compact", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Duplex", "Demo Data", "Special Exceptions"),
-              dataPoint("Accessory Dwelling Unit", "Demo Data", "Special Exceptions"),
-              dataPoint("Assissted Living Facilities", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Home", "Demo Data", "Special Exceptions"),
-              dataPoint("Group Residential Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Rooming or Boarding House", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Civic, Public, and Institutional Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Libraries, Museums, and Cultural Facilities", "Demo Data", "Permitted Uses"),
-              dataPoint("Municipal and Government Buildings", "Demo Data", "Permitted Uses"),
-              dataPoint("Parks and Playgrounds", "Demo Data", "Permitted Uses"),
-              dataPoint("Commercial Studios", "Demo Data", "Permitted Uses"),
-              dataPoint("Club or Lodge", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Utility, Minor Impact", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Community Center", "Demo Data", "Special Exceptions"),
-              dataPoint("Hospital, Minor", "Demo Data", "Special Exceptions"),
-              dataPoint("Colleges and Universities", "Demo Data", "Special Exceptions"),
-              dataPoint("Vocational Schools", "Demo Data", "Special Exceptions"),
-              dataPoint("Banquet Facilities and Reception Halls", "Demo Data", "Special Exceptions"),
-              dataPoint("Places of Worship", "Demo Data", "Special Exceptions"),
-              dataPoint("Public and Religous Asswmbly, All Others", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Commercial Sales, Services, and Repair Primary Uses ", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Arts, Recreation, Entertainment, Indoor", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class A (table service)", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class B (counter service, no drive-thru)", "Demo Data", "Permitted Uses"),
-              dataPoint("Taverns", "Demo Data", "Permitted Uses"),
-              dataPoint("Winery and Microbrewery", "Demo Data", "Permitted Uses"),
-              dataPoint("Dental/Medical Offuce or Clinic", "Demo Data", "Permitted Uses"),
-              dataPoint("Banks and Financial Institutions", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Arts, Recreation, Entertainment, Outdoor", "Demo Data", "Special Exceptions"),
-              dataPoint("Sports and/or Entertainment Arena or Stadium", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Garage", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Lot", "Demo Data", "Special Exceptions"),
-              dataPoint("Restaurants - Class C (counter service w/drive-thru)", "Demo Data", "Special Exceptions"),
-              dataPoint("Bed and Breakfast Establishments", "Demo Data", "Special Exceptions"),
-              dataPoint("Hotel or Motel", "Demo Data", "Special Exceptions"),
-              dataPoint("Animal Sales and Services, Household Pets Only", "Demo Data", "Special Exceptions"),
-              dataPoint("Food Catering Service", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Industrial, Manufacturing, and Wholesale Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Grain and Feed Mills", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Mass Transit Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Recycling Drop-Off Facility", "Demo Data", "Special Exceptions"),
-            ]
-          }
-        ],
-        "Development Standards": {
-          "Lot Requirements": {
-            "Maximum Density": {
-              "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
-            },
-            "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
-            },
-            "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
-            }
-          },
-          "Building Placement Requirements": {
-            "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            }
-          },
-          "Building Requirements": {
-            "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "%"),
-            }
-          },
-          "Landscaping Requirements": {
-            "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Landscape Plan Review Summary": {
-              "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
-            },
-            "Species Variation Requirement Summary": {
-              "summary": dataPoint("A description of the requirements for species diversity in the landscaping plan.", "Demo Data", "Species Variation Requirement Summary"),
-            },
-            "Performance Guarantee Warranty Requirements Summary": {
-              "summary": dataPoint("A summary of any performance guarantee or warranty requirements related to landscaping.", "Demo Data", "Performance Guarantee Warranty Requirements Summary"),
-            }
-          },
-          "Parking Requirements": {
-            "Minimum Aisle Width": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Curbing Requirements": {
-              "summary": dataPoint("A description of the curbing standards and specifications for the parking lot.", "Demo Data", "Curbing Requirements"),
-            },
-            "Striping Requirements": {
-              "summary": dataPoint("A summary of the requirements for parking lot striping, including layout and dimensions.", "Demo Data", "Striping Requirements"),
-            },
-            "Drainage Requirements": {
-              "summary": dataPoint("A summary of the drainage standards that must be met within the parking area.", "Demo Data", "Drainage Requirements"),
-            },
-            "Parking Stalls Required": {
-              "summary": dataPoint("A description of the number or configuration of parking stalls required, including any specifics such as ADA stalls.", "Demo Data", "Parking Stalls Required"),
-            }
-          },
-          "Signage Requirements": {
-            "Permitted Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are allowed under the zoning or planning guidelines.", "Demo Data", "Permitted Sign Types"),
-            },
-            "Prohibited Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are not allowed under the zoning or planning guidelines.", "Demo Data", "Prohibited Sign Types"),
-            },
-            "Design Requirements": {
-              "summary": dataPoint("A description of the design requirements for signage, including specifications on size, color, and shape.", "Demo Data", "Design Requirements"),
-            }
-          }
-        }
-      }
-  },
-  "238 Easy St, Bargersville, IN 46106, USA": {
-    "General Property Information": {
-      "Property Identification & Legal Framework": {
-        "Geospatial Information": {
-          latitude: dataPoint(38.3782, "Demo Data", "Latitude"),
-          longitude: dataPoint(-85.7709, "Demo Data", "Longitude"),
-          munName: dataPoint("Sellersburg", "Demo Data", "Municipality Name"),
-          lotSize1: dataPoint("2.11 acres", "Demo Data", "Lot Size 1"),
-          lotSize2: dataPoint("91,911 sq ft", "Demo Data", "Lot Size 2"),
-          lotNum: dataPoint("A-1234", "Demo Data", "Lot Number"),
-          country: dataPoint("United States", "Demo Data", "Country"),
-          countrySubd: dataPoint("Indiana", "Demo Data", "Country Subdivision"),
-          oneline: dataPoint("7315 Hwy 311, Sellersburg, IN 47172, USA", "Demo Data", "One Line Address"),
-          locality: dataPoint("Sellersburg", "Demo Data", "Locality"),
-          subdName: dataPoint("Market West", "Demo Data", "Subdivision Name"),
-        },
-        "Legal Description": {
-          legal1: dataPoint("Lot 1, Block A, Market West Subdivision, City of Philadelphia, PA", "Demo Data", "Legal Description"),
-        },
-        "Regulatory Status": {
-          "Zoning Classification": {
-            siteZoningIdent: dataPoint("CMX-5", "Demo Data", "Site Zoning Identifier"),
-            zoningType: dataPoint("Central Business District", "Demo Data", "Zoning Type"),
-            zoneName: dataPoint("Market West", "Demo Data", "Zone Name"),
-            zoneSubType: dataPoint("Commercial", "Demo Data", "Zone Subtype"),
-          },
-          "Overlay Districts": {
-            overlayDistricts: dataPoint("Center City Commercial Area", "Demo Data", "Overlay Districts"),
-          },
-        },
-        "Tax Status": {
-          taxCodeArea: dataPoint("15-0023", "Demo Data", "Tax Code Area"),
-          taxAmt: dataPoint(145000, "Demo Data", "Tax Amount"),
-          taxYear: dataPoint(2023, "Demo Data", "Tax Year"),
-        },
-        "Tax Deliquincy": {
-          taxDeliquincy: dataPoint("None", "Demo Data", "Tax Deliquincy"),
-        },
-      },
-      "Physical Site Characteristics": {
-        "Lot Configuration": {
-          "Dimensional Analysis": {
-            depth: dataPoint("250 ft", "Demo Data", "Depth"),
-            frontage: dataPoint("180 ft", "Demo Data", "Frontage"),
-          },
-          "Topographical Profile": {
-            elevationDelta: dataPoint("5 ft", "Demo Data", "Elevation Delta"),
-            slope: dataPoint("2%", "Demo Data", "Slope"),
-          },
-        },
-        "Easements & Encumbrances": {
-          "Recorded Easements": {
-            recordedEasements: dataPoint("Utility easement on north property line, 15 ft width", "Demo Data", "Recorded Easements"),
-          },
-          "Deed Restrictions": {
-            deedRestrictions: dataPoint("None", "Demo Data", "Deed Restrictions"),
-          },
-        },
-        "Structural Inventory": {
-          "Existing Improvements": {
-            existingImprovements: dataPoint("35-story office tower", "Demo Data", "Existing Improvements"),
-            yearBuilt: dataPoint(1985, "Demo Data", "Year Built"),
-          },
-          "Building Metrics": {
-            bldgSize: dataPoint("850,000 sq ft", "Demo Data", "Building Size"),
-            horizontalFootprint: dataPoint("65,000 sq ft", "Demo Data", "Horizontal Footprint"),
-            totalStructureCount: dataPoint(1, "Demo Data", "Total Structure Count"),
-          },
-        },
-      },
-      "Zoning & Entitlements": {
-        "Entitlement Status": {
-          entitlementStatus: dataPoint("Fully entitled", "Demo Data", "Entitlement Status"),
-        },
-        "Current Approvals": {
-          currentApprovals: dataPoint("All zoning approvals in place", "Demo Data", "Current Approvals"),
-        },
-        "Required Permits": {
-          requiredPermits: dataPoint("Building permits required for renovations", "Demo Data", "Required Permits"),
-        },
-      },
-      "Construction & Systems Profile": {
-        "Structural Components": {
-          foundationType: dataPoint("Concrete pilings", "Demo Data", "Foundation Type"),
-          frameType: dataPoint("Steel frame", "Demo Data", "Frame Type"),
-        },
-        "Utilities": {
-          powerProvider: dataPoint("PECO", "Demo Data", "Power Provider"),
-          gasProvider: dataPoint("Philadelphia Gas Works", "Demo Data", "Gas Provider"),
-          tcommProvider: dataPoint("Comcast", "Demo Data", "Telecommunications Provider"),
-          waterProvider: dataPoint("Philadelphia Water Department", "Demo Data", "Water Provider"),
-        },
-      },
-      "Environmental & Geotechnical": {
-        "Environmental Assessment": {
-          environmentalAssessment: dataPoint("Phase I complete, no issues identified", "Demo Data", "Environmental Assessment"),
-        },
-        "Phase I ESA Findings (2024)": {
-          phaseIESA: dataPoint("No RECs identified", "Demo Data", "Phase I ESA"),
-        },
-        "Soil Contamination": {
-          soilContamination: dataPoint("None detected", "Demo Data", "Soil Contamination"),
-        },
-        "Flood Risk Assessment": {
-          floodRiskAssessment: dataPoint("Low risk", "Demo Data", "Flood Risk Assessment"),
-        },
-        "FEMA Designation": {
-          femaDesignation: dataPoint("Zone X", "Demo Data", "FEMA Designation"),
-        },
-        "Mitigation Requirements": {
-          mitigationRequirements: dataPoint("None required", "Demo Data", "Mitigation Requirements"),
-        },
-      },
-      "Development Economics": {
-        "Current Use Analysis": {
-          value: dataPoint("Class A office building with retail", "Demo Data", "Current Use Analysis"),
-          officeRents: dataPoint("$35-45 psf", "Demo Data", "Office Rents"),
-          NOI: dataPoint("$3.2M annually", "Demo Data", "NOI"),
-          capRate: dataPoint("6.5%", "Demo Data", "Cap Rate"),
-        },
-        "Reuse Potential": {
-          reusePotential: dataPoint("High potential for mixed-use redevelopment", "Demo Data", "Development Feasibility"),
-        },
-        "Tax History & Projections": {
-          taxHistory: dataPoint("Property taxes have increased 3% annually over the past 5 years", "Demo Data", "Tax History"),
-        },
-      },
-      "Insurance & Risk Assessment": {
-        "Insurance Profile": {
-          currentCoverage: dataPoint("Standard commercial property insurance", "Demo Data", "Current Coverage"),
-          lossHistory: dataPoint("No significant claims in past 5 years", "Demo Data", "Loss History"),
-        },
-        "Risk Assessment Matrix": {
-          riskAssessmentMatrix: dataPoint("Low overall risk profile", "Demo Data", "Risk Factors"),
-        },
-      },
-    },
-    "Development Information": {
-        "Permitted Uses": [
-        {
-          "primary_use_classification": dataPoint("Residential Primary Uses", "Demo Data", "Primary Use Classification"),
-          "permitted_uses": [
-              dataPoint("Dwelling - Bungalow Court", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Townhouse", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Small", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Large", "Demo Data", "Permitted Uses"),
-              dataPoint("Live/Work Dwelling", "Demo Data", "Permitted Uses"),
-              dataPoint("Upper Story Residential", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Dwelling - Single-Family Detached: Standard", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Single-Family Detached: Compact", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Duplex", "Demo Data", "Special Exceptions"),
-              dataPoint("Accessory Dwelling Unit", "Demo Data", "Special Exceptions"),
-              dataPoint("Assissted Living Facilities", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Home", "Demo Data", "Special Exceptions"),
-              dataPoint("Group Residential Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Rooming or Boarding House", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Civic, Public, and Institutional Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Libraries, Museums, and Cultural Facilities", "Demo Data", "Permitted Uses"),
-              dataPoint("Municipal and Government Buildings", "Demo Data", "Permitted Uses"),
-              dataPoint("Parks and Playgrounds", "Demo Data", "Permitted Uses"),
-              dataPoint("Commercial Studios", "Demo Data", "Permitted Uses"),
-              dataPoint("Club or Lodge", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Utility, Minor Impact", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Community Center", "Demo Data", "Special Exceptions"),
-              dataPoint("Hospital, Minor", "Demo Data", "Special Exceptions"),
-              dataPoint("Colleges and Universities", "Demo Data", "Special Exceptions"),
-              dataPoint("Vocational Schools", "Demo Data", "Special Exceptions"),
-              dataPoint("Banquet Facilities and Reception Halls", "Demo Data", "Special Exceptions"),
-              dataPoint("Places of Worship", "Demo Data", "Special Exceptions"),
-              dataPoint("Public and Religous Asswmbly, All Others", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Commercial Sales, Services, and Repair Primary Uses ", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Arts, Recreation, Entertainment, Indoor", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class A (table service)", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class B (counter service, no drive-thru)", "Demo Data", "Permitted Uses"),
-              dataPoint("Taverns", "Demo Data", "Permitted Uses"),
-              dataPoint("Winery and Microbrewery", "Demo Data", "Permitted Uses"),
-              dataPoint("Dental/Medical Offuce or Clinic", "Demo Data", "Permitted Uses"),
-              dataPoint("Banks and Financial Institutions", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Arts, Recreation, Entertainment, Outdoor", "Demo Data", "Special Exceptions"),
-              dataPoint("Sports and/or Entertainment Arena or Stadium", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Garage", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Lot", "Demo Data", "Special Exceptions"),
-              dataPoint("Restaurants - Class C (counter service w/drive-thru)", "Demo Data", "Special Exceptions"),
-              dataPoint("Bed and Breakfast Establishments", "Demo Data", "Special Exceptions"),
-              dataPoint("Hotel or Motel", "Demo Data", "Special Exceptions"),
-              dataPoint("Animal Sales and Services, Household Pets Only", "Demo Data", "Special Exceptions"),
-              dataPoint("Food Catering Service", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Industrial, Manufacturing, and Wholesale Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Grain and Feed Mills", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Mass Transit Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Recycling Drop-Off Facility", "Demo Data", "Special Exceptions"),
-            ]
-          }
-        ],
-        "Development Standards": {
-          "Lot Requirements": {
-            "Maximum Density": {
-              "units_per_acre": dataPoint(10, "Demo Data", "Units per Acre"),
-            },
-            "Minimum Lot Size": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
-            },
-            "Minimum Lot Width": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Lot Frontage": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Living Area": {
-              "square_feet": dataPoint(1000, "Demo Data", "Sq. Ft."),
-            }
-          },
-          "Building Placement Requirements": {
-            "Minimum Front Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Street Side Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Side Yard Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Minimum Rear Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Accessory Building Setback": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            }
-          },
-          "Building Requirements": {
-            "Maximum Building Height": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Maximum Lot Coverage": {
-              "percentage": dataPoint(100, "Demo Data", "%"),
-            }
-          },
-          "Landscaping Requirements": {
-            "Minimum Plant Sizes": {
-              "feet": dataPoint(100, "Demo Data", "Ft."),
-            },
-            "Landscape Plan Review Summary": {
-              "summary": dataPoint("A summary outlining the requirements or review criteria for the landscaping plan.", "Demo Data", "Landscape Plan Review Summary"),
-            },
-            "Species Variation Requirement Summary": {
-              "summary": dataPoint("A description of the requirements for species diversity in the landscaping plan.", "Demo Data", "Species Variation Requirement Summary"),
-            },
-            "Performance Guarantee Warranty Requirements Summary": {
-              "summary": dataPoint("A summary of any performance guarantee or warranty requirements related to landscaping.", "Demo Data", "Performance Guarantee Warranty Requirements Summary"),
-            }
-          },
-          "Parking Requirements": {
-            "Minimum Aisle Width": {
-              "feet": dataPoint(100, "Demo Data", "Minimum Aisle Width"),
-            },
-            "Curbing Requirements": {
-              "summary": dataPoint("A description of the curbing standards and specifications for the parking lot.", "Demo Data", "Curbing Requirements"),
-            },
-            "Striping Requirements": {
-              "summary": dataPoint("A summary of the requirements for parking lot striping, including layout and dimensions.", "Demo Data", "Striping Requirements"),
-            },
-            "Drainage Requirements": {
-              "summary": dataPoint("A summary of the drainage standards that must be met within the parking area.", "Demo Data", "Drainage Requirements"),
-            },
-            "Parking Stalls Required": {
-              "summary": dataPoint("A description of the number or configuration of parking stalls required, including any specifics such as ADA stalls.", "Demo Data", "Parking Stalls Required"),
-            }
-          },
-          "Signage Requirements": {
-            "Permitted Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are allowed under the zoning or planning guidelines.", "Demo Data", "Permitted Sign Types"),
-            },
-            "Prohibited Sign Types": {
-              "summary": dataPoint("A summary of the types of signs that are not allowed under the zoning or planning guidelines.", "Demo Data", "Prohibited Sign Types"),
-            },
-            "Design Requirements": {
-              "summary": dataPoint("A description of the design requirements for signage, including specifications on size, color, and shape.", "Demo Data", "Design Requirements"),
+            "design_requirements": {
+              "requirements": dataPoint(`
+                1. **Material Requirements:**  
+                  - Sign design themes and materials must be compatible with the architecture, colors, and materials of the project.  
+                  - Permanent signs located in residential districts cannot be separately or specially illuminated, except for identification signs at the entrance of a residential subdivision.  
+
+                2. **Illumination Requirements:**  
+                  - Permanent signs in residential districts must not have internal illumination unless specified otherwise.  
+                  - Signs in nonresidential districts may use internal illumination, internal indirect (halo) illumination, or external indirect illumination.  
+                  - Outdoor internally illuminated signs must have an opaque background with translucent letters or graphics, or a colored background with lighter letters or graphics.  
+                  - Exposed light sources are prohibited, and light sources must be shielded to prevent light trespass onto adjacent properties.  
+                  - Signs located within 50 feet of a single-family district cannot be internally illuminated.  
+
+                3. **Size Requirements:**  
+                  - Signs must be no larger than necessary for visibility and legibility.  
+                  - A master sign plan must not contain a freestanding sign exceeding any maximum height standard by more than 50%.  
+                  - A wall sign must not exceed any maximum sign area standard by more than 25%.  
+                  - The number of signs must be sufficient for internal traffic and navigation for vehicles and pedestrians.`, "Demo Data", "Design Requirements"),
             }
           }
         }
