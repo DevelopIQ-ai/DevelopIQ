@@ -9,31 +9,34 @@ interface DevelopmentInfoResult {
 export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null): DevelopmentInfoResult => {
     const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(true);
     const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
+    const [attemptCount, setAttemptCount] = useState(0);
 
     useEffect(() => {
+        let isMounted = true;
+        let timeoutId: NodeJS.Timeout;
+
         async function fetchDevelopmentInfo() {
+            console.log("Fetching development info");
             if (!reportHandler) {
-                return; // Only proceed when generalInfoLoaded is true and reportHandler exists
+                // Schedule another attempt if reportHandler not available
+                if (isMounted) {
+                    timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                }
+                return;
             }
 
             const generalInfo = reportHandler.getGeneralInfo();
             if (!generalInfo) {
-                setDevelopmentInfoError("No general info available, unable to fetch development info");
-                setDevelopmentInfoLoading(false); // Signal completion even if we didn't do anything
+                if (isMounted) {
+                    setDevelopmentInfoError("No general info available, unable to fetch development info");
+                    setDevelopmentInfoLoading(false);
+                    // Schedule another attempt if no general info
+                    timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                }
                 return;
             }
 
             try {
-                const generalInfo = reportHandler.getGeneralInfo();
-
-                // If generalInfo doesn't exist, don't proceed
-                if (!generalInfo) {
-                    console.log("No general info available, skipping development info fetch");
-                    setDevelopmentInfoError("No general info available, unable to fetch development info");
-                    setDevelopmentInfoLoading(false); // Signal completion even if we didn't do anything
-                    return;
-                }
-
                 // Extract required parameters from generalInfo
                 let stateCode;
                 let municipality;
@@ -73,29 +76,38 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 // If any required parameter is missing, log error and return
                 if (!stateCode) {
                     console.error("Missing state code from property data");
-                    setDevelopmentInfoError("Could not determine property state");
-                    setDevelopmentInfoLoading(false); // Signal completion even though we had an error
+                    if (isMounted) {
+                        setDevelopmentInfoError("Could not determine property state");
+                        setDevelopmentInfoLoading(false);
+                        timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                    }
                     return;
                 }
 
                 if (!municipality) {
                     console.error("Missing municipality from property data");
-                    setDevelopmentInfoError("Could not determine property municipality");
-                    setDevelopmentInfoLoading(false); // Signal completion even though we had an error
+                    if (isMounted) {
+                        setDevelopmentInfoError("Could not determine property municipality");
+                        setDevelopmentInfoLoading(false);
+                        timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                    }
                     return;
                 }
 
                 if (!zoneCode) {
                     console.error("Missing zone code from property data");
-                    setDevelopmentInfoError("Could not determine property zone code");
-                    setDevelopmentInfoLoading(false); // Signal completion even though we had an error
+                    if (isMounted) {
+                        setDevelopmentInfoError("Could not determine property zone code");
+                        setDevelopmentInfoLoading(false);
+                        timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                    }
                     return;
                 }
+
                 console.log("INPUTS: ", stateCode, municipality, zoneCode);
-                // Start loading
-                setDevelopmentInfoLoading(true);
-                console.log('DEVELOPMENT INFO ERROR: ', developmentInfoError);
-                console.log(`Fetching development info for ${municipality}, ${stateCode}, zone: ${zoneCode}`);
+                if (isMounted) {
+                    setDevelopmentInfoLoading(true);
+                }
 
                 // Call API route
                 const response = await fetch('/api/development-info', {
@@ -117,25 +129,37 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 const result = await response.json();
                 console.log('DEVELOPMENT INFO: ', result);
 
-                // Set development info in the report handler
-                if (result.status === 'success' && result.requirements) {
-                    console.log('DEVELOPMENT INFO: ', result.requirements);
-                    reportHandler.setDevelopmentInfo(result.requirements);
-                } else if (result.status === 'error') {
-                    throw new Error(result.error || "Unknown error fetching development info");
+                if (isMounted) {
+                    // Set development info in the report handler
+                    if (result.status === 'success' && result.requirements) {
+                        console.log('DEVELOPMENT INFO: ', result.requirements);
+                        reportHandler.setDevelopmentInfo(result.requirements);
+                    } else if (result.status === 'error') {
+                        throw new Error(result.error || "Unknown error fetching development info");
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching development info:", error);
-                setDevelopmentInfoError(
-                    error instanceof Error ? error.message : "An unexpected error occurred"
-                );
+                if (isMounted) {
+                    setDevelopmentInfoError(
+                        error instanceof Error ? error.message : "An unexpected error occurred"
+                    );
+                    timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                }
             } finally {
-                setDevelopmentInfoLoading(false);
+                if (isMounted) {
+                    setDevelopmentInfoLoading(false);
+                }
             }
         }
 
         fetchDevelopmentInfo();
-    }, [reportHandler]);
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timeoutId);
+        };
+    }, [reportHandler, attemptCount]);
 
     return { developmentInfoLoading, developmentInfoError };
 }
