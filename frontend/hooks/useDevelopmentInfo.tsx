@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PropertyReportHandler } from "@/lib/report-handler";
-import { transformDevelopmentRequirements } from "@/lib/development-info-helpers";
+
 interface DevelopmentInfoResult {
     developmentInfoLoading: boolean;
     developmentInfoError: string | null;
@@ -159,8 +159,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                                 }
                             ]
                         };
-                        const transformedRequirements = transformDevelopmentRequirements(result.requirements.requirements);
-                        reportHandler.setDevelopmentInfo({...mockPermittedUses, "requirements": transformedRequirements});
+                        reportHandler.setDevelopmentInfo({...mockPermittedUses, "requirements": result.requirements.requirements});
                     } else if (result.status === 'error') {
                         throw new Error(result.error || "Unknown error fetching development info");
                     }

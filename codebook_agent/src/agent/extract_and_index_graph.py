@@ -156,9 +156,21 @@ async def chunk_async(state: DocumentState, config: RunnableConfig) -> DocumentS
     
     return state
 
+# def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
+#     """Synchronous wrapper for chunk_async."""
+#     return asyncio.run(chunk_async(state, config))
 def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
-    """Synchronous wrapper for chunk_async."""
-    return asyncio.run(chunk_async(state, config))
+    """
+    Synchronous wrapper for the async chunk_async function that properly handles
+    execution when an event loop may already be running.
+    """
+    import concurrent.futures
+    
+    # Use a thread pool to run the async function in a separate thread
+    # where it can safely create its own event loop
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(lambda: asyncio.run(chunk_async(state, config)))
+        return future.result()
 
 def create_graph() -> StateGraph:
     """Create the graph for the municipal code retrieval and analysis system."""
