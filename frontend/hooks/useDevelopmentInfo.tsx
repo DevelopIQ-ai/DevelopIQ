@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PropertyReportHandler } from "@/lib/report-handler";
-
+import { transformDevelopmentRequirements } from "@/lib/development-info-helpers";
 interface DevelopmentInfoResult {
     developmentInfoLoading: boolean;
     developmentInfoError: string | null;
@@ -28,8 +28,6 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
             const generalInfo = reportHandler.getGeneralInfo();
             if (!generalInfo) {
                 if (isMounted) {
-                    setDevelopmentInfoError("No general info available, unable to fetch development info");
-                    setDevelopmentInfoLoading(false);
                     // Schedule another attempt if no general info
                     timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
                 }
@@ -95,20 +93,22 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 }
 
                 if (!zoneCode) {
-                    console.error("Missing zone code from property data");
-                    if (isMounted) {
-                        setDevelopmentInfoError("Could not determine property zone code");
-                        setDevelopmentInfoLoading(false);
-                        timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
-                    }
-                    return;
+                    // console.error("Missing zone code from property data");
+                    // if (isMounted) {
+                    //     setDevelopmentInfoError("Could not determine property zone code");
+                    //     setDevelopmentInfoLoading(false);
+                    //     timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                    // }
+                    // return;
+                    zoneCode = "RR";
                 }
 
                 console.log("INPUTS: ", stateCode, municipality, zoneCode);
                 if (isMounted) {
                     setDevelopmentInfoLoading(true);
+                    setDevelopmentInfoError(null);
                 }
-
+                
                 // Call API route
                 const response = await fetch('/api/development-info', {
                     method: 'POST',
@@ -127,13 +127,40 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 }
 
                 const result = await response.json();
+                
                 console.log('DEVELOPMENT INFO: ', result);
 
                 if (isMounted) {
                     // Set development info in the report handler
                     if (result.status === 'success' && result.requirements) {
                         console.log('DEVELOPMENT INFO: ', result.requirements);
-                        reportHandler.setDevelopmentInfo(result.requirements);
+                        const mockPermittedUses = {
+                            "Permitted Uses": [
+                                {
+                                    "primary_use_classification": {
+                                        value: "Residential",
+                                        alias: "Primary Use Classification",
+                                        source: null
+                                    },
+                                    "permitted_uses": [
+                                        {
+                                            value: "Single Family Residential",
+                                            alias: "Permitted Use",
+                                            source: null
+                                        }
+                                    ],
+                                    "special_exceptions": [
+                                        {
+                                            value: "Special Exceptions",
+                                            alias: "Special Exception",
+                                            source: null
+                                        }
+                                    ]
+                                }
+                            ]
+                        };
+                        const transformedRequirements = transformDevelopmentRequirements(result.requirements.requirements);
+                        reportHandler.setDevelopmentInfo({...mockPermittedUses, "requirements": transformedRequirements});
                     } else if (result.status === 'error') {
                         throw new Error(result.error || "Unknown error fetching development info");
                     }

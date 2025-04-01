@@ -5,10 +5,14 @@ import { Client } from "@langchain/langgraph-sdk";
 // Get LangGraph client with server-side env variables
 function getLangGraphClient() {
   const apiKey = process.env.LANGGRAPH_API_KEY;
-  const apiUrl = process.env.LANGGRAPH_API_URL || "https://api.smith.langchain.com";
+  const apiUrl = process.env.LANGGRAPH_API_URL;
   
   if (!apiKey) {
     throw new Error("Missing LANGGRAPH_API_KEY environment variable");
+  }
+
+  if (!apiUrl) {
+    throw new Error("Missing LANGGRAPH_API_URL environment variable");
   }
   
   return new Client({
@@ -20,7 +24,12 @@ function getLangGraphClient() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log("BODY: ", body);
     const { municipality, state, zone_code } = body;
+
+    console.log("MUNICIPALITY: ", municipality);
+    console.log("STATE: ", state);
+    console.log("ZONE CODE: ", zone_code);
     
     // Validate required parameters
     if (!municipality) {
