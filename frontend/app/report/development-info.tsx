@@ -49,7 +49,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
     )
   }
 
-  if (isLoading || !reportData) {
+  if (isLoading || !reportData || parentLoading) {
     return <DevelopmentInfoSkeleton />
   }
 
