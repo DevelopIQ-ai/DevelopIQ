@@ -16,16 +16,9 @@ export const DEMO_PROPERTIES = [
 
 // Create a general info data point helper
 const dataPoint = (value: string | number | null, source: string | null = "Demo Data", alias?: string) => ({
-  value,
+  value: value?.toString() ?? "",
   source,
   alias: alias || "Property Data"
-})
-
-const dataPointWithUnit = (value: string | number | null, source: string | null = "Demo Data", alias?: string, unit?: string) => ({
-  value,
-  source,
-  alias: alias || "Property Data",
-  unit: unit || "Unit",
 })
 
 interface MockPropertyData {
@@ -253,49 +246,88 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
         "requirements": {
           "lot_requirements": {
             "maximum_density": {
-              "units": dataPointWithUnit(10, "Demo Data", "Maximum Density", "Units per Acre"),
+              "unit": "units",
+              "value": "10",
+              "source": "Demo Data",
+              "alias": "Maximum Density",
             },
             "minimum_lot_size": {
-              "square_feet": dataPointWithUnit(1000, "Demo Data", "Minimum Lot Size", "Sq. Ft."),
+              "unit": "square_feet",
+              "value": "1000",
+              "source": "Demo Data",
+              "alias": "Minimum Lot Size",
             },
             "minimum_lot_width": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Lot Width", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Lot Width",
             },
             "minimum_lot_frontage": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Lot Frontage", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Lot Frontage",
             },
             "minimum_living_area": {
-              "square_feet": dataPointWithUnit(1000, "Demo Data", "Minimum Living Area", "Sq. Ft."),
+              "unit": "square_feet",
+              "value": "1000",
+              "source": "Demo Data",
+              "alias": "Minimum Living Area",
             }
           },
           "building_placement_requirements": {
             "minimum_front_setback": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Front Setback", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Front Setback",
             },
             "minimum_street_side_setback": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Street Side Setback", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Street Side Setback",
             },
             "minimum_side_yard_setback": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Side Yard Setback", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Side Yard Setback",
             },
             "minimum_rear_setback": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Rear Setback", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Rear Setback",
             },
             "accessory_building_setback": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Accessory Building Setback", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Accessory Building Setback",
             }
           },
           "building_requirements": {
             "maximum_building_height": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Maximum Building Height", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Maximum Building Height",
             },
             "maximum_lot_coverage": {
-              "percentage": dataPointWithUnit(100, "Demo Data", "Maximum Lot Coverage", "%"),
+              "unit": "percentage",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Maximum Lot Coverage",
             }
           },
           "landscaping_requirements": {
             "minimum_plant_sizes": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Plant Sizes", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Plant Sizes",
             },
             "landscape_plan_review_summary": {
               "summary": dataPoint(`
@@ -324,7 +356,10 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
           },
           "parking_requirements": {
             "minimum_aisle_width": {
-              "feet": dataPointWithUnit(100, "Demo Data", "Minimum Aisle Width", "Ft."),
+              "unit": "feet",
+              "value": "100",
+              "source": "Demo Data",
+              "alias": "Minimum Aisle Width",
             },
             "curbing_requirements": {
               "summary": dataPoint(`
@@ -400,4 +435,127 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
         }
       }
   }
-} 
+}
+
+// Helper function to create development info mock data
+export const createDevelopmentInfoMockData = () => {
+  return {
+    "Permitted Uses": [
+      {
+        primary_use_classification: {
+          value: "Residential",
+          source: "Mock data"
+        },
+        permitted_uses: [
+          { value: "Single-family dwelling", source: "Mock data" },
+          { value: "Duplex", source: "Mock data" },
+          { value: "Townhouse", source: "Mock data" }
+        ],
+        special_exceptions: [
+          { value: "Multi-family dwelling", source: "Mock data" },
+          { value: "Accessory dwelling unit", source: "Mock data" }
+        ]
+      }
+    ],
+    "requirements": {
+      "lot_requirements": {
+        "lot_size": {
+          "minimum_lot_area": {
+            alias: "Minimum Lot Area",
+            value: "5,000",
+            source: "Mock data",
+            unit: "Sq. Ft."
+          },
+          "minimum_lot_width": {
+            alias: "Minimum Lot Width",
+            value: "50",
+            source: "Mock data",
+            unit: "Ft."
+          },
+          "summary": {
+            alias: "Lot Size Summary",
+            value: "Minimum lot size of 5,000 sq. ft. with 50 ft. minimum width required for all residential developments.",
+            source: "Mock data"
+          }
+        }
+      },
+      "building_placement_requirements": {
+        "setbacks": {
+          "front_setback": {
+            alias: "Front Setback",
+            value: "25",
+            source: "Mock data",
+            unit: "Ft."
+          },
+          "side_setback": {
+            alias: "Side Setback",
+            value: "10",
+            source: "Mock data",
+            unit: "Ft."
+          },
+          "rear_setback": {
+            alias: "Rear Setback",
+            value: "20",
+            source: "Mock data",
+            unit: "Ft."
+          },
+          "summary": {
+            alias: "Setback Summary",
+            value: "Front: 25 ft, Side: 10 ft, Rear: 20 ft minimum setbacks required.",
+            source: "Mock data"
+          }
+        }
+      },
+      "building_requirements": {
+        "height": {
+          "maximum_height": {
+            alias: "Maximum Height",
+            value: "35",
+            source: "Mock data",
+            unit: "Ft."
+          },
+          "summary": {
+            alias: "Height Summary",
+            value: "Buildings may not exceed 35 feet in height.",
+            source: "Mock data"
+          }
+        },
+        "density": {
+          "maximum_density": {
+            alias: "Maximum Density",
+            value: "8",
+            source: "Mock data",
+            unit: "Units per Acre"
+          }
+        }
+      },
+      "landscaping_requirements": {
+        "general": {
+          "requirements": {
+            alias: "Landscaping Requirements",
+            value: "Minimum 20% of the lot must be landscaped. Street trees required every 40 ft. along frontage.",
+            source: "Mock data"
+          }
+        }
+      },
+      "parking_requirements": {
+        "residential": {
+          "requirements": {
+            alias: "Residential Parking",
+            value: "2 parking spaces per dwelling unit. Additional visitor parking at 1 space per 4 units for developments with more than 10 units.",
+            source: "Mock data"
+          }
+        }
+      },
+      "signage_requirements": {
+        "permitted_signs": {
+          "signs": [
+            "One monument sign not to exceed 24 sq. ft. and 6 ft. in height",
+            "Building identification sign not to exceed 6 sq. ft.",
+            "Temporary real estate sign not to exceed 6 sq. ft."
+          ]
+        }
+      }
+    }
+  };
+}; 

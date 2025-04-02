@@ -40,8 +40,10 @@ export default function PropertyAnalysisDashboard() {
         return;
       }
       setPropertyAddress(address);
-      const handler = new PropertyReportHandler();
-      setReportHandler(handler);
+      if (!reportHandler) {
+        const handler = new PropertyReportHandler();
+        setReportHandler(handler);
+      }
     }
     fetchGeneralData();
   }, []);
@@ -183,7 +185,7 @@ export default function PropertyAnalysisDashboard() {
                 Detailed overview of zoning parameters, building requirements, and development standards.
               </p>
             </div>
-            <DevelopmentInfoTab reportHandler={reportHandler!} parentLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
+            <DevelopmentInfoTab reportHandler={reportHandler!} developmentInfoLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">
