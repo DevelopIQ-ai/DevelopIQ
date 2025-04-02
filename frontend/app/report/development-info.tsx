@@ -10,34 +10,41 @@ import type { DevelopmentInfo, DataPoint, DataPointWithUnit } from "@/schemas/vi
 
 interface DevelopmentInfoTabProps {
   reportHandler: PropertyReportHandler | null
-  parentLoading: boolean
+  developmentInfoLoading: boolean
   developmentInfoError: string | null
 }
 
-export function DevelopmentInfoTab({ reportHandler, parentLoading = false, developmentInfoError }: DevelopmentInfoTabProps) {
+export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, developmentInfoError }: DevelopmentInfoTabProps) {
   const [reportData, setReportData] = useState<DevelopmentInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (parentLoading) {
+    console.log('dev-info useEffect');
+    if (developmentInfoLoading) {
+      console.log('dev-info useEffect: developmentInfoLoading is true');
       return
     }
     
-    // When parent finishes loading, fetch data if we don't have it yet
+    // When loading finishes, fetch data if we don't have it yet
     if (!reportData && reportHandler) {
       try {
+        console.log(reportHandler)
         const data = reportHandler.getDevelopmentInfo()
+        console.log('dev-info useEffect: data', data);
         setReportData(data)
         setIsLoading(false)
+        console.log('dev-info useEffect: reportData and reportHandler are not null');
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load property data")
         setIsLoading(false)
+        console.log('dev-info useEffect: error');
       }
     } else if (!reportHandler) {
+      console.log('dev-info useEffect: reportHandler is null');
       setIsLoading(false)
     }
-  }, [parentLoading, reportHandler, reportData])
+  }, [developmentInfoLoading, reportHandler, reportData])
 
   if (error || developmentInfoError) {
     return (
@@ -49,7 +56,17 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
     )
   }
 
-  if (isLoading || !reportData || parentLoading) {
+  if (developmentInfoLoading || isLoading || !reportData) {
+    console.log('dev-info render: developmentInfoLoading or isLoading or !reportData');
+    if (developmentInfoLoading) {
+      console.log('dev-info render: developmentInfoLoading is true');
+    }
+    if (isLoading) {
+      console.log('dev-info render: isLoading is true');
+    }
+    if (!reportData) {
+      console.log('dev-info render: reportData is null');
+    }
     return <DevelopmentInfoSkeleton />
   }
 
@@ -116,7 +133,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
                       if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
                         return (
                           <div key={nestedTitle} className="border border-gray-100 rounded">
-                            <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
+                            <DataPointDisplay dataPoint={nestedData as DataPoint} developmentInfoLoading={developmentInfoLoading} />
                           </div>
                         )
                       } else {
@@ -127,7 +144,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
                                 // Display logic for unit-based values vs summaries
                                 if (dataPointKey === "summary" || dataPointKey === "requirements") {
                                   return (
-                                    <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+                                    <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} />
                                   )
                                 } else if (dataPointKey === "signs" && Array.isArray(dataPoint)) {
                                   // Handle sign arrays for signage requirements
@@ -137,7 +154,7 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
                                         <span>{nestedTitle.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</span>
                                       </div>
                                       <div className="col-span-5 text-sm px-4 py-2">
-                                        {isLoading ? (
+                                        {developmentInfoLoading ? (
                                           <div className="flex items-center space-x-2">
                                             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                                             <span className="text-muted-foreground">Loading...</span>
@@ -162,11 +179,11 @@ export function DevelopmentInfoTab({ reportHandler, parentLoading = false, devel
                                 } else {
                                   if ('unit' in dataPoint) {
                                     return (
-                                      <DataPointDisplayWithUnit key={dataPointKey} dataPoint={dataPoint as DataPointWithUnit} isLoading={isLoading} />
+                                      <DataPointDisplayWithUnit key={dataPointKey} dataPoint={dataPoint as DataPointWithUnit} developmentInfoLoading={developmentInfoLoading} />
                                     )
                                   } else {
                                     return (
-                                      <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+                                      <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} />
                                     )
                                   }                
                                 }
@@ -208,7 +225,7 @@ function getSectionTitle(title: string) {
 
 interface DataPointDisplayProps {
   dataPoint: DataPoint
-  isLoading: boolean
+  developmentInfoLoading: boolean
 }
 
 function parseTextValue(value: string): string {
@@ -223,7 +240,7 @@ function parseTextValue(value: string): string {
   return parsedValue;
 }
 
-function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
+function DataPointDisplay({ dataPoint, developmentInfoLoading }: DataPointDisplayProps) {
   const { alias, value, source } = dataPoint
   const displayValue = value === null ? "NOT FOUND" : value
   const displaySource = value === null ? "" : source
@@ -234,7 +251,7 @@ function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
         <span>{alias}</span>
       </div>
       <div className="col-span-5 text-sm px-4 py-2 whitespace-pre-wrap">
-        {isLoading ? (
+        {developmentInfoLoading ? (
           <div className="flex items-center space-x-2">
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
             <span className="text-muted-foreground">Loading...</span>
@@ -244,7 +261,7 @@ function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
         )}
       </div>
       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-        {isLoading ? (
+        {developmentInfoLoading ? (
           <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
         ) : (
           displaySource && <span>{displaySource}</span>
@@ -256,10 +273,10 @@ function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
 
 interface DataPointDisplayWithUnitProps {
   dataPoint: DataPointWithUnit
-  isLoading: boolean
+  developmentInfoLoading: boolean
 }
 
-function DataPointDisplayWithUnit({ dataPoint, isLoading }: DataPointDisplayWithUnitProps) {
+function DataPointDisplayWithUnit({ dataPoint, developmentInfoLoading }: DataPointDisplayWithUnitProps) {
   const { alias, value, source, unit } = dataPoint
   const displayValue = value === null ? "NOT FOUND" : value
   const displaySource = value === null ? "" : source
@@ -271,7 +288,7 @@ function DataPointDisplayWithUnit({ dataPoint, isLoading }: DataPointDisplayWith
         <span>{alias}</span>
       </div>
       <div className="col-span-5 text-sm px-4 py-2">
-        {isLoading ? (
+        {developmentInfoLoading ? (
           <div className="flex items-center space-x-2">
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
             <span className="text-muted-foreground">Loading...</span>
@@ -281,7 +298,7 @@ function DataPointDisplayWithUnit({ dataPoint, isLoading }: DataPointDisplayWith
         )}
       </div>
       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-        {isLoading ? (
+        {developmentInfoLoading ? (
           <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
         ) : (
           displaySource && <span>{displaySource}</span>
