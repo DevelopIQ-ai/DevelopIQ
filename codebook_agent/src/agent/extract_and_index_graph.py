@@ -3,7 +3,6 @@
 from __future__ import annotations
 import os
 import requests
-import asyncio
 from typing import Dict, Any, TypedDict
 from langgraph.graph import StateGraph, START, END
 from langchain_core.runnables import RunnableConfig
@@ -135,8 +134,8 @@ def get_sections(state: DocumentState, config: RunnableConfig) -> DocumentState:
     print(f"Found {len(section_list)} sections in {selection['selected_chapter']}")
     return {**state, "section_list": section_list}
 
-async def chunk_async(state: DocumentState, config: RunnableConfig) -> DocumentState:
-    """Extract section content and index it in the vector database asynchronously."""
+def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
+    """Extract section content and index it in the vector database."""
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
     use_cache = configuration.use_chunk_cache
@@ -145,32 +144,13 @@ async def chunk_async(state: DocumentState, config: RunnableConfig) -> DocumentS
     retriever = CodebookRetriever(html_document_id=html_document_id)
     codebook_exists = retriever.codebook_exists_and_is_indexed(html_document_id)
     print("CODEBOOK EXISTS: ", codebook_exists)
-    
     # if cache is enabled or codebook does not exist, process the sections
     if use_cache or not retriever.codebook_exists_and_is_indexed(html_document_id):
         sections = state["section_list"]
         print("PROCESSING SECTIONS, because cache is disabled or codebook does not exist")
-        await retriever.process_all_sections(sections, get_section_content)
+        retriever.process_all_sections(sections, get_section_content)
     else:
         print("Codebook already exists, using cached version")
-    
-    return state
-
-# def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
-#     """Synchronous wrapper for chunk_async."""
-#     return asyncio.run(chunk_async(state, config))
-def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
-    """
-    Synchronous wrapper for the async chunk_async function that properly handles
-    execution when an event loop may already be running.
-    """
-    import concurrent.futures
-    
-    # Use a thread pool to run the async function in a separate thread
-    # where it can safely create its own event loop
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(lambda: asyncio.run(chunk_async(state, config)))
-        return future.result()
 
 def create_graph() -> StateGraph:
     """Create the graph for the municipal code retrieval and analysis system."""
@@ -236,53 +216,6 @@ def run_analysis(
     
     # Return the analysis results
     return final_state["analysis_results"]
-
-# For async execution directly
-async def run_analysis_async(
-    municipality: str = "Bargersville",
-    state: str = "IN",
-    zone_code: str = "RR",
-    use_html_cache: bool = True,
-    use_toc_cache: bool = True,
-    use_section_cache: bool = False,
-    test_mode: bool = False,
-    model_name: str = "gpt-4o-mini",
-    storage_path: str = "./html_storage"
-) -> Dict[str, Any]:
-    """Run the municipal code analysis asynchronously with configurable parameters."""
-    # Create configuration
-    config = {
-        "configurable": {
-            "municipality": municipality,
-            "state": state,
-            "zone_code": zone_code,
-            "use_html_cache": use_html_cache,
-            "use_toc_cache": use_toc_cache,
-            "use_section_cache": use_section_cache,
-            "model_name": model_name,
-            "storage_path": storage_path,
-            "test_mode": test_mode
-        }
-    }
-    
-    # Initial state (minimal, with only values that change during processing)
-    initial_state = {
-        "html_document_id": "",
-        "document_content": "",
-        "title_list": {},
-        "section_list": {},
-        "analysis_results": {}
-    }
-    
-    # Process each node manually in sequence to maintain async capability
-    state = init_state(initial_state, config)
-    state = get_alp_codebook(state, config)
-    state = get_sections(state, config)
-    state = await chunk_async(state, config)
-    
-    # Return the analysis results
-    return state["analysis_results"]
-    
 if __name__ == "__main__":
     results = run_analysis(test_mode=True)
     print("\nFinal Results:")

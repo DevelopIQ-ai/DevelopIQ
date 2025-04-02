@@ -10,6 +10,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
     const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(true);
     const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
     const [attemptCount, setAttemptCount] = useState(0);
+    const [apiCallMade, setApiCallMade] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -31,6 +32,12 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                     // Schedule another attempt if no general info
                     timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
                 }
+                return;
+            }
+
+            // Only proceed with API call if we haven't made one yet
+            if (apiCallMade) {
+                setDevelopmentInfoLoading(false);
                 return;
             }
 
@@ -107,6 +114,8 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 if (isMounted) {
                     setDevelopmentInfoLoading(true);
                     setDevelopmentInfoError(null);
+                    // Mark that we're making the API call
+                    setApiCallMade(true);
                 }
                 
                 // Call API route
@@ -170,7 +179,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                     setDevelopmentInfoError(
                         error instanceof Error ? error.message : "An unexpected error occurred"
                     );
-                    timeoutId = setTimeout(() => setAttemptCount(prev => prev + 1), 2000);
+                    // No more retry after API failure
                 }
             } finally {
                 if (isMounted) {
