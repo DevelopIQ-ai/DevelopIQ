@@ -27,6 +27,9 @@ from more_itertools import chunked
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from qdrant_client.http.exceptions import ResponseHandlingException
 
+import concurrent.futures
+import threading
+
 # Load environment variables
 load_dotenv()
 
@@ -69,6 +72,8 @@ class CodebookRetriever:
             model="gpt-4o-mini"
         )
 
+        # self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
+
         print("CodebookRetriever initialized with Qdrant")
 
     async def _ensure_collection_exists(self):
@@ -104,6 +109,50 @@ class CodebookRetriever:
         for batch in chunked(points, batch_size):
             await self._upsert_batch(batch)
 
+    async def embed_chunks(self, chunks: List[str], batch_size: int = 16) -> List[List[float]]:
+        embeddings = []
+
+        for batch in chunked(chunks, batch_size):
+            batch_embeddings = await self.embeddings.aembed_documents(batch)
+            embeddings.extend(batch_embeddings)
+
+        return embeddings
+
+    # async def process_section(self, section_info: Dict, extract_section_content) -> int:
+    #     section_name = section_info['sectionName']
+    #     section_number = section_info['sectionNumber']
+    #     chapter_number = section_info['chapterNumber']
+    #     full_number = f"{chapter_number}.{section_number}"
+
+    #     content_dict = extract_section_content(self.html_document_id, full_number)
+    #     if "error" in content_dict:
+    #         print(f"Error extracting content: {content_dict['error']}")
+    #         return 0
+
+    #     content_text = content_dict["content"]
+    #     chunks = self.text_splitter.split_text(content_text)
+    #     if not chunks:
+    #         return 0
+
+    #     embeddings = self.embeddings.embed_documents(chunks)
+    #     payloads = [{
+    #         "chapterNumber": chapter_number,
+    #         "sectionName": section_name,
+    #         "sectionNumber": section_number,
+    #         "text": chunk
+    #     } for chunk in chunks]
+
+    #     points = [
+    #         PointStruct(
+    #             id=str(uuid.uuid4()),
+    #             vector=embedding,
+    #             payload=payloads[i]
+    #         ) for i, embedding in enumerate(embeddings)
+    #     ]
+
+    #     await self.upsert_in_batches(points)
+    #     return len(chunks)
+
     async def process_section(self, section_info: Dict, extract_section_content) -> int:
         section_name = section_info['sectionName']
         section_number = section_info['sectionNumber']
@@ -119,8 +168,20 @@ class CodebookRetriever:
         chunks = self.text_splitter.split_text(content_text)
         if not chunks:
             return 0
+        
+        thread_name = threading.current_thread().name
+        print(f"[{thread_name}] Starting section {section_info['chapterNumber']}.{section_info['sectionNumber']}")
 
-        embeddings = self.embeddings.embed_documents(chunks)
+        # loop = asyncio.get_event_loop()
+        # embeddings = await loop.run_in_executor(self.executor, self.embeddings.aembed_documents, chunks)
+        # embeddings = await self.embeddings.aembed_documents(chunks)
+        embeddings = []
+
+        for batch in chunked(chunks, 32):
+            batch_embeddings = await self.embeddings.aembed_documents(batch)
+            embeddings.extend(batch_embeddings)
+
+
         payloads = [{
             "chapterNumber": chapter_number,
             "sectionName": section_name,
@@ -137,6 +198,7 @@ class CodebookRetriever:
         ]
 
         await self.upsert_in_batches(points)
+        print(f"[{thread_name}] Finished section {section_info['chapterNumber']}.{section_info['sectionNumber']}")
         return len(chunks)
 
     async def process_all_sections(self, sections_list: List[Dict], extract_section_content) -> int:

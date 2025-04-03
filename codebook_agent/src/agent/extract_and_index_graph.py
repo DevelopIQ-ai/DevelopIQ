@@ -158,6 +158,7 @@ async def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
     use_cache = configuration.use_chunk_cache
+    # try to set this to true only
 
     retriever = CodebookRetriever(html_document_id=html_document_id)
     await retriever._ensure_collection_exists()
@@ -165,7 +166,7 @@ async def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
     codebook_exists = await retriever.codebook_exists_and_is_indexed(html_document_id)
     print("CODEBOOK EXISTS:", codebook_exists)
 
-    if use_cache or not codebook_exists:
+    if not use_cache or not codebook_exists:
         sections = state["section_list"]
         print("PROCESSING SECTIONS (cache disabled or not indexed)")
         await retriever.process_all_sections(sections, get_section_content)
@@ -198,7 +199,7 @@ graph = create_graph()
 # reinit
 # Main execution function for direct use
 def run_analysis(
-    municipality: str = "Gas-City",
+    municipality: str = "Gas City",
     state: str = "IN",
     zone_code: str = "RR",
     use_html_cache: bool = True,

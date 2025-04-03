@@ -70,9 +70,9 @@ export async function POST(request: Request) {
     
     const config = {
       configurable: {
-        municipality: "Bargersville",
-        state: "IN",
-        zone_code: "RR",
+        municipality: municipality,
+        state: state,
+        zone_code: zone_code,
         use_html_cache: true,
         use_toc_cache: true,
         use_chunk_cache: true,
