@@ -104,7 +104,7 @@ def init_state_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, 
     }
 
 # Signage requirements query node
-def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query signage requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -121,21 +121,21 @@ def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     try:
         # Query for permitted sign types
         permitted_signs_query = format_query(SIGNAGE_QUERIES["permitted_signs"], zone_code=zone_code)
-        permitted_signs_result = retriever.query_codebook(permitted_signs_query, SignList)
+        permitted_signs_result = await retriever.query_codebook(permitted_signs_query, SignList)
         
         # Query for prohibited sign types
         prohibited_signs_query = format_query(SIGNAGE_QUERIES["prohibited_signs"], zone_code=zone_code)
-        prohibited_signs_result = retriever.query_codebook(prohibited_signs_query, SignList)
+        prohibited_signs_result = await retriever.query_codebook(prohibited_signs_query, SignList)
         
         # Query for design requirements
         design_requirements_query = format_query(SIGNAGE_QUERIES["design_requirements"], zone_code=zone_code)
-        design_requirements_result = retriever.query_codebook(design_requirements_query, DesignRequirements)
+        design_requirements_result = await retriever.query_codebook(design_requirements_query, DesignRequirements)
         
         signage_requirements = SignageRequirements(
             **{
-                "Permitted Sign Types": permitted_signs_result["answer"],
-                "Prohibited Sign Types": prohibited_signs_result["answer"],
-                "Design Requirements": design_requirements_result["answer"]
+                "Permitted Sign Types": permitted_signs_result,
+                "Prohibited Sign Types": prohibited_signs_result,
+                "Design Requirements": design_requirements_result
             }
         )
         
@@ -159,7 +159,7 @@ def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
         }
 
 # Parking requirements query node
-def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query parking requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -176,32 +176,32 @@ def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any
     try:
         # Query for aisle width
         aisle_width_query = format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code)
-        aisle_width_result = retriever.query_codebook(aisle_width_query, AisleWidth)
+        aisle_width_result = await retriever.query_codebook(aisle_width_query, AisleWidth)
         #
         # Query for curbing requirements
         curbing_query = format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code)
-        curbing_result = retriever.query_codebook(curbing_query, SummaryRequirement)
+        curbing_result = await retriever.query_codebook(curbing_query, SummaryRequirement)
         
         # Query for striping requirements
         striping_query = format_query(PARKING_QUERIES["striping_requirements"], zone_code=zone_code)
-        striping_result = retriever.query_codebook(striping_query, SummaryRequirement)
+        striping_result = await retriever.query_codebook(striping_query, SummaryRequirement)
         
         # Query for drainage requirements
         drainage_query = format_query(PARKING_QUERIES["drainage_requirements"], zone_code=zone_code)
-        drainage_result = retriever.query_codebook(drainage_query, SummaryRequirement)
+        drainage_result = await retriever.query_codebook(drainage_query, SummaryRequirement)
         
         # Query for required parking stalls
         stalls_query = format_query(PARKING_QUERIES["parking_stalls"], zone_code=zone_code)
-        stalls_result = retriever.query_codebook(stalls_query, SummaryRequirement)
+        stalls_result = await retriever.query_codebook(stalls_query, SummaryRequirement)
         
         # Create Pydantic model for parking requirements
         parking_requirements = ParkingRequirements(
             **{
-                "Minimum Aisle Width": aisle_width_result["answer"],
-                "Curbing Requirements": curbing_result["answer"],
-                "Striping Requirements": striping_result["answer"],
-                "Drainage Requirements": drainage_result["answer"],
-                "Parking Stalls Required": stalls_result["answer"]
+                "Minimum Aisle Width": aisle_width_result,
+                "Curbing Requirements": curbing_result,
+                "Striping Requirements": striping_result,
+                "Drainage Requirements": drainage_result,
+                "Parking Stalls Required": stalls_result
             }
         )
         
@@ -225,7 +225,7 @@ def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any
         }
 
 # Lot requirements query node
-def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query lot requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -242,32 +242,32 @@ def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict
     try:
         # Query for density
         density_query = format_query(LOT_REQUIREMENTS_QUERIES["density"], zone_code=zone_code)
-        density_result = retriever.query_codebook(density_query, UnitsPerAcre)
+        density_result = await retriever.query_codebook(density_query, UnitsPerAcre)
         
         # Query for lot size
         lot_size_query = format_query(LOT_REQUIREMENTS_QUERIES["lot_size"], zone_code=zone_code)
-        lot_size_result = retriever.query_codebook(lot_size_query, SquareFeet)
+        lot_size_result = await retriever.query_codebook(lot_size_query, SquareFeet)
         
         # Query for lot width
         lot_width_query = format_query(LOT_REQUIREMENTS_QUERIES["lot_width"], zone_code=zone_code)
-        lot_width_result = retriever.query_codebook(lot_width_query, Feet)
+        lot_width_result = await retriever.query_codebook(lot_width_query, Feet)
         
         # Query for lot frontage
         lot_frontage_query = format_query(LOT_REQUIREMENTS_QUERIES["lot_frontage"], zone_code=zone_code)
-        lot_frontage_result = retriever.query_codebook(lot_frontage_query, Feet)
+        lot_frontage_result = await retriever.query_codebook(lot_frontage_query, Feet)
         
         # Query for living area
         living_area_query = format_query(LOT_REQUIREMENTS_QUERIES["living_area"], zone_code=zone_code)
-        living_area_result = retriever.query_codebook(living_area_query, SquareFeet)
+        living_area_result = await retriever.query_codebook(living_area_query, SquareFeet)
         
         # Create Pydantic model for lot requirements
         lot_requirements = LotRequirements(
             **{
-                "Maximum Density": density_result["answer"],
-                "Minimum Lot Size": lot_size_result["answer"],
-                "Minimum Lot Width": lot_width_result["answer"],
-                "Minimum Lot Frontage": lot_frontage_result["answer"],
-                "Minimum Living Area": living_area_result["answer"]
+                "Maximum Density": density_result,
+                "Minimum Lot Size": lot_size_result,
+                "Minimum Lot Width": lot_width_result,
+                "Minimum Lot Frontage": lot_frontage_result,
+                "Minimum Living Area": living_area_result
             }
         )
         
@@ -290,7 +290,7 @@ def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict
         }
 
 # Building placement requirements query node
-def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query building placement requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -307,32 +307,32 @@ def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Di
     try:
         # Query for front setback
         front_setback_query = format_query(BUILDING_PLACEMENT_QUERIES["front_setback"], zone_code=zone_code)
-        front_setback_result = retriever.query_codebook(front_setback_query, Feet)
+        front_setback_result = await retriever.query_codebook(front_setback_query, Feet)
         
         # Query for street side setback
         street_side_query = format_query(BUILDING_PLACEMENT_QUERIES["street_side_setback"], zone_code=zone_code)
-        street_side_result = retriever.query_codebook(street_side_query, Feet)
+        street_side_result = await retriever.query_codebook(street_side_query, Feet)
         
         # Query for side yard setback
         side_yard_query = format_query(BUILDING_PLACEMENT_QUERIES["side_yard_setback"], zone_code=zone_code)
-        side_yard_result = retriever.query_codebook(side_yard_query, Feet)
+        side_yard_result = await retriever.query_codebook(side_yard_query, Feet)
         
         # Query for rear setback
         rear_setback_query = format_query(BUILDING_PLACEMENT_QUERIES["rear_setback"], zone_code=zone_code)
-        rear_setback_result = retriever.query_codebook(rear_setback_query, Feet)
+        rear_setback_result = await retriever.query_codebook(rear_setback_query, Feet)
         
         # Query for accessory building setback
         accessory_query = format_query(BUILDING_PLACEMENT_QUERIES["accessory_building_setback"], zone_code=zone_code)
-        accessory_result = retriever.query_codebook(accessory_query, Feet)
+        accessory_result = await retriever.query_codebook(accessory_query, Feet)
         
         # Create Pydantic model for building placement requirements
         building_placement_requirements = BuildingPlacementRequirements(
             **{
-                "Minimum Front Setback": front_setback_result["answer"],
-                "Minimum Street Side Setback": street_side_result["answer"],
-                "Minimum Side Yard Setback": side_yard_result["answer"],
-                "Minimum Rear Setback": rear_setback_result["answer"],
-                "Accessory Building Setback": accessory_result["answer"]
+                "Minimum Front Setback": front_setback_result,
+                "Minimum Street Side Setback": street_side_result,
+                "Minimum Side Yard Setback": side_yard_result,
+                "Minimum Rear Setback": rear_setback_result,
+                "Accessory Building Setback": accessory_result
             }
         )
         
@@ -355,7 +355,7 @@ def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Di
         }
 
 # Building requirements query node
-def building_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def building_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query building requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -372,17 +372,17 @@ def building_requirements_node(state: Dict[str, Any], config: RunnableConfig) ->
     try:
         # Query for building height
         height_query = format_query(BUILDING_REQUIREMENTS_QUERIES["building_height"], zone_code=zone_code)
-        height_result = retriever.query_codebook(height_query, Feet)
+        height_result = await retriever.query_codebook(height_query, Feet)
         
         # Query for lot coverage
         coverage_query = format_query(BUILDING_REQUIREMENTS_QUERIES["lot_coverage"], zone_code=zone_code)
-        coverage_result = retriever.query_codebook(coverage_query, Percentage)
+        coverage_result = await retriever.query_codebook(coverage_query, Percentage)
         
         # Create Pydantic model for building requirements
         building_reqs = BuildingRequirements(
             **{
-                "Maximum Building Height": height_result["answer"],
-                "Maximum Lot Coverage": coverage_result["answer"]
+                "Maximum Building Height": height_result,
+                "Maximum Lot Coverage": coverage_result
             }
         )
         
@@ -405,7 +405,7 @@ def building_requirements_node(state: Dict[str, Any], config: RunnableConfig) ->
         }
 
 # Landscaping requirements query node
-def landscaping_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query landscaping requirements from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
@@ -422,27 +422,27 @@ def landscaping_requirements_node(state: Dict[str, Any], config: RunnableConfig)
     try:
         # Query for plant sizes
         plant_sizes_query = format_query(LANDSCAPING_QUERIES["plant_sizes"], zone_code=zone_code)
-        plant_sizes_result = retriever.query_codebook(plant_sizes_query, Feet)
+        plant_sizes_result = await retriever.query_codebook(plant_sizes_query, Feet)
         
         # Query for landscape plan review
         plan_review_query = format_query(LANDSCAPING_QUERIES["landscape_plan_review"], zone_code=zone_code)
-        plan_review_result = retriever.query_codebook(plan_review_query, Summary)
+        plan_review_result = await retriever.query_codebook(plan_review_query, Summary)
         
         # Query for species variation
         species_query = format_query(LANDSCAPING_QUERIES["species_variation"], zone_code=zone_code)
-        species_result = retriever.query_codebook(species_query, Summary)
+        species_result = await retriever.query_codebook(species_query, Summary)
         
         # Query for performance guarantee
         guarantee_query = format_query(LANDSCAPING_QUERIES["performance_guarantee"], zone_code=zone_code)
-        guarantee_result = retriever.query_codebook(guarantee_query, Summary)
+        guarantee_result = await retriever.query_codebook(guarantee_query, Summary)
         
         # Create Pydantic model for landscaping requirements
         landscaping_reqs = LandscapingRequirements(
             **{
-                "Minimum Plant Sizes": plant_sizes_result["answer"],
-                "Landscape Plan Review Summary": plan_review_result["answer"],
-                "Species Variation Requirement Summary": species_result["answer"],
-                "Performance Guarantee Warranty Requirements Summary": guarantee_result["answer"]
+                "Minimum Plant Sizes": plant_sizes_result,
+                "Landscape Plan Review Summary": plan_review_result,
+                "Species Variation Requirement Summary": species_result,
+                "Performance Guarantee Warranty Requirements Summary": guarantee_result
             }
         )
         

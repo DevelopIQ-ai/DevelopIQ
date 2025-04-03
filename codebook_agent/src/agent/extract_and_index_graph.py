@@ -15,6 +15,7 @@ from src.utils.alp_scraper import scrape_html_from_alp
 from src.utils.codebook_helpers import extract_table_of_contents, get_section_content
 from src.RAG.codebook_retriever import CodebookRetriever
 from src.agent.config_file import Configuration
+import asyncio
 
 # Define the state as a TypedDict
 class DocumentState(TypedDict):
@@ -134,23 +135,44 @@ def get_sections(state: DocumentState, config: RunnableConfig) -> DocumentState:
     print(f"Found {len(section_list)} sections in {selection['selected_chapter']}")
     return {**state, "section_list": section_list}
 
-def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
-    """Extract section content and index it in the vector database."""
+# def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
+#     """Extract section content and index it in the vector database."""
+#     configuration = get_config(config)
+#     html_document_id = state["html_document_id"]
+#     use_cache = configuration.use_chunk_cache
+    
+#     # Initialize retriever
+#     retriever = CodebookRetriever(html_document_id=html_document_id)
+#     codebook_exists = retriever.codebook_exists_and_is_indexed(html_document_id)
+#     print("CODEBOOK EXISTS: ", codebook_exists)
+#     # if cache is enabled or codebook does not exist, process the sections
+#     if use_cache or not retriever.codebook_exists_and_is_indexed(html_document_id):
+#         sections = state["section_list"]
+#         print("PROCESSING SECTIONS, because cache is disabled or codebook does not exist")
+#         # retriever.process_all_sections(sections, get_section_content)
+#         asyncio.run(retriever.process_all_sections(sections, get_section_content))
+
+#     else:
+#         print("Codebook already exists, using cached version")
+async def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
     use_cache = configuration.use_chunk_cache
-    
-    # Initialize retriever
+
     retriever = CodebookRetriever(html_document_id=html_document_id)
-    codebook_exists = retriever.codebook_exists_and_is_indexed(html_document_id)
-    print("CODEBOOK EXISTS: ", codebook_exists)
-    # if cache is enabled or codebook does not exist, process the sections
-    if use_cache or not retriever.codebook_exists_and_is_indexed(html_document_id):
+    await retriever._ensure_collection_exists()
+
+    codebook_exists = await retriever.codebook_exists_and_is_indexed(html_document_id)
+    print("CODEBOOK EXISTS:", codebook_exists)
+
+    if use_cache or not codebook_exists:
         sections = state["section_list"]
-        print("PROCESSING SECTIONS, because cache is disabled or codebook does not exist")
-        retriever.process_all_sections(sections, get_section_content)
+        print("PROCESSING SECTIONS (cache disabled or not indexed)")
+        await retriever.process_all_sections(sections, get_section_content)
     else:
-        print("Codebook already exists, using cached version")
+        print("Using cached version")
+
+    return state
 
 def create_graph() -> StateGraph:
     """Create the graph for the municipal code retrieval and analysis system."""
