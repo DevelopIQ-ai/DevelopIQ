@@ -84,7 +84,9 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 }
 
                 if (!zoneCode) {
-                    zoneCode = "RR"; // Default value
+                    setDevelopmentInfoError("Could not determine property zone code");
+                    setDevelopmentInfoLoading(false);
+                    return;
                 }
 
                 // console.log("INPUTS for development info API:", stateCode, municipality, zoneCode);
@@ -363,7 +365,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                     setDevelopmentInfoLoading(false);
                     setDevelopmentInfoError(null);
                     console.log("Development info loading set to FALSE");
-                } else if (result.status === 'error') {
+                } else if (!response.ok) {
                     throw new Error(result.error || "Unknown error fetching development info");
                 }
             } catch (error) {
