@@ -10,7 +10,10 @@
     "langgraph>=0.2.6",
     "setuptools>=78.1.0",
     "langchain-chroma>=0.2.1",
-    "chromadb>=0.6.3"
+    "chromadb>=0.6.3",
+    "langchain-qdrant>=0.2.0",
+    "qdrant-client>=1.13.3",
+    "more-itertools>=10.6.0"
   ],
   "graphs": {
     "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
