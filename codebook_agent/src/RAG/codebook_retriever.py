@@ -186,7 +186,7 @@ class CodebookRetriever:
     async def query_codebook(self, question, structured_output):
         await self._ensure_collection_exists()
 
-        print("Querying Qdrant with LangChain retriever...")
+        print("Querying Qdrant with LangChain retriever....")
         retriever = QdrantVectorStore(
             client=self.client,
             collection_name=self.collection_name,
