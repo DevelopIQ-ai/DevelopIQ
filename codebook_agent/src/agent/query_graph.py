@@ -563,7 +563,6 @@ def run_query(
     return final_state
 
 if __name__ == "__main__":
-    # Example usage
     results = run_query(
         html_document_id="bargersville_in",
         zone_code="RR"
