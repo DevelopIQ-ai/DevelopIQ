@@ -8,7 +8,7 @@ interface NewsArticlesResult {
     newsArticlesError: string | null;
 }
 
-export const useNewsArticles = (reportHandler: PropertyReportHandler | null): NewsArticlesResult => {
+export const useNewsArticles = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): NewsArticlesResult => {
     const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
     const [newsArticlesLoading, setNewsArticlesLoading] = useState(true);
     const [newsArticlesError, setNewsArticlesError] = useState<string | null>(null);
@@ -16,9 +16,17 @@ export const useNewsArticles = (reportHandler: PropertyReportHandler | null): Ne
 
     useEffect(() => {
         // Don't fetch if we already have articles
+        if (generalPropertyInfoError) {
+            console.log("News articles error set to:", generalPropertyInfoError);
+            setNewsArticlesError(generalPropertyInfoError);
+            setNewsArticlesLoading(false);
+            return;
+        }
+        
         if (newsArticles.length > 0) {
             return;
         }
+
 
         let isMounted = true;
         let timeoutId: NodeJS.Timeout;
@@ -40,6 +48,7 @@ export const useNewsArticles = (reportHandler: PropertyReportHandler | null): Ne
                 }
                 return;
             }
+
 
             try {
                 setNewsArticlesLoading(true);
@@ -105,7 +114,7 @@ export const useNewsArticles = (reportHandler: PropertyReportHandler | null): Ne
             clearTimeout(timeoutId);
         };
 
-    }, [reportHandler, attemptCount, newsArticles.length]);
+    }, [reportHandler, attemptCount, newsArticles.length, generalPropertyInfoError]);
 
     return { newsArticles, newsArticlesLoading, newsArticlesError };
 }

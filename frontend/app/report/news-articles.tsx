@@ -2,6 +2,8 @@
 
 import React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 import "@/styles/report.css";
 import { NewsArticle } from "@/schemas/views/research-agent-schema";
 
@@ -39,7 +41,11 @@ export function NewsArticlesTab({ newsArticles, newsLoading, newsError }: { news
 
   if (newsError) {
     return (
-        <p>Error: {newsError}</p>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{newsError}</AlertDescription>
+        </Alert>
     );
   }
 
