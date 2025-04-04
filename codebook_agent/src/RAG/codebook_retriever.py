@@ -30,7 +30,9 @@ from qdrant_client.http.exceptions import ResponseHandlingException
 import concurrent.futures
 import threading
 
-# Load environment variables
+from src.utils.codebook_helpers import load_html 
+
+# Load environment variables    
 load_dotenv()
 
 
@@ -39,7 +41,7 @@ class CodebookRetriever:
         if not html_document_id:
             raise ValueError("html_document_id is required")
         if not html_content:
-            raise ValueError("html_content is required")
+            html_content = load_html(html_document_id)
 
         self.html_content = html_content
         self.collection_name = html_document_id
