@@ -113,41 +113,6 @@ class CodebookRetriever:
 
         return embeddings
 
-    # async def process_section(self, section_info: Dict, extract_section_content) -> int:
-    #     section_name = section_info['sectionName']
-    #     section_number = section_info['sectionNumber']
-    #     chapter_number = section_info['chapterNumber']
-    #     full_number = f"{chapter_number}.{section_number}"
-
-    #     content_dict = extract_section_content(self.html_document_id, full_number)
-    #     if "error" in content_dict:
-    #         print(f"Error extracting content: {content_dict['error']}")
-    #         return 0
-
-    #     content_text = content_dict["content"]
-    #     chunks = self.text_splitter.split_text(content_text)
-    #     if not chunks:
-    #         return 0
-
-    #     embeddings = self.embeddings.embed_documents(chunks)
-    #     payloads = [{
-    #         "chapterNumber": chapter_number,
-    #         "sectionName": section_name,
-    #         "sectionNumber": section_number,
-    #         "text": chunk
-    #     } for chunk in chunks]
-
-    #     points = [
-    #         PointStruct(
-    #             id=str(uuid.uuid4()),
-    #             vector=embedding,
-    #             payload=payloads[i]
-    #         ) for i, embedding in enumerate(embeddings)
-    #     ]
-
-    #     await self.upsert_in_batches(points)
-    #     return len(chunks)
-
     async def process_section(self, section_info: Dict, extract_section_content) -> int:
         section_name = section_info['sectionName']
         section_number = section_info['sectionNumber']
