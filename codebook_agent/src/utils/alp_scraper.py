@@ -2,7 +2,7 @@ import requests
 import time
 
 BASE_URL = "https://codelibrary.amlegal.com/api"
-EMAIL = "evan@developiq.ai"
+EMAIL = "evanbrooks0629@gmail.com"
 PASSWORD = "Zillow2Sucks$"
 
 def get_auth_token():
