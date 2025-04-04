@@ -89,8 +89,7 @@ codebook_db/*/link_lists.bin
 # Output files
 # ----------------------------------------
 crews/search_crew/chapter_output.json
-html_storage/
-html_storage/*
+
 
 # ----------------------------------------
 # Misc

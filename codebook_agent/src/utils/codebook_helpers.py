@@ -102,26 +102,15 @@ import re
 import os
 import uuid
 
-def load_html_from_storage(html_document_id):
-    """
-    Load HTML document from storage and return a BeautifulSoup object.
-    
-    Args:
-        html_document_id (str): The ID of the HTML document to load
-    
-    Returns:
-        BeautifulSoup: A BeautifulSoup object of the HTML document, or None if loading fails
-    """
-    storage_path = "./html_storage"
-    html_file_path = f"{storage_path}/{html_document_id}.html"
-    
+def load_html(html_content):
+
     try:
-        with open(html_file_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
         return BeautifulSoup(html_content, 'html.parser')
     except Exception as e:
         print(f"Error loading HTML document: {e}")
         return None
+    
+
 
 def extract_section_text(section_element):
     """
@@ -214,7 +203,7 @@ def find_section_element(soup, chapter_number, section_number):
     
     return None, None
 
-def get_section_content(html_document_id, section_number):
+def get_section_content(html_content, section_number):
     """
     Extract the complete content of a specific section from the municipal code.
     
@@ -226,9 +215,7 @@ def get_section_content(html_document_id, section_number):
         dict: A dictionary containing the section metadata and content or error information
     """
     # Load HTML
-    soup = load_html_from_storage(html_document_id)
-    if not soup:
-        return {"error": f"Could not load HTML document: {html_document_id}"}
+    soup = load_html(html_content)
     
     # Parse the section number into chapter and section parts
     section_parts = section_number.split(".")
@@ -257,7 +244,7 @@ def get_section_content(html_document_id, section_number):
         "content": content
     }
 
-def extract_table_of_contents(html_document_id, hierarchy_depth="titles_only", target_title=None, 
+def extract_table_of_contents(html_content, hierarchy_depth="titles_only", target_title=None, 
                               target_chapter=None, include_content=False):
     """
     Extract table of contents from an HTML document containing municipal code.
@@ -286,9 +273,9 @@ def extract_table_of_contents(html_document_id, hierarchy_depth="titles_only", t
         return {"error": f"Invalid hierarchy_depth. Must be one of {valid_hierarchy_depths}"}
     
     # Load HTML
-    soup = load_html_from_storage(html_document_id)
+    soup = load_html(html_content)
     if not soup:
-        return {"error": f"Could not load HTML document: {html_document_id}"}
+        return {"error": f"Could not load HTML document"}
     
     # Special case: If target_chapter is provided, return a flat list of sections for that chapter
     if target_chapter:
@@ -456,9 +443,6 @@ def extract_table_of_contents(html_document_id, hierarchy_depth="titles_only", t
         
         # Add the title to the TOC
         toc.append(title_entry)
-    
-    # Save the TOC to a file
-    with open("./toc.json", "w") as toc_file:
-        json.dump(toc, toc_file, indent=2)
+
     
     return toc

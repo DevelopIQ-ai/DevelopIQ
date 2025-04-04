@@ -74,10 +74,8 @@ export async function POST(request: Request) {
         state: state,
         zone_code: zone_code,
         use_html_cache: true,
-        use_toc_cache: true,
         use_chunk_cache: true,
         model_name: "gpt-4o-mini",
-        storage_path: "./html_storage"
       }
     };
     

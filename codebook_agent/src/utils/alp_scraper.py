@@ -1,9 +1,11 @@
 import requests
 import time
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 BASE_URL = "https://codelibrary.amlegal.com/api"
-EMAIL = "evanbrooks0629@gmail.com"
-PASSWORD = "Zillow2Sucks!s"
+EMAIL = os.getenv("ALP_EMAIL")
+PASSWORD = os.getenv("ALP_PASSWORD")
 
 def get_auth_token():
     url = f"{BASE_URL}/login/"
