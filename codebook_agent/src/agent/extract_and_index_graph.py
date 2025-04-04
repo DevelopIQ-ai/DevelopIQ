@@ -50,30 +50,21 @@ def get_alp_codebook(state: DocumentState, config: RunnableConfig) -> DocumentSt
     """Retrieve the HTML document."""
     configuration = get_config(config)
     document_id = state["html_document_id"]
-    use_cache = configuration.use_html_cache
     
-    os.makedirs(configuration.storage_path, exist_ok=True)
-    
-    # Check if document already exists in cache
-    storage_file_path = f"{configuration.storage_path}/{document_id}.html"
-    if os.path.exists(storage_file_path) and use_cache:
-        print(f"Using cached HTML document with ID: {document_id}")
-        with open(storage_file_path, "r", encoding="utf-8") as f:
-            document_content = f.read()
-        return {**state, "document_content": document_content}
-    
-    # If not in cache, try to fetch from web (unless in test mode)
+    print(configuration.test_mode)    # If not in cache, try to fetch from web (unless in test mode)
     if not configuration.test_mode:
         try:
-            html_url = scrape_html_from_alp(configuration.municipality, configuration.state)
-            response = requests.get(html_url)
-            response.raise_for_status()
-            
+            # html_url = scrape_html_from_alp(configuration.municipality, configuration.state)
+            # response = requests.get(html_url)
+            # response.raise_for_status()
+            base_url = "https://developiq-html-files.s3.us-east-2.amazonaws.com/" + document_id + ".html"
+            print("BASE URL: ", base_url)
+            response = requests.get(base_url)
+            print("RESPONSE: ", response)
+
             if response.status_code == 200:
                 print("Successfully fetched HTML document")
                 html_content = response.text
-                with open(storage_file_path, "w", encoding="utf-8") as f:
-                    f.write(html_content)
                 return {**state, "document_content": html_content}
         except Exception as e:
             print(f"Error fetching document: {e}")
@@ -240,7 +231,7 @@ def run_analysis(
     # Return the analysis results
     return final_state["analysis_results"]
 if __name__ == "__main__":
-    results = run_analysis(test_mode=True)
+    results = run_analysis(test_mode=False)
     print("\nFinal Results:")
     for key, value in results.items():
         print(f"\n{key.upper()}:")

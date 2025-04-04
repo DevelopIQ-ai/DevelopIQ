@@ -3,7 +3,7 @@ import time
 
 BASE_URL = "https://codelibrary.amlegal.com/api"
 EMAIL = "evanbrooks0629@gmail.com"
-PASSWORD = "Zillow2Sucks$"
+PASSWORD = "Zillow2Sucks!s"
 
 def get_auth_token():
     url = f"{BASE_URL}/login/"
