@@ -7,6 +7,7 @@ from typing import Dict, Any, Annotated, TypedDict, Optional
 from langgraph.graph import StateGraph, START, END
 from langchain_core.runnables import RunnableConfig
 import json
+import nest_asyncio
 
 from src.RAG.codebook_retriever import CodebookRetriever
 from src.RAG.queries import (
@@ -38,7 +39,7 @@ from src.RAG.query_models import (
 )
 from src.agent.config_file import Configuration
 
-# Global retriever instance (not stored in state)
+nest_asyncio.apply()
 _RETRIEVER_INSTANCE = None
 
 # Custom reducer function for dictionary merge

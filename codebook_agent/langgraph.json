@@ -13,7 +13,8 @@
     "chromadb>=0.6.3",
     "langchain-qdrant>=0.2.0",
     "qdrant-client>=1.13.3",
-    "more-itertools>=10.6.0"
+    "more-itertools>=10.6.0",
+    "nest-asyncio>=1.0.0"
   ],
   "graphs": {
     "extract_and_index_graph": "./src/agent/extract_and_index_graph.py:graph",
