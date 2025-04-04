@@ -18,6 +18,8 @@ setuptools = "^78.1.0"
 beautifulsoup4 = "^4.13.3"
 tenacity = "^9.1.2"
 more-itertools = "^10.6.0"
+qdrant-client = "^1.13.3"
+langchain-qdrant = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=1.11.1"
