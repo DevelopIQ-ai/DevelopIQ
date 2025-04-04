@@ -7,7 +7,6 @@ from typing import Dict, Any, Annotated, TypedDict, Optional
 from langgraph.graph import StateGraph, START, END
 from langchain_core.runnables import RunnableConfig
 import json
-import nest_asyncio
 
 from src.RAG.codebook_retriever import CodebookRetriever
 from src.RAG.queries import (
@@ -39,9 +38,6 @@ from src.RAG.query_models import (
 )
 from src.agent.config_file import Configuration
 
-nest_asyncio.apply()
-_RETRIEVER_INSTANCE = None
-
 # Custom reducer function for dictionary merge
 def dict_merge(existing: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
     """Merge two dictionaries without overwriting the existing one."""
@@ -58,20 +54,16 @@ class MunicipalCodeState(TypedDict):
     requirements: Annotated[Dict[str, Any], dict_merge]  # Use custom reducer for requirements
     errors: Annotated[Dict[str, str], dict_merge]  # Use custom reducer for errors
 
-# Helper function to get or create retriever (outside of state)
+# Helper function to create a new retriever instance
 def get_retriever(html_document_id: str):
-    """Get or create a CodebookRetriever instance."""
-    global _RETRIEVER_INSTANCE
-    
-    if _RETRIEVER_INSTANCE is None:
-        try:
-            _RETRIEVER_INSTANCE = CodebookRetriever(html_document_id=html_document_id)
-            print("Created new retriever instance")
-        except Exception as e:
-            print(f"Error creating retriever: {str(e)}")
-            return None
-    
-    return _RETRIEVER_INSTANCE
+    """Create a new CodebookRetriever instance."""
+    try:
+        retriever = CodebookRetriever(html_document_id=html_document_id)
+        print("Created new retriever instance")
+        return retriever
+    except Exception as e:
+        print(f"Error creating retriever: {str(e)}")
+        return None
 
 # Configuration handler
 def get_config(config: RunnableConfig) -> Configuration:
@@ -110,7 +102,7 @@ async def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str,
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
@@ -165,7 +157,7 @@ async def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[st
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
@@ -178,7 +170,7 @@ async def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[st
         # Query for aisle width
         aisle_width_query = format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code)
         aisle_width_result = await retriever.query_codebook(aisle_width_query, AisleWidth)
-        #
+        
         # Query for curbing requirements
         curbing_query = format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code)
         curbing_result = await retriever.query_codebook(curbing_query, SummaryRequirement)
@@ -231,7 +223,7 @@ async def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
@@ -296,7 +288,7 @@ async def building_placement_node(state: Dict[str, Any], config: RunnableConfig)
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
@@ -361,7 +353,7 @@ async def building_requirements_node(state: Dict[str, Any], config: RunnableConf
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
@@ -411,7 +403,7 @@ async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableC
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     
-    # Get retriever from global variable
+    # Create a new retriever instance for this node
     retriever = get_retriever(html_document_id)
     if not retriever:
         return {
