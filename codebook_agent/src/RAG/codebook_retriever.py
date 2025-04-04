@@ -35,21 +35,14 @@ load_dotenv()
 
 
 class CodebookRetriever:
-    def __init__(self, persist_directory="./qdrant_storage", html_document_id=None, reset_db=False):
+    def __init__(self, html_document_id=None, html_content=None, reset_db=False):
         if not html_document_id:
             raise ValueError("html_document_id is required")
+        if not html_content:
+            raise ValueError("html_content is required")
 
-        self.persist_directory = persist_directory
-        self.html_document_id = html_document_id
+        self.html_content = html_content
         self.collection_name = html_document_id
-
-        if reset_db and os.path.exists(persist_directory):
-            shutil.rmtree(persist_directory)
-            print(f"Removed existing database at {persist_directory}")
-        else:
-            print(f"Using existing database at {persist_directory}")
-
-        Path(persist_directory).mkdir(parents=True, exist_ok=True)
 
         self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)

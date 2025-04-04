@@ -15,13 +15,14 @@ from src.utils.alp_scraper import scrape_html_from_alp
 from src.utils.codebook_helpers import extract_table_of_contents, get_section_content
 from src.RAG.codebook_retriever import CodebookRetriever
 from src.agent.config_file import Configuration
-import asyncio
+from dotenv import load_dotenv
+load_dotenv()
 
 # Define the state as a TypedDict
 class DocumentState(TypedDict):
     # Processing state
     html_document_id: str
-    document_content: str
+    html_content: str
     
     # Results
     title_list: Dict[str, Any]
@@ -50,31 +51,20 @@ def get_alp_codebook(state: DocumentState, config: RunnableConfig) -> DocumentSt
     """Retrieve the HTML document."""
     configuration = get_config(config)
     document_id = state["html_document_id"]
-    use_cache = configuration.use_html_cache
     
-    os.makedirs(configuration.storage_path, exist_ok=True)
-    
-    # Check if document already exists in cache
-    storage_file_path = f"{configuration.storage_path}/{document_id}.html"
-    if os.path.exists(storage_file_path) and use_cache:
-        print(f"Using cached HTML document with ID: {document_id}")
-        with open(storage_file_path, "r", encoding="utf-8") as f:
-            document_content = f.read()
-        return {**state, "document_content": document_content}
-    
-    # If not in cache, try to fetch from web (unless in test mode)
+    print(configuration.test_mode)    # If not in cache, try to fetch from web (unless in test mode)
     if not configuration.test_mode:
         try:
-            html_url = scrape_html_from_alp(configuration.municipality, configuration.state)
-            response = requests.get(html_url)
-            response.raise_for_status()
-            
+            # html_url = scrape_html_from_alp(configuration.municipality, configuration.state)
+            # response = requests.get(html_url)
+            # response.raise_for_status()
+            base_url = os.getenv("S3_BASE_URL") + document_id + ".html"
+            response = requests.get(base_url)
+
             if response.status_code == 200:
                 print("Successfully fetched HTML document")
                 html_content = response.text
-                with open(storage_file_path, "w", encoding="utf-8") as f:
-                    f.write(html_content)
-                return {**state, "document_content": html_content}
+                return {**state, "html_content": html_content}
         except Exception as e:
             print(f"Error fetching document: {e}")
     
@@ -85,11 +75,10 @@ def get_sections(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Get the list of relevant sections by identifying the most relevant chapter."""
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
-    use_cache = configuration.use_toc_cache
     
     # Extract titles and chapters
     hierarchy = extract_table_of_contents(
-        html_document_id=html_document_id,
+        html_content=state["html_content"],
         hierarchy_depth="titles_and_chapters"
     )
     
@@ -128,39 +117,22 @@ def get_sections(state: DocumentState, config: RunnableConfig) -> DocumentState:
     
     # Get sections from selected chapter
     section_list = extract_table_of_contents(
-        html_document_id=html_document_id,
+        html_content=state["html_content"],
         target_chapter=chapter_number  
     )
     
     print(f"Found {len(section_list)} sections in {selection['selected_chapter']}")
     return {**state, "section_list": section_list}
 
-# def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
-#     """Extract section content and index it in the vector database."""
-#     configuration = get_config(config)
-#     html_document_id = state["html_document_id"]
-#     use_cache = configuration.use_chunk_cache
-    
-#     # Initialize retriever
-#     retriever = CodebookRetriever(html_document_id=html_document_id)
-#     codebook_exists = retriever.codebook_exists_and_is_indexed(html_document_id)
-#     print("CODEBOOK EXISTS: ", codebook_exists)
-#     # if cache is enabled or codebook does not exist, process the sections
-#     if use_cache or not retriever.codebook_exists_and_is_indexed(html_document_id):
-#         sections = state["section_list"]
-#         print("PROCESSING SECTIONS, because cache is disabled or codebook does not exist")
-#         # retriever.process_all_sections(sections, get_section_content)
-#         asyncio.run(retriever.process_all_sections(sections, get_section_content))
 
-#     else:
-#         print("Codebook already exists, using cached version")
 async def chunk(state: DocumentState, config: RunnableConfig) -> DocumentState:
     configuration = get_config(config)
     html_document_id = state["html_document_id"]
+    html_content = state["html_content"]
     use_cache = configuration.use_chunk_cache
     # try to set this to true only
 
-    retriever = CodebookRetriever(html_document_id=html_document_id)
+    retriever = CodebookRetriever(html_document_id=html_document_id, html_content=html_content)
     await retriever._ensure_collection_exists()
 
     codebook_exists = await retriever.codebook_exists_and_is_indexed(html_document_id)
@@ -203,11 +175,9 @@ def run_analysis(
     state: str = "IN",
     zone_code: str = "RR",
     use_html_cache: bool = True,
-    use_toc_cache: bool = True,
     use_section_cache: bool = False,
     test_mode: bool = False,
     model_name: str = "gpt-4o-mini",
-    storage_path: str = "./html_storage"
 ) -> Dict[str, Any]:
     """Run the municipal code analysis with configurable parameters."""
     # Create configuration
@@ -217,10 +187,8 @@ def run_analysis(
             "state": state,
             "zone_code": zone_code,
             "use_html_cache": use_html_cache,
-            "use_toc_cache": use_toc_cache,
             "use_section_cache": use_section_cache,
             "model_name": model_name,
-            "storage_path": storage_path,
             "test_mode": test_mode
         }
     }
@@ -228,7 +196,7 @@ def run_analysis(
     # Initial state (minimal, with only values that change during processing)
     initial_state = {
         "html_document_id": "",
-        "document_content": "",
+        "html_content": "",
         "title_list": {},
         "section_list": {},
         "analysis_results": {}
@@ -240,7 +208,7 @@ def run_analysis(
     # Return the analysis results
     return final_state["analysis_results"]
 if __name__ == "__main__":
-    results = run_analysis(test_mode=True)
+    results = run_analysis(test_mode=False)
     print("\nFinal Results:")
     for key, value in results.items():
         print(f"\n{key.upper()}:")

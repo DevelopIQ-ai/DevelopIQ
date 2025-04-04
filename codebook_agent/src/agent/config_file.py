@@ -15,13 +15,11 @@ class Configuration:
     # Municipal code retrieval parameters
     municipality: str = "Bargersville"
     state: str = "IN"
-    storage_path: str = "./html_storage"
     zone_code: str = "RR"
     model_name: str = "gpt-4o-mini"
     test_mode: bool = False
     use_html_cache: bool = True
-    use_toc_cache: bool = True
-    use_chunk_cache: bool = False
+    use_chunk_cache: bool = True
     use_query_cache: bool = False
     
     @classmethod
