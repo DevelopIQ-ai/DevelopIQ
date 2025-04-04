@@ -34,7 +34,8 @@ export function GeneralPropertyTab({ reportHandler, generalPropertyInfoLoading, 
         setReportData(data)
         setIsLoading(false)
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load property data")
+        console.log(err);
+        setError("Unfortunately, we were unable to fetch property information for your property. Please try again later.")
         setIsLoading(false)
       }
     } else if (!reportHandler) {
@@ -47,7 +48,7 @@ export function GeneralPropertyTab({ reportHandler, generalPropertyInfoLoading, 
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{error || generalPropertyInfoError}</AlertDescription>
       </Alert>
     )
   }

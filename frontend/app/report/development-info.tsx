@@ -21,10 +21,18 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
 
   useEffect(() => {
     console.log('dev-info useEffect');
+    if (developmentInfoError) {
+      console.log('dev-info useEffect: developmentInfoError is true');
+      setError(developmentInfoError);
+      setIsLoading(false);
+      return;
+    }
+
     if (developmentInfoLoading) {
       console.log('dev-info useEffect: developmentInfoLoading is true');
       return
     }
+
     
     // When loading finishes, fetch data if we don't have it yet
     if (!reportData && reportHandler) {
@@ -44,7 +52,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
       console.log('dev-info useEffect: reportHandler is null');
       setIsLoading(false)
     }
-  }, [developmentInfoLoading, reportHandler, reportData])
+  }, [developmentInfoLoading, reportHandler, reportData, developmentInfoError])
 
   if (error || developmentInfoError) {
     return (

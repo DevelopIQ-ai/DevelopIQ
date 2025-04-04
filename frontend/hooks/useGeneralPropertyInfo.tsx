@@ -77,7 +77,7 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                 
                     // Only set the error if ATTOM also failed
                     if (!attomSuccess) {
-                        setGeneralPropertyInfoError(error instanceof Error ? error.message : "An unexpected error occurred");
+                        setGeneralPropertyInfoError("Unfortunately, we were unable to fetch property information for your property. Please try again later.");
                     }
                 } finally {
                     if (isMounted) {

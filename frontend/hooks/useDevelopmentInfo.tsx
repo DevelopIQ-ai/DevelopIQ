@@ -6,7 +6,7 @@ interface DevelopmentInfoResult {
     developmentInfoError: string | null;
 }
 
-export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null): DevelopmentInfoResult => {
+export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): DevelopmentInfoResult => {
     const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(true);
     const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
 
@@ -23,6 +23,13 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 if (reportHandler.getDevelopmentInfo()) {
                     console.log("Development info already exists in report handler");
                     setDevelopmentInfoLoading(false);
+                    return;
+                }
+
+                if (generalPropertyInfoError) {
+                    setDevelopmentInfoError(generalPropertyInfoError);
+                    setDevelopmentInfoLoading(false);
+                    console.log("Development info error set to:", generalPropertyInfoError);
                     return;
                 }
 
@@ -376,6 +383,8 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
                 //     );
                 //     setDevelopmentInfoLoading(false);
                 // }
+                setDevelopmentInfoError("Unfortunately, we were unable to fetch development info for your property. Please try again later.");
+                setDevelopmentInfoLoading(false);
             }
         };
 
@@ -384,7 +393,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null):
         // return () => {
         //     isMounted = false;
         // };
-    }, [reportHandler, reportHandler?.getGeneralInfo()]); // Only depend on reportHandler changes
+    }, [reportHandler, reportHandler?.getGeneralInfo(), generalPropertyInfoError]); // Only depend on reportHandler changes
 
 
     return { developmentInfoLoading, developmentInfoError };
