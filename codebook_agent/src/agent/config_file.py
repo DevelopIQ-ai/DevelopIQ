@@ -13,7 +13,7 @@ class Configuration:
     """The configuration for the municipal code retrieval agent."""
 
     # Municipal code retrieval parameters
-    municipality: str = "Bargersville"
+    municipality: str = "Richmond"
     state: str = "IN"
     zone_code: str = "RR"
     model_name: str = "gpt-4o-mini"
