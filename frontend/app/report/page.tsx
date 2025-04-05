@@ -23,6 +23,7 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 import { useGeneralPropertyInfo } from "@/hooks/useGeneralPropertyInfo";
 import { useDevelopmentInfo } from "@/hooks/useDevelopmentInfo";
 import { useNewsArticles } from "@/hooks/useNewsArticles";
+import { usePropertyImages } from "@/hooks/usePropertyImages";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
@@ -30,6 +31,7 @@ export default function PropertyAnalysisDashboard() {
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
+  const { images } = usePropertyImages(propertyAddress);
 
   
   // First useEffect: Fetch general property information
@@ -66,73 +68,24 @@ export default function PropertyAnalysisDashboard() {
           <div className="relative">
             <Carousel className="w-full">
               <CarouselContent>
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-uZ7J3h8v7RkCQvbW4zOpGQWPKISqu1.png"
-                      alt="Exterior view of the property showing modern two-story residential building"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-nbZliwuRjp9a7cwyA8vUFEErMJfxOt.png"
-                      alt="Interior view showing home office and living room spaces"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZU9GzXZxEpWtz4PKmrPWa5s1uuBZRC.png"
-                      alt="Map view of the property location"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
-                {/* Duplicate images for scrollability */}
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-uZ7J3h8v7RkCQvbW4zOpGQWPKISqu1.png"
-                      alt="Exterior view of the property"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-nbZliwuRjp9a7cwyA8vUFEErMJfxOt.png"
-                      alt="Interior view of the property"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZU9GzXZxEpWtz4PKmrPWa5s1uuBZRC.png"
-                      alt="Map view of the property location"
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </CarouselItem>
+                {images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
+                      <Image
+                        src={image.url}
+                        alt={image.alt}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="object-cover w-full h-full"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <p className="text-white text-sm">
+                          Image source: {image.source}
+                        </p>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
               </CarouselContent>
               <CarouselPrevious className="left-4" />
               <CarouselNext className="right-4" />
