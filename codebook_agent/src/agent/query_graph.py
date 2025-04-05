@@ -74,9 +74,10 @@ def get_config(config: RunnableConfig) -> Configuration:
 def init_state_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Initialize the query state."""
     configuration = get_config(config)
-    html_document_id = "bargersville_in"
-    zone_code = "RR"
-    
+    html_document_id = f"{configuration.municipality.lower().replace(' ', '_')}_{configuration.state.lower()}"
+    zone_code = configuration.zone_code
+    # Return updated state with initial values
+
     # Create retriever but don't store it in state
     retriever = get_retriever(html_document_id)
     if not retriever:
