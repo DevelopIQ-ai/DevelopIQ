@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 // import { useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
@@ -122,19 +122,19 @@ export default function PropertyAnalysisDashboard() {
             <Card>
               <CardHeader>
                 <CardDescription>Parcel ID</CardDescription>
-                <CardTitle className="text-xl">#888-123456</CardTitle>
+                {/* <CardTitle className="text-xl">#888-123456</CardTitle> */}
               </CardHeader>
             </Card>
             <Card>
               <CardHeader>
                 <CardDescription>Total Area</CardDescription>
-                <CardTitle className="text-xl">2.11 acres</CardTitle>
+                {/* <CardTitle className="text-xl">2.11 acres</CardTitle> */}
               </CardHeader>
             </Card>
             <Card>
               <CardHeader>
                 <CardDescription>Assessed Value (2024)</CardDescription>
-                <CardTitle className="text-xl">$4.2M</CardTitle>
+                {/* <CardTitle className="text-xl">$4.2M</CardTitle> */}
               </CardHeader>
             </Card>
           </div>
