@@ -38,7 +38,7 @@ export function mapAttomProfileToGeneralPropertyInfo(
       },
       "Regulatory Status": {
         "Zoning Classification": {
-          siteZoningIdent: { alias: "Site Zoning Identifier", value: prop.lot?.siteZoningIdent ?? null, source: "attom" },
+          // siteZoningIdent: { alias: "Site Zoning Identifier", value: prop.lot?.siteZoningIdent ?? null, source: "attom" },
           zoningType: { alias: "Zoning Type", value: prop.lot?.zoningType ?? null, source: "attom" },
         }
         // Atom does not provide "Overlay Districts" – we leave that to default.
