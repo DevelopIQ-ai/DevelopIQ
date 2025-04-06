@@ -122,19 +122,19 @@ export default function PropertyAnalysisDashboard() {
             <Card>
               <CardHeader>
                 <CardDescription>Parcel ID</CardDescription>
-                <CardTitle className="text-xl">#888-123456</CardTitle>
+                {/* <CardTitle className="text-xl">#888-123456</CardTitle> */}
               </CardHeader>
             </Card>
             <Card>
               <CardHeader>
                 <CardDescription>Total Area</CardDescription>
-                <CardTitle className="text-xl">2.11 acres</CardTitle>
+                {/* <CardTitle className="text-xl">2.11 acres</CardTitle> */}
               </CardHeader>
             </Card>
             <Card>
               <CardHeader>
                 <CardDescription>Assessed Value (2024)</CardDescription>
-                <CardTitle className="text-xl">$4.2M</CardTitle>
+                {/* <CardTitle className="text-xl">$4.2M</CardTitle> */}
               </CardHeader>
             </Card>
           </div>
