@@ -8,18 +8,18 @@ interface PropertyImage {
 
 export const usePropertyImages = (propertyAddress: string | null) => {
   const [images, setImages] = useState<PropertyImage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [imagesLoading, setImagesLoading] = useState(true);
+  const [imagesError, setImagesError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!propertyAddress) {
-      setLoading(false);
+      setImagesLoading(false);
       return;
     }
 
     const fetchImages = async () => {
       try {
-        setLoading(true);
+        setImagesLoading(true);
         const response = await fetch('/api/property-images', {
           method: 'POST',
           headers: {
@@ -35,7 +35,7 @@ export const usePropertyImages = (propertyAddress: string | null) => {
         const data = await response.json();
         setImages(data.images);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch property images');
+        setImagesError(err instanceof Error ? err.message : 'Failed to fetch property images');
         // Fallback to default images if API fails
         setImages([
           {
@@ -55,12 +55,12 @@ export const usePropertyImages = (propertyAddress: string | null) => {
           },
         ]);
       } finally {
-        setLoading(false);
+        setImagesLoading(false);
       }
     };
 
     fetchImages();
   }, [propertyAddress]);
 
-  return { images, loading, error };
+  return { images, imagesLoading, imagesError };
 }; 

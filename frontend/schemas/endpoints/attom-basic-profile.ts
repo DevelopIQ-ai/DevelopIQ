@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 // ---------------- Status ----------------
 const StatusSchema = z.object({
   version: z.string().optional().nullable().default(null),
@@ -12,53 +13,54 @@ const StatusSchema = z.object({
   attomId: z.number().optional().nullable().default(null),
 });
 
+// ---------------- EchoedFields ----------------
+const EchoedFieldsSchema = z.object({
+  jobID: z.string().optional().nullable().default(null),
+  loanNumber: z.string().optional().nullable().default(null),
+  preparedBy: z.string().optional().nullable().default(null),
+  resellerID: z.string().optional().nullable().default(null),
+  preparedFor: z.string().optional().nullable().default(null),
+});
 
 // ---------------- Identifier ----------------
 const IdentifierSchema = z.object({
   Id: z.number().optional().nullable().default(null),
   fips: z.string().optional().nullable().default(null),
   apn: z.string().optional().nullable().default(null),
-  multiApn: z.any().optional().nullable().default(null),
   attomId: z.number().optional().nullable().default(null),
 });
 
 // ---------------- Lot ----------------
 const LotSchema = z.object({
-  depth: z.any().optional().nullable().default(null),
-  frontage: z.any().optional().nullable().default(null),
+  depth: z.number().optional().nullable().default(null),
+  frontage: z.number().optional().nullable().default(null),
   lotNum: z.string().optional().nullable().default(null),
   lotSize1: z.number().optional().nullable().default(null),
   lotSize2: z.number().optional().nullable().default(null),
   zoningType: z.string().optional().nullable().default(null),
-  // siteZoningIdent: z.string().optional().nullable().default(null),
 });
 
 // ---------------- Area ----------------
 const AreaSchema = z.object({
-  blockNum: z.any().optional().nullable().default(null),
-  locType: z.string().optional().nullable().default(null),
   countrySecSubd: z.string().optional().nullable().default(null),
-  countyUse1: z.string().optional().nullable().default(null),
-  munCode: z.string().optional().nullable().default(null),
-  munName: z.string().optional().nullable().default(null),
-  srvyRange: z.any().optional().nullable().default(null),
-  srvySection: z.any().optional().nullable().default(null),
-  srvyTownship: z.any().optional().nullable().default(null),
-  subdName: z.string().optional().nullable().default(null),
-  subdTractNum: z.any().optional().nullable().default(null),
-  taxCodeArea: z.string().optional().nullable().default(null),
   censusTractIdent: z.string().optional().nullable().default(null),
   censusBlockGroup: z.string().optional().nullable().default(null),
 });
 
+// ---------------- Location ----------------
+const GeoIdV4Schema = z.object({}).catchall(z.string().or(z.array(z.string())));
+
 const LocationSchema = z.object({
+  accuracy: z.string().optional().nullable().default(null),
   latitude: z.string().optional().nullable().default(null),
   longitude: z.string().optional().nullable().default(null),
+  distance: z.number().optional().nullable().default(null),
+  geoid: z.string().optional().nullable().default(null),
+  geoIdV4: GeoIdV4Schema.optional().nullable().default(null),
 });
 
 // ---------------- Address ----------------
 const AddressSchema = z.object({
-  bldgName: z.any().optional().nullable().default(null),
   country: z.string().optional().nullable().default(null),
   countrySubd: z.string().optional().nullable().default(null),
   line1: z.string().optional().nullable().default(null),
@@ -69,100 +71,97 @@ const AddressSchema = z.object({
   postal1: z.string().optional().nullable().default(null),
   postal2: z.string().optional().nullable().default(null),
   postal3: z.string().optional().nullable().default(null),
-  stateFips: z.string().optional().nullable().default(null),
-  unitNumberIdent: z.any().optional().nullable().default(null),
-  situsHouseNumber: z.string().optional().nullable().default(null),
-  situsDirection: z.any().optional().nullable().default(null),
-  situsStreetName: z.string().optional().nullable().default(null),
-  situsAddressSuffix: z.string().optional().nullable().default(null),
-  situsPostDirection: z.any().optional().nullable().default(null),
-  situsUnitPrefix: z.any().optional().nullable().default(null),
-  situsUnitValue: z.any().optional().nullable().default(null),
+});
+
+// ---------------- Summary ----------------
+const SummarySchema = z.object({
+  absenteeInd: z.string().optional().nullable().default(null),
+  propClass: z.string().optional().nullable().default(null),
+  propSubType: z.string().optional().nullable().default(null),
+  propType: z.string().optional().nullable().default(null),
+  propertyType: z.string().optional().nullable().default(null),
+  yearBuilt: z.number().optional().nullable().default(null),
+  propLandUse: z.string().optional().nullable().default(null),
+  propIndicator: z.number().optional().nullable().default(null),
+  legal1: z.string().optional().nullable().default(null),
+});
+
+// ---------------- Utilities ----------------
+const UtilitiesSchema = z.object({
+  coolingType: z.string().optional().nullable().default(null),
+  energyType: z.string().optional().nullable().default(null),
+  heatingType: z.string().optional().nullable().default(null),
+  sewerType: z.string().optional().nullable().default(null),
 });
 
 // ---------------- Sale ----------------
-const SaleAmountSchema = z.object({
+const SaleAmountDataSchema = z.object({
   saleAmt: z.number().optional().nullable().default(null),
-  saleCode: z.any().optional().nullable().default(null),
   saleRecDate: z.string().optional().nullable().default(null),
   saleDisclosureType: z.number().optional().nullable().default(null),
-  saleDocType: z.any().optional().nullable().default(null),
   saleDocNum: z.string().optional().nullable().default(null),
   saleTransType: z.string().optional().nullable().default(null),
 });
 
-
 const SaleSchema = z.object({
-  sequenceSaleHistory: z.number().optional().nullable().default(null),
-  sellerName: z.string().optional().nullable().default(null),
   saleSearchDate: z.string().optional().nullable().default(null),
   saleTransDate: z.string().optional().nullable().default(null),
   transactionIdent: z.string().optional().nullable().default(null),
-  amount: SaleAmountSchema.optional().nullable().default(null),
+  saleAmountData: SaleAmountDataSchema.optional().nullable().default(null),
 });
 
-// ---------------- Building ----------------
+// ---------------- Building Size ----------------
 const BuildingSizeSchema = z.object({
   bldgSize: z.number().optional().nullable().default(null),
   grossSize: z.number().optional().nullable().default(null),
   grossSizeAdjusted: z.number().optional().nullable().default(null),
-  groundFloorSize: z.any().optional().nullable().default(null),
   livingSize: z.number().optional().nullable().default(null),
   sizeInd: z.string().optional().nullable().default(null),
   universalSize: z.number().optional().nullable().default(null),
-  atticSize: z.any().optional().nullable().default(null),
 });
 
+// ---------------- Building Rooms ----------------
 const BuildingRoomsSchema = z.object({
-  bathFixtures: z.any().optional().nullable().default(null),
-  baths1qtr: z.any().optional().nullable().default(null),
-  baths3qtr: z.any().optional().nullable().default(null),
-  bathsCalc: z.any().optional().nullable().default(null),
+  bathFixtures: z.number().optional().nullable().default(null),
   bathsFull: z.number().optional().nullable().default(null),
-  bathsHalf: z.any().optional().nullable().default(null),
   bathsPartial: z.number().optional().nullable().default(null),
   bathsTotal: z.number().optional().nullable().default(null),
   beds: z.number().optional().nullable().default(null),
-  roomsTotal: z.any().optional().nullable().default(null),
 });
 
+// ---------------- Building Interior ----------------
 const BuildingInteriorSchema = z.object({
-  bsmtSize: z.any().optional().nullable().default(null),
-  bsmtType: z.any().optional().nullable().default(null),
-  bsmtFinishedPercent: z.any().optional().nullable().default(null),
-  floors: z.any().optional().nullable().default(null),
+  bsmtSize: z.number().optional().nullable().default(null),
+  bsmtFinishedPercent: z.number().optional().nullable().default(null),
   fplcCount: z.number().optional().nullable().default(null),
   fplcInd: z.string().optional().nullable().default(null),
   fplcType: z.string().optional().nullable().default(null),
 });
 
+// ---------------- Building Construction ----------------
 const BuildingConstructionSchema = z.object({
   condition: z.string().optional().nullable().default(null),
-  constructionType: z.any().optional().nullable().default(null),
+  constructionType: z.string().optional().nullable().default(null),
   foundationType: z.string().optional().nullable().default(null),
-  frameType: z.any().optional().nullable().default(null),
-  roofCover: z.any().optional().nullable().default(null),
-  roofShape: z.any().optional().nullable().default(null),
-  wallType: z.string().optional().nullable().default(null),
-  propertyStructureMajorImprovementsYear: z.any().optional().nullable().default(null),
-  buildingShapeType: z.any().optional().nullable().default(null),
-  buildingShapeDescription: z.any().optional().nullable().default(null),
+  frameType: z.string().optional().nullable().default(null),
 });
 
+// ---------------- Building Parking ----------------
 const BuildingParkingSchema = z.object({
-  garageType: z.any().optional().nullable().default(null),
-  prkgSize: z.any().optional().nullable().default(null),
-  prkgSpaces: z.any().optional().nullable().default(null),
-  prkgType: z.any().optional().nullable().default(null),
+  garageType: z.string().optional().nullable().default(null),
+  prkgSize: z.number().optional().nullable().default(null),
+  prkgType: z.string().optional().nullable().default(null),
 });
 
+// ---------------- Building Summary ----------------
 const BuildingSummarySchema = z.object({
   levels: z.number().optional().nullable().default(null),
   storyDesc: z.string().optional().nullable().default(null),
-  unitsCount: z.any().optional().nullable().default(null),
   view: z.string().optional().nullable().default(null),
+  viewCode: z.string().optional().nullable().default(null),
 });
 
+// ---------------- Building ----------------
 const BuildingSchema = z.object({
   size: BuildingSizeSchema.optional().nullable().default(null),
   rooms: BuildingRoomsSchema.optional().nullable().default(null),
@@ -172,95 +171,95 @@ const BuildingSchema = z.object({
   summary: BuildingSummarySchema.optional().nullable().default(null),
 });
 
-// ---------------- Assessment ----------------
-const AppraisedSchema = z.object({
-  apprImprValue: z.any().optional().nullable().default(null),
-  apprLandValue: z.any().optional().nullable().default(null),
-  apprTtlValue: z.any().optional().nullable().default(null),
+// ---------------- Owner ----------------
+const OwnerNameSchema = z.object({
+  fullName: z.string().optional().nullable().default(null),
+  lastName: z.string().optional().nullable().default(null),
+  firstNameAndMi: z.string().optional().nullable().default(null),
 });
 
+const OwnerSchema = z.object({
+  corporateIndicator: z.string().optional().nullable().default(null),
+  owner1: OwnerNameSchema.optional().nullable().default(null),
+  owner2: z.object({}).optional().nullable().default(null),
+  owner3: z.object({}).optional().nullable().default(null),
+  owner4: z.object({}).optional().nullable().default(null),
+  absenteeOwnerStatus: z.string().optional().nullable().default(null),
+  mailingAddressOneLine: z.string().optional().nullable().default(null),
+});
+
+// ---------------- Assessed ----------------
 const AssessedSchema = z.object({
   assdImprValue: z.number().optional().nullable().default(null),
   assdLandValue: z.number().optional().nullable().default(null),
   assdTtlValue: z.number().optional().nullable().default(null),
 });
 
+// ---------------- Market ----------------
 const MarketSchema = z.object({
   mktImprValue: z.number().optional().nullable().default(null),
   mktLandValue: z.number().optional().nullable().default(null),
   mktTtlValue: z.number().optional().nullable().default(null),
 });
 
-const TaxExemptionSchema = z.object({
-  ExemptionAmount1: z.any().optional().nullable().default(null),
-  ExemptionAmount2: z.any().optional().nullable().default(null),
-  ExemptionAmount3: z.any().optional().nullable().default(null),
-  ExemptionAmount4: z.any().optional().nullable().default(null),
-  ExemptionAmount5: z.any().optional().nullable().default(null),
-});
-
+// ---------------- Tax ----------------
 const TaxSchema = z.object({
-  taxAmt: z.any().optional().nullable().default(null),
-  taxPerSizeUnit: z.any().optional().nullable().default(null),
+  taxAmt: z.number().optional().nullable().default(null),
+  taxPerSizeUnit: z.number().optional().nullable().default(null),
   taxYear: z.number().optional().nullable().default(null),
-  exemption: TaxExemptionSchema.optional().nullable().default(null),
+  exemption: z.object({}).optional().nullable().default(null),
+  exemptiontype: z.object({}).optional().nullable().default(null),
 });
 
+// ---------------- Mortgage ----------------
 const MortgageFirstConcurrentSchema = z.object({
   trustDeedDocumentNumber: z.string().optional().nullable().default(null),
-  ident: z.string().optional().nullable().default(null),
   amount: z.number().optional().nullable().default(null),
   lenderLastName: z.string().optional().nullable().default(null),
-  companyCode: z.string().optional().nullable().default(null),
-  date: z.string().optional().nullable().default(null),
-  loanTypeCode: z.string().optional().nullable().default(null),
-  deedType: z.string().optional().nullable().default(null),
-  interestRateType: z.string().optional().nullable().default(null),
-  equityFlag: z.string().optional().nullable().default(null),
-});
-
-const MortgageSecondConcurrentSchema = z.object({
-  trustDeedDocumentNumber: z.string().optional().nullable().default(null),
-  ident: z.string().optional().nullable().default(null),
-  amount: z.number().optional().nullable().default(null),
-  lenderLastName: z.string().optional().nullable().default(null),
-  companyCode: z.string().optional().nullable().default(null),
-  date: z.string().optional().nullable().default(null),
-  loanTypeCode: z.string().optional().nullable().default(null),
-  term: z.string().optional().nullable().default(null),
-  dueDate: z.string().optional().nullable().default(null),
 });
 
 const MortgageSchema = z.object({
   FirstConcurrent: MortgageFirstConcurrentSchema.optional().nullable().default(null),
-  SecondConcurrent: MortgageSecondConcurrentSchema.optional().nullable().default(null),
+  SecondConcurrent: z.object({}).optional().nullable().default(null),
 });
 
+// ---------------- Assessment ----------------
 const AssessmentSchema = z.object({
-  appraised: AppraisedSchema.optional().nullable().default(null),
+  appraised: z.object({}).optional().nullable().default(null),
   assessed: AssessedSchema.optional().nullable().default(null),
   market: MarketSchema.optional().nullable().default(null),
   tax: TaxSchema.optional().nullable().default(null),
   improvementPercent: z.number().optional().nullable().default(null),
+  owner: OwnerSchema.optional().nullable().default(null),
   mortgage: MortgageSchema.optional().nullable().default(null),
+});
+
+// ---------------- Vintage ----------------
+const VintageSchema = z.object({
+  lastModified: z.string().optional().nullable().default(null),
+  pubDate: z.string().optional().nullable().default(null),
 });
 
 // ---------------- Property ----------------
 const PropertySchema = z.object({
   identifier: IdentifierSchema.optional().nullable().default(null),
-  location: LocationSchema.optional().nullable().default(null),
   lot: LotSchema.optional().nullable().default(null),
   area: AreaSchema.optional().nullable().default(null),
+  location: LocationSchema.optional().nullable().default(null),
   address: AddressSchema.optional().nullable().default(null),
+  summary: SummarySchema.optional().nullable().default(null),
+  utilities: UtilitiesSchema.optional().nullable().default(null),
   sale: SaleSchema.optional().nullable().default(null),
   building: BuildingSchema.optional().nullable().default(null),
   assessment: AssessmentSchema.optional().nullable().default(null),
+  vintage: VintageSchema.optional().nullable().default(null),
 });
 
 // ---------------- Expanded Profile ----------------
-export const ExpandedProfileSchema = z.object({
+export const BasicProfileSchema = z.object({
   status: StatusSchema.optional().nullable().default(null),
+  echoed_fields: EchoedFieldsSchema.optional().nullable().default(null),
   property: z.array(PropertySchema).optional().nullable().default([]),
 });
 
-export type PropertyExpandedProfile = z.infer<typeof ExpandedProfileSchema>;
+export type PropertyBasicProfile = z.infer<typeof BasicProfileSchema>;

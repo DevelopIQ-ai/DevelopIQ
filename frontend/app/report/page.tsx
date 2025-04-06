@@ -9,6 +9,8 @@ import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
 import { NewsArticlesTab } from "@/app/report/news-articles";
 import { PrintDialog } from "@/components/print-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle, Loader2 } from "lucide-react"
 import {
   Carousel,
   CarouselContent,
@@ -31,7 +33,7 @@ export default function PropertyAnalysisDashboard() {
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
-  const { images } = usePropertyImages(propertyAddress);
+  const { images, imagesLoading, imagesError } = usePropertyImages(propertyAddress);
 
   
   // First useEffect: Fetch general property information
@@ -50,6 +52,26 @@ export default function PropertyAnalysisDashboard() {
     fetchGeneralData();
   }, []);
 
+  const ImagesError = () => {
+    return (
+    <Alert variant="default">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>No images found</AlertTitle>
+        <AlertDescription>No images found for this property.</AlertDescription>
+      </Alert>
+    )
+  }
+
+  const ImagesLoading = () => {
+    return (
+      <Alert variant="default">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        <AlertTitle>Loading</AlertTitle>
+        <AlertDescription>Loading images for this property...</AlertDescription>
+      </Alert>
+    )
+  }
+
   return (
     <main className="property-demo min-h-screen pt-16">
       <NavBar />
@@ -66,8 +88,11 @@ export default function PropertyAnalysisDashboard() {
 
           {/* Image Carousel */}
           <div className="relative">
-            <Carousel className="w-full">
-              <CarouselContent>
+            {imagesError && <ImagesError />}
+            {imagesLoading && <ImagesLoading />}
+            {!imagesError && !imagesLoading && (
+              <Carousel className="w-full">
+                <CarouselContent>
                 {images.map((image, index) => (
                   <CarouselItem key={index}>
                     <div className="aspect-[16/9] relative overflow-hidden rounded-lg">
@@ -88,8 +113,9 @@ export default function PropertyAnalysisDashboard() {
                 ))}
               </CarouselContent>
               <CarouselPrevious className="left-4" />
-              <CarouselNext className="right-4" />
-            </Carousel>
+                <CarouselNext className="right-4" />
+              </Carousel>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -9,10 +9,12 @@ interface DevelopmentInfoResult {
 export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): DevelopmentInfoResult => {
     const [developmentInfoLoading, setDevelopmentInfoLoading] = useState(true);
     const [developmentInfoError, setDevelopmentInfoError] = useState<string | null>(null);
+    const [hasFetchedZoningCode, setHasFetchedZoningCode] = useState(false);
 
     useEffect(() => {
         const fetchDevelopmentInfo = async () => {
             try {
+                console.log("Fetching development info");
                 // Don't do anything if reportHandler is null
                 if (!reportHandler) {
                     console.log("Report handler is null, waiting...");
@@ -64,30 +66,33 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"] &&
                     generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].siteZoningIdent?.value) {
                     zoneCode = generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].siteZoningIdent.value;
-                } else if (generalInfo["Property Identification & Legal Framework"] &&
-                    generalInfo["Property Identification & Legal Framework"]["Regulatory Status"] &&
-                    generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"] &&
-                    generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].zoneSubType?.value) {
-                    zoneCode = generalInfo["Property Identification & Legal Framework"]["Regulatory Status"]["Zoning Classification"].zoneSubType.value;
-                }
+                } 
 
                 // If any required parameter is missing, log error and return
                 if (!stateCode) {
+                    console.log("Could not determine property state");
                     setDevelopmentInfoError("Could not determine property state");
                     setDevelopmentInfoLoading(false);
                     return;
                 }
 
                 if (!municipality) {
+                    console.log("Could not determine property municipality");
                     setDevelopmentInfoError("Could not determine property municipality");
                     setDevelopmentInfoLoading(false);
                     return;
                 }
 
                 if (!zoneCode) {
-                    setDevelopmentInfoError("Could not determine property zone code");
-                    setDevelopmentInfoLoading(false);
-                    return;
+                    console.log("Could not determine property zone code");
+                    if (hasFetchedZoningCode) {
+                        setDevelopmentInfoError("Could not determine property zone code");
+                        setDevelopmentInfoLoading(false);
+                        return;
+                    }
+                    else {
+                        setHasFetchedZoningCode(true);
+                    }
                 }
 
                 // console.log("INPUTS for development info API:", stateCode, municipality, zoneCode);
@@ -107,64 +112,59 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                 //     error: null
                 // };
 
-                console.log("Fetching development info from API");
-                const response = await fetch('/api/development-info', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ state: stateCode, municipality, zone_code: zoneCode })
-                })
+                if (stateCode && municipality && zoneCode) {
+                    console.log("Fetching development info from API");
+                    const response = await fetch('/api/development-info', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ state: stateCode, municipality, zone_code: zoneCode })
+                    })
 
-                const result = await response.json();
-                console.log('result', result);
-                // Set development info in the report handler
-                if (result.status === 'success') {
-                    console.log('Development info received successfully');
-                    
-                    const mockPermittedUses = {
-                        "Permitted Uses": [
-                            {
-                                "primary_use_classification": {
-                                    value: "Residential",
-                                    alias: "Primary Use Classification",
-                                    source: null
-                                },
-                                "permitted_uses": [
-                                    {
-                                        value: "Single Family Residential",
-                                        alias: "Permitted Use",
+                    const result = await response.json();
+                    console.log('result', result);
+                    // Set development info in the report handler
+                    if (result.status === 'success') {
+                        console.log('Development info received successfully');
+                        
+                        const mockPermittedUses = {
+                            "Permitted Uses": [
+                                {
+                                    "primary_use_classification": {
+                                        value: "Residential",
+                                        alias: "Primary Use Classification",
                                         source: null
-                                    }
-                                ],
-                                "special_exceptions": [
-                                    {
-                                        value: "Special Exceptions",
-                                        alias: "Special Exception",
-                                        source: null
-                                    }
-                                ]
-                            }
-                        ]
-                    };
-                    
-                    reportHandler.setDevelopmentInfo({ ...mockPermittedUses, "requirements": result.requirements.requirements });
-                    
-                    // IMPORTANT: Set loading to false IMMEDIATELY after setting the data
-                    setDevelopmentInfoLoading(false);
-                    setDevelopmentInfoError(null);
-                    console.log("Development info loading set to FALSE");
-                } else if (!response.ok) {
-                    throw new Error(result.error || "Unknown error fetching development info");
+                                    },
+                                    "permitted_uses": [
+                                        {
+                                            value: "Single Family Residential",
+                                            alias: "Permitted Use",
+                                            source: null
+                                        }
+                                    ],
+                                    "special_exceptions": [
+                                        {
+                                            value: "Special Exceptions",
+                                            alias: "Special Exception",
+                                            source: null
+                                        }
+                                    ]
+                                }
+                            ]
+                        };
+                        
+                        reportHandler.setDevelopmentInfo({ ...mockPermittedUses, "requirements": result.requirements.requirements });
+                        
+                        setDevelopmentInfoLoading(false);
+                        setDevelopmentInfoError(null);
+                        console.log("Development info loading set to FALSE");
+                    } else if (!response.ok) {
+                        throw new Error(result.error || "Unknown error fetching development info");
+                    }
                 }
             } catch (error) {
                 console.error("Error in development info processing:", error);
-                // if (isMounted) {
-                //     setDevelopmentInfoError(
-                //         error instanceof Error ? error.message : "An unexpected error occurred"
-                //     );
-                //     setDevelopmentInfoLoading(false);
-                // }
                 setDevelopmentInfoError("Unfortunately, we were unable to fetch development info for your property. Please try again later.");
                 setDevelopmentInfoLoading(false);
             }
@@ -172,9 +172,6 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
 
         fetchDevelopmentInfo();
 
-        // return () => {
-        //     isMounted = false;
-        // };
     }, [reportHandler, reportHandler?.getGeneralInfo(), generalPropertyInfoError]); // Only depend on reportHandler changes
 
 
