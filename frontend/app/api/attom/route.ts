@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 import axios, { AxiosError } from "axios";
 import { ZodType } from "zod";
 import { ExpandedProfileSchema } from "@/schemas/endpoints/attom-expanded-profile";
-
+import { BasicProfileSchema } from "@/schemas/endpoints/attom-basic-profile";
 const BASE_URL = "https://api.gateway.attomdata.com/propertyapi/v1.0.0";
 
 // Map endpoints to their corresponding schemas
 const endpointSchemas: Record<string, ZodType<unknown>> = {
   "property/expandedprofile": ExpandedProfileSchema,
+  "property/basicprofile": BasicProfileSchema,
 };
 
 function logEndpoint(

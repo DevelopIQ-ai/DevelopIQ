@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { v4 as uuidv4 } from "uuid"
+import { canFetchAttomData } from "@/lib/attom-data-fetcher"
 
 // Helper to load Google Maps script
 const loadGoogleMapsScript = (callback: () => void) => {
@@ -31,6 +32,7 @@ const loadGoogleMapsScript = (callback: () => void) => {
 export default function GetStarted() {
   const [address, setAddress] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const autocompleteInput = useRef<HTMLInputElement>(null)
   const autocompleteInstance = useRef<google.maps.places.Autocomplete | null>(null)
@@ -105,13 +107,24 @@ export default function GetStarted() {
     }
   }, [])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setError(null)
     e.preventDefault()
     if (!address) {
       setError("Please select a valid address from the suggestions.")
       return
     }
+    setIsLoading(true)
     localStorage.setItem("propertyAddress", address)
+
+    const canFetch = await canFetchAttomData(address)
+    if (!canFetch) {
+      setError("We are unable to process this address. Please try with a different address.")
+      setIsLoading(false)
+      return
+    }
+    setIsLoading(false)
+    // test attom api call
     router.push("/report")
   }
 
@@ -143,9 +156,9 @@ export default function GetStarted() {
             <Button
               type="submit"
               className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-medium"
-              disabled={!address}
+              disabled={!address || isLoading}
             >
-              Analyze Property
+              {isLoading ? "Analyzing Property..." : "Analyze Property"}
             </Button>
           </form>
           {error && (

@@ -180,7 +180,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
                                         )}
                                       </div>
                                       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-                                        Demo Data
+                                        
                                       </div>
                                     </div>
                                   )

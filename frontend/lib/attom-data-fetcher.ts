@@ -35,4 +35,35 @@ export async function fetchAttomData(handler: PropertyReportHandler, propertyAdd
   return { handler, propertyAddress };
 }
 
+export async function canFetchAttomData(propertyAddress: string) {
+  /**
+   * Pre-flight check to see if the property address is valid for ATTOM API
+   */
+  const mode = process.env.NEXT_PUBLIC_MODE;
+  const endpoint = mode === "test" ? "/api/mock-attom" : "/api/attom";
+  const address1 = propertyAddress.split(',')[0].trim();
+  const address2 = propertyAddress.split(',')[1].trim();
+  const params = { address1: address1, address2: address2 };
 
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ endpoint: "property/basicprofile", params }),
+    });
+
+    console.log("response", response);
+
+    if (!response.ok) {
+      console.error("Failed to fetch property data", response);
+      throw new Error("Failed to fetch property data");
+    }
+
+    // const data = await response.json();
+  } catch (error) {
+    console.error("Error: ", error);
+    return false;
+  }
+
+  return true;
+}
