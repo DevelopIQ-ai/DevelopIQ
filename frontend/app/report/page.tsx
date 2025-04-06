@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 // import { useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
