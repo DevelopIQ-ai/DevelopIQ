@@ -4,6 +4,7 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 interface DevelopmentInfoResult {
     developmentInfoLoading: boolean;
     developmentInfoError: string | null;
+    submitFeedback: (fieldName: string, feedback: string) => Promise<boolean>;
 }
 
 export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): DevelopmentInfoResult => {
@@ -26,6 +27,21 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     console.log("Development info already exists in report handler");
                     setDevelopmentInfoLoading(false);
                     return;
+                }
+
+                // Check if development info exists in local storage
+                try {
+                    const storedDevelopmentInfo = localStorage.getItem('developmentInfo');
+                    if (storedDevelopmentInfo) {
+                        const parsedInfo = JSON.parse(storedDevelopmentInfo);
+                        console.log("Development info loaded from local storage");
+                        reportHandler.setDevelopmentInfo(parsedInfo);
+                        setDevelopmentInfoLoading(false);
+                        return;
+                    }
+                } catch (storageError) {
+                    console.error("Error reading development info from local storage:", storageError);
+                    // Continue with API call if local storage fails
                 }
 
                 if (generalPropertyInfoError) {
@@ -128,33 +144,18 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     if (result.status === 'success') {
                         console.log('Development info received successfully');
                         
-                        const mockPermittedUses = {
-                            "Permitted Uses": [
-                                {
-                                    "primary_use_classification": {
-                                        value: "Residential",
-                                        alias: "Primary Use Classification",
-                                        source: null
-                                    },
-                                    "permitted_uses": [
-                                        {
-                                            value: "Single Family Residential",
-                                            alias: "Permitted Use",
-                                            source: null
-                                        }
-                                    ],
-                                    "special_exceptions": [
-                                        {
-                                            value: "Special Exceptions",
-                                            alias: "Special Exception",
-                                            source: null
-                                        }
-                                    ]
-                                }
-                            ]
-                        };
+                       
+                        const developmentInfo = {"requirements": result.requirements.requirements };
                         
-                        reportHandler.setDevelopmentInfo({ ...mockPermittedUses, "requirements": result.requirements.requirements });
+                        // Save development info to local storage
+                        try {
+                            localStorage.setItem('developmentInfo', JSON.stringify(developmentInfo));
+                            console.log('Development info saved to local storage');
+                        } catch (storageError) {
+                            console.error('Failed to save development info to local storage:', storageError);
+                        }
+                        
+                        reportHandler.setDevelopmentInfo(developmentInfo);
                         
                         setDevelopmentInfoLoading(false);
                         setDevelopmentInfoError(null);
@@ -174,6 +175,26 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
 
     }, [reportHandler, reportHandler?.getGeneralInfo(), generalPropertyInfoError]); // Only depend on reportHandler changes
 
+    // You might want to add a mutation function here to handle feedback submission
+    // For example:
+    
+    const submitFeedback = async (fieldName: string, feedback: string) => {
+        try {
+            // This would be your API call to submit feedback
+            // await fetch('/api/feedback', {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({ fieldName, feedback, section: 'development-info' }),
+            // });
+            
+            // For now, we'll just log it
+            console.log(`Feedback submitted for ${fieldName}: ${feedback}`);
+            return true;
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            return false;
+        }
+    };
 
-    return { developmentInfoLoading, developmentInfoError };
+    return { developmentInfoLoading, developmentInfoError, submitFeedback };
 }

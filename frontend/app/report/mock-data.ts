@@ -166,83 +166,6 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
       },
     },
     "Development Information": {
-        "Permitted Uses": [
-        {
-          "primary_use_classification": dataPoint("Residential Primary Uses", "Demo Data", "Primary Use Classification"),
-          "permitted_uses": [
-              dataPoint("Dwelling - Bungalow Court", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Townhouse", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Small", "Demo Data", "Permitted Uses"),
-              dataPoint("Dwelling - Apartment Building: Large", "Demo Data", "Permitted Uses"),
-              dataPoint("Live/Work Dwelling", "Demo Data", "Permitted Uses"),
-              dataPoint("Upper Story Residential", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Dwelling - Single-Family Detached: Standard", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Single-Family Detached: Compact", "Demo Data", "Special Exceptions"),
-              dataPoint("Dwelling - Duplex", "Demo Data", "Special Exceptions"),
-              dataPoint("Accessory Dwelling Unit", "Demo Data", "Special Exceptions"),
-              dataPoint("Assissted Living Facilities", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Home", "Demo Data", "Special Exceptions"),
-              dataPoint("Group Residential Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Rooming or Boarding House", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Civic, Public, and Institutional Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Libraries, Museums, and Cultural Facilities", "Demo Data", "Permitted Uses"),
-              dataPoint("Municipal and Government Buildings", "Demo Data", "Permitted Uses"),
-              dataPoint("Parks and Playgrounds", "Demo Data", "Permitted Uses"),
-              dataPoint("Commercial Studios", "Demo Data", "Permitted Uses"),
-              dataPoint("Club or Lodge", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Utility, Minor Impact", "Demo Data", "Special Exceptions"),
-              dataPoint("Childcare Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Community Center", "Demo Data", "Special Exceptions"),
-              dataPoint("Hospital, Minor", "Demo Data", "Special Exceptions"),
-              dataPoint("Colleges and Universities", "Demo Data", "Special Exceptions"),
-              dataPoint("Vocational Schools", "Demo Data", "Special Exceptions"),
-              dataPoint("Banquet Facilities and Reception Halls", "Demo Data", "Special Exceptions"),
-              dataPoint("Places of Worship", "Demo Data", "Special Exceptions"),
-              dataPoint("Public and Religous Asswmbly, All Others", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Commercial Sales, Services, and Repair Primary Uses ", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Arts, Recreation, Entertainment, Indoor", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class A (table service)", "Demo Data", "Permitted Uses"),
-              dataPoint("Restaurants - Class B (counter service, no drive-thru)", "Demo Data", "Permitted Uses"),
-              dataPoint("Taverns", "Demo Data", "Permitted Uses"),
-              dataPoint("Winery and Microbrewery", "Demo Data", "Permitted Uses"),
-              dataPoint("Dental/Medical Offuce or Clinic", "Demo Data", "Permitted Uses"),
-              dataPoint("Banks and Financial Institutions", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Arts, Recreation, Entertainment, Outdoor", "Demo Data", "Special Exceptions"),
-              dataPoint("Sports and/or Entertainment Arena or Stadium", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Garage", "Demo Data", "Special Exceptions"),
-              dataPoint("Parking Lot", "Demo Data", "Special Exceptions"),
-              dataPoint("Restaurants - Class C (counter service w/drive-thru)", "Demo Data", "Special Exceptions"),
-              dataPoint("Bed and Breakfast Establishments", "Demo Data", "Special Exceptions"),
-              dataPoint("Hotel or Motel", "Demo Data", "Special Exceptions"),
-              dataPoint("Animal Sales and Services, Household Pets Only", "Demo Data", "Special Exceptions"),
-              dataPoint("Food Catering Service", "Demo Data", "Special Exceptions"),
-            ]
-          },
-          {
-            "primary_use_classification": dataPoint("Industrial, Manufacturing, and Wholesale Primary Uses", "Demo Data", "Primary Use Classification"),
-            "permitted_uses": [
-              dataPoint("Grain and Feed Mills", "Demo Data", "Permitted Uses"),
-            ],
-            "special_exceptions": [
-              dataPoint("Mass Transit Facility", "Demo Data", "Special Exceptions"),
-              dataPoint("Recycling Drop-Off Facility", "Demo Data", "Special Exceptions"),
-            ]
-          }
-        ],
         "requirements": {
           "lot_requirements": {
             "maximum_density": {
@@ -440,23 +363,6 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
 // Helper function to create development info mock data
 export const createDevelopmentInfoMockData = () => {
   return {
-    "Permitted Uses": [
-      {
-        primary_use_classification: {
-          value: "Residential",
-          source: "Mock data"
-        },
-        permitted_uses: [
-          { value: "Single-family dwelling", source: "Mock data" },
-          { value: "Duplex", source: "Mock data" },
-          { value: "Townhouse", source: "Mock data" }
-        ],
-        special_exceptions: [
-          { value: "Multi-family dwelling", source: "Mock data" },
-          { value: "Accessory dwelling unit", source: "Mock data" }
-        ]
-      }
-    ],
     "requirements": {
       "lot_requirements": {
         "lot_size": {

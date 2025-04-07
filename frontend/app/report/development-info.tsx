@@ -4,9 +4,10 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Loader2, Ruler, Building2 } from "lucide-react"
+import { AlertCircle, Loader2, Ruler, Flag, FlagIcon } from "lucide-react"
 import type { PropertyReportHandler } from "@/lib/report-handler"
 import type { DevelopmentInfo, DataPoint, DataPointWithUnit } from "@/schemas/views/development-info-schema"
+import FeedbackModal from "@/components/FeedbackModal"
 
 interface DevelopmentInfoTabProps {
   reportHandler: PropertyReportHandler | null
@@ -18,6 +19,9 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
   const [reportData, setReportData] = useState<DevelopmentInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
+  const [selectedField, setSelectedField] = useState('')
+  const [selectedValue, setSelectedValue] = useState<string | number | null>(null)
 
   useEffect(() => {
     console.log('dev-info useEffect');
@@ -54,6 +58,40 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
     }
   }, [developmentInfoLoading, reportHandler, reportData, developmentInfoError])
 
+  const handleFlagClick = (fieldName: string, value: string | number | null) => {
+    console.log("Flag clicked for:", fieldName, "with value:", value);
+    setSelectedField(fieldName);
+    setSelectedValue(value);
+    setFeedbackModalOpen(true);
+  };
+
+  const handleFeedbackSubmit = (
+    feedback: { correction: string; reason: string; source: string }, 
+    fieldName: string
+  ) => {
+    console.log(`Feedback for ${fieldName}:`, feedback);
+    
+    // Store feedback in local storage
+    try {
+      // Get existing feedback from local storage
+      const existingFeedbackJSON = localStorage.getItem('feedback');
+      const existingFeedback = existingFeedbackJSON ? JSON.parse(existingFeedbackJSON) : {};
+      
+      // Add new feedback
+      existingFeedback[fieldName] = {
+        ...feedback,
+        originalValue: selectedValue,
+        timestamp: new Date().toISOString(),
+      };
+      
+      // Save back to local storage
+      localStorage.setItem('feedback', JSON.stringify(existingFeedback));
+      console.log('Feedback saved to local storage');
+    } catch (error) {
+      console.error('Error saving feedback to local storage:', error);
+    }
+  };
+
   if (error || developmentInfoError) {
     return (
       <Alert variant="destructive">
@@ -81,48 +119,6 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {reportData["Permitted Uses"] && (
-          <div className="rounded-lg border bg-card shadow-sm">
-            <div className="flex items-center gap-2 border-b px-6 py-4">
-              <Building2 className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Permitted Uses</h2>
-            </div>
-            <div className="p-4">
-              <div className="space-y-4">
-                {(reportData["Permitted Uses"] as any[]).map((dataPoint, index) => (
-                  <div key={index} className="border border-gray-100 rounded p-4">
-                    <h3 className="text-base font-medium mb-3">
-                      {dataPoint.primary_use_classification.value}
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-600 mb-2">Permitted Uses</h4>
-                        <div className="space-y-1">
-                          {dataPoint.permitted_uses.map((use: any, useIndex: number) => (
-                            <div key={useIndex} className="border border-gray-100 rounded p-2 text-sm">
-                              {use.value}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-600 mb-2">Special Exceptions</h4>
-                        <div className="space-y-1">
-                          {dataPoint.special_exceptions.map((exception: any, exceptionIndex: number) => (
-                            <div key={exceptionIndex} className="border border-gray-100 rounded p-2 text-sm">
-                              {exception.value}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
         {reportData["requirements"] && (
           <div className="rounded-lg border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b px-6 py-4">
@@ -141,7 +137,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
                       if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
                         return (
                           <div key={nestedTitle} className="border border-gray-100 rounded">
-                            <DataPointDisplay dataPoint={nestedData as DataPoint} developmentInfoLoading={developmentInfoLoading} />
+                            <DataPointDisplay dataPoint={nestedData as DataPoint} developmentInfoLoading={developmentInfoLoading} onFlagClick={handleFlagClick} />
                           </div>
                         )
                       } else {
@@ -152,14 +148,27 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
                                 // Display logic for unit-based values vs summaries
                                 if (dataPointKey === "summary" || dataPointKey === "requirements") {
                                   return (
-                                    <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} />
+                                    <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} onFlagClick={handleFlagClick} />
                                   )
                                 } else if (dataPointKey === "signs" && Array.isArray(dataPoint)) {
                                   // Handle sign arrays for signage requirements
+                                  const hasFeedback = hasFeedbackForField(nestedTitle);
+                                  
                                   return (
-                                    <div key={dataPointKey} className="grid grid-cols-12 divide-x divide-gray-100">
+                                    <div key={dataPointKey} className={`grid grid-cols-12 divide-x divide-gray-100 ${hasFeedback ? 'bg-orange-50' : ''}`}>
                                       <div className="col-span-4 text-sm px-4 py-2">
-                                        <span>{nestedTitle.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</span>
+                                        <div className="flex justify-between items-center">
+                                          <span>{nestedTitle.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</span>
+                                          {!developmentInfoLoading && (
+                                            <button 
+                                              onClick={() => handleFlagClick(nestedTitle, dataPoint.join(', '))}
+                                              className={`${hasFeedback ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} ml-2`}
+                                              aria-label={`Flag issue with ${nestedTitle}`}
+                                            >
+                                              {hasFeedback ? <FlagIcon size={14} fill="currentColor" /> : <Flag size={14} />}
+                                            </button>
+                                          )}
+                                        </div>
                                       </div>
                                       <div className="col-span-5 text-sm px-4 py-2">
                                         {developmentInfoLoading ? (
@@ -187,11 +196,11 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
                                 } else {
                                   if ('unit' in dataPoint) {
                                     return (
-                                      <DataPointDisplayWithUnit key={dataPointKey} dataPoint={dataPoint as DataPointWithUnit} developmentInfoLoading={developmentInfoLoading} />
+                                      <DataPointDisplayWithUnit key={dataPointKey} dataPoint={dataPoint as DataPointWithUnit} developmentInfoLoading={developmentInfoLoading} onFlagClick={handleFlagClick} />
                                     )
                                   } else {
                                     return (
-                                      <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} />
+                                      <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} developmentInfoLoading={developmentInfoLoading} onFlagClick={handleFlagClick} />
                                     )
                                   }                
                                 }
@@ -208,6 +217,13 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
           </div>
         )}
       </div>
+      <FeedbackModal
+        isOpen={feedbackModalOpen}
+        onClose={() => setFeedbackModalOpen(false)}
+        fieldName={selectedField}
+        originalValue={selectedValue}
+        onSubmit={handleFeedbackSubmit}
+      />
     </div>
   )
 }
@@ -234,6 +250,7 @@ function getSectionTitle(title: string) {
 interface DataPointDisplayProps {
   dataPoint: DataPoint
   developmentInfoLoading: boolean
+  onFlagClick: (fieldName: string, value: string | number | null) => void
 }
 
 function parseTextValue(value: string): string {
@@ -248,15 +265,42 @@ function parseTextValue(value: string): string {
   return parsedValue;
 }
 
-function DataPointDisplay({ dataPoint, developmentInfoLoading }: DataPointDisplayProps) {
+// Add a function to check if feedback exists for a field
+function hasFeedbackForField(fieldName: string): boolean {
+  try {
+    const feedbackJSON = localStorage.getItem('feedback');
+    if (!feedbackJSON) return false;
+    
+    const feedback = JSON.parse(feedbackJSON);
+    return !!feedback[fieldName];
+  } catch (error) {
+    console.error('Error checking feedback:', error);
+    return false;
+  }
+}
+
+// Update the DataPointDisplay component to highlight fields with feedback
+function DataPointDisplay({ dataPoint, developmentInfoLoading, onFlagClick }: DataPointDisplayProps) {
   const { alias, value, source } = dataPoint
   const displayValue = value === null ? "NOT FOUND" : value
   const displaySource = value === null ? "" : source
+  const hasFeedback = hasFeedbackForField(alias);
 
   return (
-    <div className="grid grid-cols-12 divide-x divide-gray-100">
-      <div className="col-span-4 text-sm px-4 py-2">
-        <span>{alias}</span>
+    <div className={`grid grid-cols-12 divide-x divide-gray-100 ${hasFeedback ? 'bg-orange-50' : ''}`}>
+      <div className="col-span-4 text-sm px-4 py-2 relative">
+        <div className="flex justify-between items-center">
+          <span>{alias}</span>
+          {!developmentInfoLoading && (
+            <button 
+              onClick={() => onFlagClick(alias, value)}
+              className={`${hasFeedback ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} ml-2`}
+              aria-label={`Flag issue with ${alias}`}
+            >
+              {hasFeedback ? <FlagIcon size={14} fill="currentColor" /> : <Flag size={14} />}
+            </button>
+          )}
+        </div>
       </div>
       <div className="col-span-5 text-sm px-4 py-2 whitespace-pre-wrap">
         {developmentInfoLoading ? (
@@ -282,18 +326,32 @@ function DataPointDisplay({ dataPoint, developmentInfoLoading }: DataPointDispla
 interface DataPointDisplayWithUnitProps {
   dataPoint: DataPointWithUnit
   developmentInfoLoading: boolean
+  onFlagClick: (fieldName: string, value: string | number | null) => void
 }
 
-function DataPointDisplayWithUnit({ dataPoint, developmentInfoLoading }: DataPointDisplayWithUnitProps) {
+// Similarly update the DataPointDisplayWithUnit component
+function DataPointDisplayWithUnit({ dataPoint, developmentInfoLoading, onFlagClick }: DataPointDisplayWithUnitProps) {
   const { alias, value, source, unit } = dataPoint
   const displayValue = value === null ? "NOT FOUND" : value
   const displaySource = value === null ? "" : source
   const displayUnit = unit === null ? "x" : unit
+  const hasFeedback = hasFeedbackForField(alias);
 
   return (
-    <div className="grid grid-cols-12 divide-x divide-gray-100">
-      <div className="col-span-4 text-sm px-4 py-2">
-        <span>{alias}</span>
+    <div className={`grid grid-cols-12 divide-x divide-gray-100 ${hasFeedback ? 'bg-orange-50' : ''}`}>
+      <div className="col-span-4 text-sm px-4 py-2 relative">
+        <div className="flex justify-between items-center">
+          <span>{alias}</span>
+          {!developmentInfoLoading && (
+            <button 
+              onClick={() => onFlagClick(alias, value)}
+              className={`${hasFeedback ? 'text-red-500' : 'text-gray-400 hover:text-red-500'} ml-2`}
+              aria-label={`Flag issue with ${alias}`}
+            >
+              {hasFeedback ? <FlagIcon size={14} fill="currentColor" /> : <Flag size={14} />}
+            </button>
+          )}
+        </div>
       </div>
       <div className="col-span-5 text-sm px-4 py-2">
         {developmentInfoLoading ? (
@@ -316,46 +374,9 @@ function DataPointDisplayWithUnit({ dataPoint, developmentInfoLoading }: DataPoi
   )
 }
 
-// interface SignsDisplayProps {
-//   dataPoint: DataPoint
-//   isLoading: boolean
-// }
-
-// function SignsDisplay({ dataPoint, isLoading }: SignsDisplayProps) {
-//   const { alias, value, source } = dataPoint
-//   const displayValue = value === null ? "NOT FOUND" : value
-//   const displaySource = value === null ? "" : source
-
-//   return (
-//     <div className="grid grid-cols-12 divide-x divide-gray-100">
-//       <div className="col-span-4 text-sm px-4 py-2">
-//         <span>{alias}</span>
-//       </div>
-//       <div className="col-span-5 text-sm px-4 py-2">
-//         {isLoading ? (
-//           <div className="flex items-center space-x-2">
-//             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-//             <span className="text-muted-foreground">Loading...</span>
-//           </div>
-//         ) : (
-//           <span className={value === null ? "text-red-500" : ""}>{displayValue}</span>
-//         )}
-//       </div>
-//       <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-//         {isLoading ? (
-//           <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-//         ) : (
-//           displaySource && <span>{displaySource}</span>
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
-
 function DevelopmentInfoSkeleton() {
   // Create skeleton sections for each typical property section
   const skeletonSections = [
-    "Permitted Uses",
     "Development Standards",
   ]
 

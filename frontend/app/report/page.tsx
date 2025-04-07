@@ -26,10 +26,15 @@ import { useGeneralPropertyInfo } from "@/hooks/useGeneralPropertyInfo";
 import { useDevelopmentInfo } from "@/hooks/useDevelopmentInfo";
 import { useNewsArticles } from "@/hooks/useNewsArticles";
 import { usePropertyImages } from "@/hooks/usePropertyImages";
+import { Button } from "@/components/ui/button";
+import SubmitEvaluationDialog from "@/components/submit-evaluation-dialog";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
+  const [hasFeedback, setHasFeedback] = useState<boolean>(false);
+  const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
+  const [previousAddress, setPreviousAddress] = useState<string | null>(null);
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
@@ -43,14 +48,85 @@ export default function PropertyAnalysisDashboard() {
       if (!address) {
         return;
       }
+      
+      // Check if this is a new property search
+      if (previousAddress && previousAddress !== address) {
+        // Clear all property-related data
+        localStorage.removeItem("feedback");
+        localStorage.removeItem("propertyData");
+        localStorage.removeItem("developmentInfo");
+        localStorage.removeItem("newsArticles");
+        // Any other property-specific data that should be cleared
+        
+        // Update feedback state immediately
+        setHasFeedback(false);
+        
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event("feedbackUpdated"));
+        
+        // Reset the report handler to force new data fetching
+        setReportHandler(null);
+      }
+      
+      setPreviousAddress(address);
       setPropertyAddress(address);
       if (!reportHandler) {
         const handler = new PropertyReportHandler();
         setReportHandler(handler);
       }
+      
+      // Check if feedback exists in localStorage
+      const feedback = localStorage.getItem("feedback");
+      setHasFeedback(!!feedback);
     }
     fetchGeneralData();
+  }, [previousAddress, reportHandler]);
+
+  // Add this useEffect to listen for changes to localStorage
+  useEffect(() => {
+    // Function to check for feedback in localStorage
+    const checkFeedback = () => {
+      const feedback = localStorage.getItem("feedback");
+      setHasFeedback(!!feedback);
+    };
+
+    // Initial check
+    checkFeedback();
+
+    // Set up event listener for storage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "feedback") {
+        checkFeedback();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event for same-tab updates
+    const handleCustomEvent = () => {
+      checkFeedback();
+    };
+
+    window.addEventListener("feedbackUpdated", handleCustomEvent);
+
+    // Clean up
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("feedbackUpdated", handleCustomEvent);
+    };
   }, []);
+
+  const handleSubmitEvaluation = () => {
+    // Close the modal
+    setIsEvalModalOpen(false);
+  };
+
+  const handleEvaluationButtonClick = () => {
+    // Check for feedback directly from localStorage when button is clicked
+    const feedback = localStorage.getItem("feedback");
+    setHasFeedback(!!feedback);
+    setIsEvalModalOpen(true);
+  };
 
   const ImagesError = () => {
     return (
@@ -79,8 +155,26 @@ export default function PropertyAnalysisDashboard() {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h1 className="text-4xl font-bold tracking-tight">Property Assessment Report</h1>
-            <PrintDialog reportHandler={reportHandler!} />
+            <div className="flex items-center gap-3">
+              <Button 
+                variant={hasFeedback ? "default" : "outline"} 
+                className={hasFeedback ? "bg-orange-500 hover:bg-orange-600" : ""}
+                onClick={handleEvaluationButtonClick}
+              >
+                Submit Evaluation
+              </Button>
+              <PrintDialog reportHandler={reportHandler!} />
+            </div>
           </div>
+          
+          {/* Use the new component */}
+          <SubmitEvaluationDialog
+            open={isEvalModalOpen}
+            onOpenChange={setIsEvalModalOpen}
+            hasFeedback={hasFeedback}
+            onSubmit={handleSubmitEvaluation}
+          />
+          
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-5 w-5" />
             <p className="text-lg">{propertyAddress}</p>

@@ -65,11 +65,6 @@ const createMeasurementField = (fieldType: 'feet' | 'square_feet' | 'units' | 'p
 
 // New schema for the additional sections with mocked variables.
 export const DevelopmentInfoSchema = z.object({
-  "Permitted Uses": z.array(z.object({
-      "primary_use_classification": dataPointWithAlias("Primary Use Classification"),
-      "permitted_uses": z.array(dataPointWithAlias("Permitted Uses")),
-      "special_exceptions": z.array(dataPointWithAlias("Special Exceptions")),
-  })),
   "requirements": z.object({
       "lot_requirements": z.object({
         "maximum_density": createMeasurementField('units', "Maximum Density"),

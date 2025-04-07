@@ -28,6 +28,23 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
             if (!reportHandler) {
                 return;
             }
+            
+            // Check if general property info exists in local storage
+            try {
+                const storedGeneralInfo = localStorage.getItem('generalPropertyInfo');
+                if (storedGeneralInfo) {
+                    const parsedInfo = JSON.parse(storedGeneralInfo);
+                    console.log("General property info loaded from local storage");
+                    reportHandler.setGeneralInfo(parsedInfo);
+                    if (isMounted) {
+                        setGeneralPropertyInfoLoading(false);
+                    }
+                    return;
+                }
+            } catch (storageError) {
+                console.error("Error reading general property info from local storage:", storageError);
+                // Continue with normal flow if local storage fails
+            }
 
             if (isDemo) {
                 console.log('DEMO');
@@ -37,6 +54,15 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                     const propertyData = mockPropertyData[propertyAddress]["General Property Information"];
                     reportHandler.setGeneralInfo(propertyData);
                     console.log('PROPERTY DATA', propertyData);
+                    
+                    // Save to local storage
+                    try {
+                        localStorage.setItem('generalPropertyInfo', JSON.stringify(propertyData));
+                        console.log('General property info saved to local storage');
+                    } catch (storageError) {
+                        console.error('Failed to save general property info to local storage:', storageError);
+                    }
+                    
                     setGeneralPropertyInfoLoading(false);
                 }, 1500);
             } else {
@@ -50,6 +76,14 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                     // Get location data from ATTOM response
                     const generalInfo = reportHandler.getGeneralInfo();
                     if (generalInfo) {
+                        // Save to local storage
+                        try {
+                            localStorage.setItem('generalPropertyInfo', JSON.stringify(generalInfo));
+                            console.log('General property info saved to local storage');
+                        } catch (storageError) {
+                            console.error('Failed to save general property info to local storage:', storageError);
+                        }
+                        
                         const geospatialInfo = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"];
                         const latitude = geospatialInfo.latitude?.value as string;
                         const longitude = geospatialInfo.longitude?.value as string;
@@ -60,6 +94,15 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                                 console.log("Found coordinates, fetching Zoneomics data:", { latitude, longitude });
                                 await fetchZoneomicsData(reportHandler, latitude, longitude);
                                 console.log("Zoneomics data fetch completed");
+                                
+                                // Update local storage with the new data that includes Zoneomics
+                                try {
+                                    const updatedInfo = reportHandler.getGeneralInfo();
+                                    localStorage.setItem('generalPropertyInfo', JSON.stringify(updatedInfo));
+                                    console.log('Updated general property info saved to local storage');
+                                } catch (storageError) {
+                                    console.error('Failed to save updated general property info to local storage:', storageError);
+                                }
                             } catch (zoneomicsError) {
                                 console.error("Error fetching Zoneomics data (isolated):", zoneomicsError);
                                 // Don't set the main error state - we'll continue with just ATTOM data
