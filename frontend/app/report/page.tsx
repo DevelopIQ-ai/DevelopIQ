@@ -26,10 +26,14 @@ import { useGeneralPropertyInfo } from "@/hooks/useGeneralPropertyInfo";
 import { useDevelopmentInfo } from "@/hooks/useDevelopmentInfo";
 import { useNewsArticles } from "@/hooks/useNewsArticles";
 import { usePropertyImages } from "@/hooks/usePropertyImages";
+import { Button } from "@/components/ui/button";
+import SubmitEvaluationDialog from "@/components/submit-evaluation-dialog";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
+  const [hasFeedback, setHasFeedback] = useState<boolean>(false);
+  const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
@@ -48,9 +52,24 @@ export default function PropertyAnalysisDashboard() {
         const handler = new PropertyReportHandler();
         setReportHandler(handler);
       }
+      
+      // Check if feedback exists in localStorage
+      const feedback = localStorage.getItem("feedback");
+      setHasFeedback(!!feedback);
     }
     fetchGeneralData();
   }, []);
+
+  const handleSubmitEvaluation = (reviewerName: string) => {
+    // Here you would typically send the feedback to a server
+    // For now, we'll just show a success message
+    alert(`Evaluation submitted successfully by ${reviewerName}`);
+    setIsEvalModalOpen(false);
+    
+    // Clear the feedback from localStorage after submission
+    localStorage.removeItem("feedback");
+    setHasFeedback(false);
+  };
 
   const ImagesError = () => {
     return (
@@ -79,8 +98,26 @@ export default function PropertyAnalysisDashboard() {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h1 className="text-4xl font-bold tracking-tight">Property Assessment Report</h1>
-            <PrintDialog reportHandler={reportHandler!} />
+            <div className="flex items-center gap-3">
+              <Button 
+                variant={hasFeedback ? "default" : "outline"} 
+                className={hasFeedback ? "bg-orange-500 hover:bg-orange-600" : ""}
+                onClick={() => setIsEvalModalOpen(true)}
+              >
+                Submit Evaluation
+              </Button>
+              <PrintDialog reportHandler={reportHandler!} />
+            </div>
           </div>
+          
+          {/* Use the new component */}
+          <SubmitEvaluationDialog
+            open={isEvalModalOpen}
+            onOpenChange={setIsEvalModalOpen}
+            hasFeedback={hasFeedback}
+            onSubmit={handleSubmitEvaluation}
+          />
+          
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-5 w-5" />
             <p className="text-lg">{propertyAddress}</p>

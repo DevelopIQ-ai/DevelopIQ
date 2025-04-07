@@ -4,6 +4,7 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 interface DevelopmentInfoResult {
     developmentInfoLoading: boolean;
     developmentInfoError: string | null;
+    submitFeedback: (fieldName: string, feedback: string) => Promise<boolean>;
 }
 
 export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): DevelopmentInfoResult => {
@@ -174,6 +175,26 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
 
     }, [reportHandler, reportHandler?.getGeneralInfo(), generalPropertyInfoError]); // Only depend on reportHandler changes
 
+    // You might want to add a mutation function here to handle feedback submission
+    // For example:
+    
+    const submitFeedback = async (fieldName: string, feedback: string) => {
+        try {
+            // This would be your API call to submit feedback
+            // await fetch('/api/feedback', {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({ fieldName, feedback, section: 'development-info' }),
+            // });
+            
+            // For now, we'll just log it
+            console.log(`Feedback submitted for ${fieldName}: ${feedback}`);
+            return true;
+        } catch (error) {
+            console.error('Error submitting feedback:', error);
+            return false;
+        }
+    };
 
-    return { developmentInfoLoading, developmentInfoError };
+    return { developmentInfoLoading, developmentInfoError, submitFeedback };
 }
