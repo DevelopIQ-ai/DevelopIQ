@@ -377,7 +377,6 @@ function DataPointDisplayWithUnit({ dataPoint, developmentInfoLoading, onFlagCli
 function DevelopmentInfoSkeleton() {
   // Create skeleton sections for each typical property section
   const skeletonSections = [
-    "Permitted Uses",
     "Development Standards",
   ]
 
