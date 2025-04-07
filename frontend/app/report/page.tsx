@@ -34,6 +34,7 @@ export default function PropertyAnalysisDashboard() {
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
   const [hasFeedback, setHasFeedback] = useState<boolean>(false);
   const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
+  const [previousAddress, setPreviousAddress] = useState<string | null>(null);
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
@@ -47,6 +48,27 @@ export default function PropertyAnalysisDashboard() {
       if (!address) {
         return;
       }
+      
+      // Check if this is a new property search
+      if (previousAddress && previousAddress !== address) {
+        // Clear all property-related data
+        localStorage.removeItem("feedback");
+        localStorage.removeItem("propertyData");
+        localStorage.removeItem("developmentInfo");
+        localStorage.removeItem("newsArticles");
+        // Any other property-specific data that should be cleared
+        
+        // Update feedback state immediately
+        setHasFeedback(false);
+        
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event("feedbackUpdated"));
+        
+        // Reset the report handler to force new data fetching
+        setReportHandler(null);
+      }
+      
+      setPreviousAddress(address);
       setPropertyAddress(address);
       if (!reportHandler) {
         const handler = new PropertyReportHandler();
@@ -58,17 +80,52 @@ export default function PropertyAnalysisDashboard() {
       setHasFeedback(!!feedback);
     }
     fetchGeneralData();
+  }, [previousAddress, reportHandler]);
+
+  // Add this useEffect to listen for changes to localStorage
+  useEffect(() => {
+    // Function to check for feedback in localStorage
+    const checkFeedback = () => {
+      const feedback = localStorage.getItem("feedback");
+      setHasFeedback(!!feedback);
+    };
+
+    // Initial check
+    checkFeedback();
+
+    // Set up event listener for storage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "feedback") {
+        checkFeedback();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Custom event for same-tab updates
+    const handleCustomEvent = () => {
+      checkFeedback();
+    };
+
+    window.addEventListener("feedbackUpdated", handleCustomEvent);
+
+    // Clean up
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("feedbackUpdated", handleCustomEvent);
+    };
   }, []);
 
-  const handleSubmitEvaluation = (reviewerName: string) => {
-    // Here you would typically send the feedback to a server
-    // For now, we'll just show a success message
-    alert(`Evaluation submitted successfully by ${reviewerName}`);
+  const handleSubmitEvaluation = () => {
+    // Close the modal
     setIsEvalModalOpen(false);
-    
-    // Clear the feedback from localStorage after submission
-    localStorage.removeItem("feedback");
-    setHasFeedback(false);
+  };
+
+  const handleEvaluationButtonClick = () => {
+    // Check for feedback directly from localStorage when button is clicked
+    const feedback = localStorage.getItem("feedback");
+    setHasFeedback(!!feedback);
+    setIsEvalModalOpen(true);
   };
 
   const ImagesError = () => {
@@ -102,7 +159,7 @@ export default function PropertyAnalysisDashboard() {
               <Button 
                 variant={hasFeedback ? "default" : "outline"} 
                 className={hasFeedback ? "bg-orange-500 hover:bg-orange-600" : ""}
-                onClick={() => setIsEvalModalOpen(true)}
+                onClick={handleEvaluationButtonClick}
               >
                 Submit Evaluation
               </Button>
