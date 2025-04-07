@@ -5,11 +5,13 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Loader2, FileText, MapPin, Building, Ruler, Shield, Leaf, DollarSign } from "lucide-react"
+import { AlertCircle, FileText, MapPin, Building, Ruler, Shield, Leaf, DollarSign } from "lucide-react"
 import type { PropertyReportHandler } from "@/lib/report-handler"
 import "@/styles/report.css";
 import type { GeneralPropertyInfo } from "@/schemas/views/general-property-info-schema"
 import type { DataPoint } from "@/schemas/views/general-property-info-schema"
+import { reportStore } from "@/lib/report-store";
+import { DataPointDisplay } from "../../components/data-point-display";
 
 interface GeneralPropertyTabProps {
   reportHandler: PropertyReportHandler | null
@@ -23,27 +25,45 @@ export function GeneralPropertyTab({ reportHandler, generalPropertyInfoLoading, 
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (generalPropertyInfoLoading) {
-      return
+    if (generalPropertyInfoError) {
+      setError(generalPropertyInfoError);
+      setIsLoading(false);
+      return;
     }
-    
-    // When loading finishes, fetch data if we don't have it yet
-    if (!reportData && reportHandler) {
-      try {
-        const data = reportHandler.getGeneralInfo()
-        setReportData(data)
-        setIsLoading(false)
-      } catch (err) {
-        console.log(err);
-        setError("Unfortunately, we were unable to fetch property information for your property. Please try again later.")
-        setIsLoading(false)
-      }
-    } else if (!reportHandler) {
-      setIsLoading(false)
-    }
-  }, [generalPropertyInfoLoading, reportHandler, reportData])
 
-  if (generalPropertyInfoError || error) {
+    if (generalPropertyInfoLoading) {
+      return;
+    }
+
+    // Check for stored data first
+    const storedData = reportStore.getReportData();
+    if (storedData?.generalPropertyInfo) {
+      setReportData(storedData.generalPropertyInfo);
+      setIsLoading(false);
+      return;
+    }
+
+    // If no stored data, fetch from API
+    if (reportHandler) {
+      try {
+        const data = reportHandler.getGeneralInfo();
+        setReportData(data);
+        // Save to store
+        reportStore.saveReportData({
+          generalPropertyInfo: data,
+          developmentInfo: null
+        });
+        setIsLoading(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load property data");
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  }, [generalPropertyInfoLoading, reportHandler, generalPropertyInfoError]);
+
+  if (error || generalPropertyInfoError) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
@@ -118,22 +138,22 @@ function PropertyReportSection({ title, icon, data, isLoading }: PropertyReportS
             <h3 className="mb-3 text-base font-medium">{subSectionTitle}</h3>
             <div className="space-y-1">
               {Object.entries(subSectionData).map(([nestedTitle, nestedData]) => {
-                // Check if nestedData is an object with datapoints or a datapoint itself
-                if (nestedData && typeof nestedData === "object" && "alias" in nestedData) {
-                  // It's a datapoint
+                if (nestedData && typeof nestedData === "object" && "alias" in nestedData && "value" in nestedData) {
                   return (
                     <div key={nestedTitle} className="border border-gray-100 rounded">
-                      <DataPointDisplay dataPoint={nestedData as DataPoint} isLoading={isLoading} />
+                      <DataPointDisplay dataPoint={nestedData as DataPoint} generalPropertyInfoLoading={isLoading} />
                     </div>
                   )
                 } else {
-                  // It's a nested section
                   return (
                     <div key={nestedTitle} className="mb-2">
-                      <h4 className="mb-1 text-sm font-medium text-gray-600">{nestedTitle}</h4>
                       <div className="border border-gray-100 rounded divide-y divide-gray-100">
-                        {Object.entries(nestedData as Record<string, DataPoint>).map(([dataPointKey, dataPoint]) => (
-                          <DataPointDisplay key={dataPointKey} dataPoint={dataPoint} isLoading={isLoading} />
+                        {Object.entries(nestedData as Record<string, any>).map(([dataPointKey, dataPoint]) => (
+                          <DataPointDisplay
+                            key={dataPointKey}
+                            dataPoint={dataPoint}
+                            generalPropertyInfoLoading={isLoading}
+                          />
                         ))}
                       </div>
                     </div>
@@ -143,42 +163,6 @@ function PropertyReportSection({ title, icon, data, isLoading }: PropertyReportS
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  )
-}
-
-interface DataPointDisplayProps {
-  dataPoint: DataPoint
-  isLoading: boolean
-}
-
-function DataPointDisplay({ dataPoint, isLoading }: DataPointDisplayProps) {
-  const { alias, value, source } = dataPoint
-  const displayValue = value === null ? "NOT FOUND" : value
-  const displaySource = value === null ? "" : source
-
-  return (
-    <div className="grid grid-cols-12 divide-x divide-gray-100">
-      <div className="col-span-4 text-sm px-4 py-2">
-        <span>{alias}</span>
-      </div>
-      <div className="col-span-5 text-sm px-4 py-2">
-        {isLoading ? (
-          <div className="flex items-center space-x-2">
-            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-            <span className="text-muted-foreground">Loading...</span>
-          </div>
-        ) : (
-          <span className={value === null ? "text-red-500" : ""}>{displayValue}</span>
-        )}
-      </div>
-      <div className="col-span-3 text-xs text-gray-500 px-4 py-2">
-        {isLoading ? (
-          <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-        ) : (
-          displaySource && <span>{displaySource}</span>
-        )}
       </div>
     </div>
   )

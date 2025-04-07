@@ -3,6 +3,7 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 import { mockPropertyData } from '@/app/report/mock-data';
 import { fetchAttomData } from "@/lib/attom-data-fetcher";
 import { fetchZoneomicsData } from "@/lib/zoneomics-data-fetcher";
+import { reportStore } from "@/lib/report-store";
 
 interface GeneralPropertyInfoResult {
   generalPropertyInfoLoading: boolean;
@@ -29,6 +30,15 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                 return;
             }
 
+            // Check for stored data first
+            const storedData = reportStore.getReportData();
+            if (storedData?.generalPropertyInfo) {
+                console.log("Found stored general property info, skipping API calls");
+                reportHandler.setGeneralInfo(storedData.generalPropertyInfo);
+                setGeneralPropertyInfoLoading(false);
+                return;
+            }
+
             if (isDemo) {
                 console.log('DEMO');
                 setTimeout(() => {
@@ -36,6 +46,11 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                     
                     const propertyData = mockPropertyData[propertyAddress]["General Property Information"];
                     reportHandler.setGeneralInfo(propertyData);
+                    // Save to store
+                    reportStore.saveReportData({
+                        generalPropertyInfo: propertyData,
+                        developmentInfo: null
+                    });
                     console.log('PROPERTY DATA', propertyData);
                     setGeneralPropertyInfoLoading(false);
                 }, 1500);
@@ -50,6 +65,12 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                     // Get location data from ATTOM response
                     const generalInfo = reportHandler.getGeneralInfo();
                     if (generalInfo) {
+                        // Save to store after ATTOM data
+                        reportStore.saveReportData({
+                            generalPropertyInfo: generalInfo,
+                            developmentInfo: null
+                        });
+
                         const geospatialInfo = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"];
                         const latitude = geospatialInfo.latitude?.value as string;
                         const longitude = geospatialInfo.longitude?.value as string;
@@ -60,6 +81,12 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                                 console.log("Found coordinates, fetching Zoneomics data:", { latitude, longitude });
                                 await fetchZoneomicsData(reportHandler, latitude, longitude);
                                 console.log("Zoneomics data fetch completed");
+                                // Update store with combined data
+                                const updatedInfo = reportHandler.getGeneralInfo();
+                                reportStore.saveReportData({
+                                    generalPropertyInfo: updatedInfo,
+                                    developmentInfo: null
+                                });
                             } catch (zoneomicsError) {
                                 console.error("Error fetching Zoneomics data (isolated):", zoneomicsError);
                                 // Don't set the main error state - we'll continue with just ATTOM data

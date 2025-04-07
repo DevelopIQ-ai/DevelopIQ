@@ -69,7 +69,77 @@ export class PropertyReportHandler {
 
   getDevelopmentInfo(): DevelopmentInfo | null {
     return this.developmentInfo;
-  } 
+  }
+
+  async fetchDevelopmentInfo(stateCode: string | number, municipality: string, zoneCode: string): Promise<DevelopmentInfo> {
+    try {
+      console.log("Fetching development info from API");
+      const response = await fetch('/api/development-info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ state: stateCode, municipality, zone_code: zoneCode })
+      });
+
+      const result = await response.json();
+      console.log('Development info API result:', result);
+
+      if (result.status === 'success') {
+        console.log('Development info received successfully');
+        
+        // Create a development info object with the new schema structure
+        const developmentInfo = {
+          lot_requirements: {
+            maximum_density: { alias: "Maximum Density", value: result.requirements?.lot_requirements?.maximum_density?.value || null, source: result.requirements?.lot_requirements?.maximum_density?.source || null, unit: "Units per Acre" },
+            minimum_lot_size: { alias: "Minimum Lot Size", value: result.requirements?.lot_requirements?.minimum_lot_size?.value || null, source: result.requirements?.lot_requirements?.minimum_lot_size?.source || null, unit: "Sq. Ft." },
+            minimum_lot_width: { alias: "Minimum Lot Width", value: result.requirements?.lot_requirements?.minimum_lot_width?.value || null, source: result.requirements?.lot_requirements?.minimum_lot_width?.source || null, unit: "Ft." },
+            minimum_lot_frontage: { alias: "Minimum Lot Frontage", value: result.requirements?.lot_requirements?.minimum_lot_frontage?.value || null, source: result.requirements?.lot_requirements?.minimum_lot_frontage?.source || null, unit: "Ft." },
+            minimum_living_area: { alias: "Minimum Living Area", value: result.requirements?.lot_requirements?.minimum_living_area?.value || null, source: result.requirements?.lot_requirements?.minimum_living_area?.source || null, unit: "Sq. Ft." }
+          },
+          building_placement_requirements: {
+            minimum_front_setback: { alias: "Minimum Front Setback", value: result.requirements?.building_placement_requirements?.minimum_front_setback?.value || null, source: result.requirements?.building_placement_requirements?.minimum_front_setback?.source || null, unit: "Ft." },
+            minimum_street_side_setback: { alias: "Minimum Street Side Setback", value: result.requirements?.building_placement_requirements?.minimum_street_side_setback?.value || null, source: result.requirements?.building_placement_requirements?.minimum_street_side_setback?.source || null, unit: "Ft." },
+            minimum_side_yard_setback: { alias: "Minimum Side Yard Setback", value: result.requirements?.building_placement_requirements?.minimum_side_yard_setback?.value || null, source: result.requirements?.building_placement_requirements?.minimum_side_yard_setback?.source || null, unit: "Ft." },
+            minimum_rear_setback: { alias: "Minimum Rear Setback", value: result.requirements?.building_placement_requirements?.minimum_rear_setback?.value || null, source: result.requirements?.building_placement_requirements?.minimum_rear_setback?.source || null, unit: "Ft." },
+            accessory_building_setback: { alias: "Accessory Building Setback", value: result.requirements?.building_placement_requirements?.accessory_building_setback?.value || null, source: result.requirements?.building_placement_requirements?.accessory_building_setback?.source || null, unit: "Ft." }
+          },
+          building_requirements: {
+            maximum_building_height: { alias: "Maximum Building Height", value: result.requirements?.building_requirements?.maximum_building_height?.value || null, source: result.requirements?.building_requirements?.maximum_building_height?.source || null, unit: "Ft." },
+            maximum_lot_coverage: { alias: "Maximum Lot Coverage", value: result.requirements?.building_requirements?.maximum_lot_coverage?.value || null, source: result.requirements?.building_requirements?.maximum_lot_coverage?.source || null, unit: "%" }
+          },
+          landscaping_requirements: {
+            minimum_plant_sizes: { alias: "Minimum Plant Sizes", value: result.requirements?.landscaping_requirements?.minimum_plant_sizes?.value || null, source: result.requirements?.landscaping_requirements?.minimum_plant_sizes?.source || null, unit: "Ft." },
+            landscape_plan_review_summary: { summary: { alias: "Landscape Plan Review Summary", value: result.requirements?.landscaping_requirements?.landscape_plan_review_summary?.summary?.value || null, source: result.requirements?.landscaping_requirements?.landscape_plan_review_summary?.summary?.source || null } },
+            species_variation_requirement_summary: { summary: { alias: "Species Variation Requirement Summary", value: result.requirements?.landscaping_requirements?.species_variation_requirement_summary?.summary?.value || null, source: result.requirements?.landscaping_requirements?.species_variation_requirement_summary?.summary?.source || null } },
+            performance_guarantee_warranty_requirements_summary: { summary: { alias: "Performance Guarantee Warranty Requirements Summary", value: result.requirements?.landscaping_requirements?.performance_guarantee_warranty_requirements_summary?.summary?.value || null, source: result.requirements?.landscaping_requirements?.performance_guarantee_warranty_requirements_summary?.summary?.source || null } }
+          },
+          parking_requirements: {
+            minimum_aisle_width: { alias: "Minimum Aisle Width", value: result.requirements?.parking_requirements?.minimum_aisle_width?.value || null, source: result.requirements?.parking_requirements?.minimum_aisle_width?.source || null, unit: "Ft." },
+            curbing_requirements: { summary: { alias: "Curbing Requirements", value: result.requirements?.parking_requirements?.curbing_requirements?.summary?.value || null, source: result.requirements?.parking_requirements?.curbing_requirements?.summary?.source || null } },
+            striping_requirements: { summary: { alias: "Striping Requirements", value: result.requirements?.parking_requirements?.striping_requirements?.summary?.value || null, source: result.requirements?.parking_requirements?.striping_requirements?.summary?.source || null } },
+            drainage_requirements: { summary: { alias: "Drainage Requirements", value: result.requirements?.parking_requirements?.drainage_requirements?.summary?.value || null, source: result.requirements?.parking_requirements?.drainage_requirements?.summary?.source || null } },
+            parking_stalls_required: { summary: { alias: "Parking Stalls Required", value: result.requirements?.parking_requirements?.parking_stalls_required?.summary?.value || null, source: result.requirements?.parking_requirements?.parking_stalls_required?.summary?.source || null } }
+          },
+          signage_requirements: {
+            permitted_sign_types: { signs: result.requirements?.signage_requirements?.permitted_sign_types?.signs || [] },
+            prohibited_sign_types: { signs: result.requirements?.signage_requirements?.prohibited_sign_types?.signs || [] },
+            design_requirements: { requirements: { alias: "Design Requirements", value: result.requirements?.signage_requirements?.design_requirements?.requirements?.value || null, source: result.requirements?.signage_requirements?.design_requirements?.requirements?.source || null } }
+          }
+        };
+
+        this.setDevelopmentInfo(developmentInfo);
+        return developmentInfo;
+      } else if (!response.ok) {
+        throw new Error(result.error || "Unknown error fetching development info");
+      } else {
+        throw new Error("Failed to fetch development info");
+      }
+    } catch (error) {
+      console.error("Error in development info processing:", error);
+      throw error;
+    }
+  }
 
   updateDataPoint(
     path: string,

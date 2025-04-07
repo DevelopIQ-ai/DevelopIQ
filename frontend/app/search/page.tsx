@@ -7,6 +7,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { v4 as uuidv4 } from "uuid"
 import { canFetchAttomData } from "@/lib/attom-data-fetcher"
+import { reportStore } from "@/lib/report-store"
+import { feedbackStore } from "@/lib/feedback-store"
 
 // Helper to load Google Maps script
 const loadGoogleMapsScript = (callback: () => void) => {
@@ -116,6 +118,9 @@ export default function GetStarted() {
     }
     setIsLoading(true)
     localStorage.setItem("propertyAddress", address)
+    // Clear the report store and feedback store when a new address is submitted
+    reportStore.clearReportData()
+    feedbackStore.clear()
 
     const canFetch = await canFetchAttomData(address)
     if (!canFetch) {

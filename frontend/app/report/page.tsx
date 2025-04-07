@@ -26,12 +26,16 @@ import { useGeneralPropertyInfo } from "@/hooks/useGeneralPropertyInfo";
 import { useDevelopmentInfo } from "@/hooks/useDevelopmentInfo";
 import { useNewsArticles } from "@/hooks/useNewsArticles";
 import { usePropertyImages } from "@/hooks/usePropertyImages";
+import { Button } from "@/components/ui/button";
+import { exportToExcel } from "@/lib/excel-export";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
-  const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
+  const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(
+    generalPropertyInfoLoading ? null : reportHandler
+  );
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
   const { images, imagesLoading, imagesError } = usePropertyImages(propertyAddress);
 
@@ -72,6 +76,18 @@ export default function PropertyAnalysisDashboard() {
     )
   }
 
+  const handleSubmitEvaluation = () => {
+    try {
+      exportToExcel(
+        reportHandler?.getGeneralInfo() || null,
+        reportHandler?.getDevelopmentInfo() || null,
+        propertyAddress || "Unknown_Property"
+      );
+    } catch (error) {
+      console.error("Failed to export evaluation:", error);
+    }
+  };
+
   return (
     <main className="property-demo min-h-screen pt-16">
       <NavBar />
@@ -79,7 +95,12 @@ export default function PropertyAnalysisDashboard() {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h1 className="text-4xl font-bold tracking-tight">Property Assessment Report</h1>
-            <PrintDialog reportHandler={reportHandler!} />
+            <div className="flex gap-4">
+              <Button onClick={handleSubmitEvaluation} variant="default">
+                Submit Evaluation
+              </Button>
+              <PrintDialog reportHandler={reportHandler!} />
+            </div>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-5 w-5" />

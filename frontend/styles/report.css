@@ -112,3 +112,30 @@
   animation: loading 2s infinite linear;
 }
 
+/* Flagged field styles */
+.flagged-field {
+  background-color: #fff3cd !important;
+  border-left: 4px solid #ffc107 !important;
+  animation: flagged-pulse 2s ease-in-out infinite !important;
+  transition: all 0.3s ease !important;
+  margin: 0.5rem 0 !important;
+  border-radius: 0.25rem !important;
+  padding: 0.5rem !important;
+}
+
+.flagged-field:hover {
+  background-color: #ffe69c !important;
+}
+
+@keyframes flagged-pulse {
+  0% {
+    background-color: #fff3cd;
+  }
+  50% {
+    background-color: #ffe69c;
+  }
+  100% {
+    background-color: #fff3cd;
+  }
+}
+
