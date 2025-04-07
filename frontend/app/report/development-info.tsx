@@ -4,7 +4,7 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, Loader2, Ruler, Building2 } from "lucide-react"
+import { AlertCircle, Loader2, Ruler } from "lucide-react"
 import type { PropertyReportHandler } from "@/lib/report-handler"
 import type { DevelopmentInfo, DataPoint, DataPointWithUnit } from "@/schemas/views/development-info-schema"
 
@@ -81,48 +81,6 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {reportData["Permitted Uses"] && (
-          <div className="rounded-lg border bg-card shadow-sm">
-            <div className="flex items-center gap-2 border-b px-6 py-4">
-              <Building2 className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Permitted Uses</h2>
-            </div>
-            <div className="p-4">
-              <div className="space-y-4">
-                {(reportData["Permitted Uses"] as any[]).map((dataPoint, index) => (
-                  <div key={index} className="border border-gray-100 rounded p-4">
-                    <h3 className="text-base font-medium mb-3">
-                      {dataPoint.primary_use_classification.value}
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-600 mb-2">Permitted Uses</h4>
-                        <div className="space-y-1">
-                          {dataPoint.permitted_uses.map((use: any, useIndex: number) => (
-                            <div key={useIndex} className="border border-gray-100 rounded p-2 text-sm">
-                              {use.value}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-600 mb-2">Special Exceptions</h4>
-                        <div className="space-y-1">
-                          {dataPoint.special_exceptions.map((exception: any, exceptionIndex: number) => (
-                            <div key={exceptionIndex} className="border border-gray-100 rounded p-2 text-sm">
-                              {exception.value}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
         {reportData["requirements"] && (
           <div className="rounded-lg border bg-card shadow-sm">
             <div className="flex items-center gap-2 border-b px-6 py-4">

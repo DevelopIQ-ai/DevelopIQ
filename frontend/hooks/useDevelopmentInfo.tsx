@@ -28,6 +28,21 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     return;
                 }
 
+                // Check if development info exists in local storage
+                try {
+                    const storedDevelopmentInfo = localStorage.getItem('developmentInfo');
+                    if (storedDevelopmentInfo) {
+                        const parsedInfo = JSON.parse(storedDevelopmentInfo);
+                        console.log("Development info loaded from local storage");
+                        reportHandler.setDevelopmentInfo(parsedInfo);
+                        setDevelopmentInfoLoading(false);
+                        return;
+                    }
+                } catch (storageError) {
+                    console.error("Error reading development info from local storage:", storageError);
+                    // Continue with API call if local storage fails
+                }
+
                 if (generalPropertyInfoError) {
                     setDevelopmentInfoError(generalPropertyInfoError);
                     setDevelopmentInfoLoading(false);
@@ -128,33 +143,18 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     if (result.status === 'success') {
                         console.log('Development info received successfully');
                         
-                        const mockPermittedUses = {
-                            "Permitted Uses": [
-                                {
-                                    "primary_use_classification": {
-                                        value: "Residential",
-                                        alias: "Primary Use Classification",
-                                        source: null
-                                    },
-                                    "permitted_uses": [
-                                        {
-                                            value: "Single Family Residential",
-                                            alias: "Permitted Use",
-                                            source: null
-                                        }
-                                    ],
-                                    "special_exceptions": [
-                                        {
-                                            value: "Special Exceptions",
-                                            alias: "Special Exception",
-                                            source: null
-                                        }
-                                    ]
-                                }
-                            ]
-                        };
+                       
+                        const developmentInfo = {"requirements": result.requirements.requirements };
                         
-                        reportHandler.setDevelopmentInfo({ ...mockPermittedUses, "requirements": result.requirements.requirements });
+                        // Save development info to local storage
+                        try {
+                            localStorage.setItem('developmentInfo', JSON.stringify(developmentInfo));
+                            console.log('Development info saved to local storage');
+                        } catch (storageError) {
+                            console.error('Failed to save development info to local storage:', storageError);
+                        }
+                        
+                        reportHandler.setDevelopmentInfo(developmentInfo);
                         
                         setDevelopmentInfoLoading(false);
                         setDevelopmentInfoError(null);

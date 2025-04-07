@@ -23,24 +23,64 @@ export function GeneralPropertyTab({ reportHandler, generalPropertyInfoLoading, 
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (generalPropertyInfoLoading) {
-      return
-    }
-    
-    // When loading finishes, fetch data if we don't have it yet
-    if (!reportData && reportHandler) {
-      try {
-        const data = reportHandler.getGeneralInfo()
-        setReportData(data)
+    const loadGeneralPropertyInfo = async () => {
+      if (generalPropertyInfoLoading) {
+        return
+      }
+      
+      // If we already have report data, we're done
+      if (reportData) {
         setIsLoading(false)
-      } catch (err) {
-        console.log(err);
-        setError("Unfortunately, we were unable to fetch property information for your property. Please try again later.")
+        return
+      }
+      
+      // Check if general property info exists in local storage
+      try {
+        const storedGeneralInfo = localStorage.getItem('generalPropertyInfo')
+        if (storedGeneralInfo) {
+          const parsedInfo = JSON.parse(storedGeneralInfo)
+          console.log("General property info loaded from local storage")
+          setReportData(parsedInfo)
+          
+          // Also set it in the report handler if available
+          if (reportHandler) {
+            reportHandler.setGeneralInfo(parsedInfo)
+          }
+          
+          setIsLoading(false)
+          return
+        }
+      } catch (storageError) {
+        console.error("Error reading general property info from local storage:", storageError)
+        // Continue with normal flow if local storage fails
+      }
+      
+      // When loading finishes, fetch data if we don't have it yet
+      if (!reportData && reportHandler) {
+        try {
+          const data = reportHandler.getGeneralInfo()
+          setReportData(data)
+          
+          // Save general property info to local storage
+          try {
+            localStorage.setItem('generalPropertyInfo', JSON.stringify(data))
+            console.log('General property info saved to local storage')
+          } catch (storageError) {
+            console.error('Failed to save general property info to local storage:', storageError)
+          }
+          
+          setIsLoading(false)
+        } catch (err) {
+          console.log(err)
+          setError("Unfortunately, we were unable to fetch property information for your property. Please try again later.")
+          setIsLoading(false)
+        }
+      } else if (!reportHandler) {
         setIsLoading(false)
       }
-    } else if (!reportHandler) {
-      setIsLoading(false)
     }
+    
+    loadGeneralPropertyInfo()
   }, [generalPropertyInfoLoading, reportHandler, reportData])
 
   if (generalPropertyInfoError || error) {
