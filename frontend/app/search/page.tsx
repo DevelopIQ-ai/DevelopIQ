@@ -115,6 +115,16 @@ export default function GetStarted() {
       return
     }
     setIsLoading(true)
+    
+    // Clear previous property data from localStorage
+    // Keep only the userId
+    const userId = localStorage.getItem("userId")
+    localStorage.clear()
+    if (userId) {
+      localStorage.setItem("userId", userId)
+    }
+    
+    // Set the new property address
     localStorage.setItem("propertyAddress", address)
 
     const canFetch = await canFetchAttomData(address)
