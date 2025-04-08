@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 
 import React, { useState } from "react";
@@ -123,14 +122,15 @@ export default function SubmitEvaluationDialog({
     if (feedbackJson) {
       try {
         const feedbackData = JSON.parse(feedbackJson);
-        
+        console.log("Feedback data:", feedbackData);
         // Add header row for feedback table
         data.push(["Property Attribute", "Original Value", "Correction", "Reason", "Source", "Timestamp"]);
         
         // Process feedback data based on the structure
         if (Array.isArray(feedbackData)) {
-          // If it's an array of feedback items
-          feedbackData.forEach(item => {
+            console.log("Feedback data is an array");
+            feedbackData.forEach(item => {
+            console.log("Item:", item);
             if (item && typeof item === 'object') {
               const propertyName = Object.keys(item)[0] || '';
               const details = item[propertyName] || {};
@@ -145,20 +145,28 @@ export default function SubmitEvaluationDialog({
             }
           });
         } else if (feedbackData && typeof feedbackData === 'object') {
-          // If it's a single feedback object
-          const propertyName = Object.keys(feedbackData)[0] || '';
-          
-          if (propertyName && feedbackData[propertyName]) {
-            const details = feedbackData[propertyName];
-            data.push([
-              propertyName, 
-              details.originalValue || '', 
-              details.correction || '', 
-              details.reason || '', 
-              details.source || '', 
-              details.timestamp || ''
-            ]);
-          }
+          // If it's an object with multiple property feedbacks
+          Object.entries(feedbackData).forEach(([propertyName, details]) => {
+            if (details && typeof details === 'object') {
+              // Type assertion to tell TypeScript about the expected structure
+              const typedDetails = details as {
+                originalValue?: string;
+                correction?: string;
+                reason?: string;
+                source?: string;
+                timestamp?: string;
+              };
+              
+              data.push([
+                propertyName, 
+                typedDetails.originalValue || '', 
+                typedDetails.correction || '', 
+                typedDetails.reason || '', 
+                typedDetails.source || '', 
+                typedDetails.timestamp || ''
+              ]);
+            }
+          });
         }
       } catch (e) {
         data.push(["Feedback", "Error processing feedback data"]);
@@ -281,13 +289,7 @@ export default function SubmitEvaluationDialog({
     const excelUrl = exportToExcel();
     
     if (excelUrl) {
-      // Clear the feedback from localStorage after successful export
-      localStorage.removeItem("feedback");
-      
-      // Dispatch custom event to notify the page component
-      window.dispatchEvent(new Event("feedbackUpdated"));
-      
-      // Call the onSubmit callback
+      console.log("Excel URL:", excelUrl);      
       onSubmit(reviewerName);
     }
   };
