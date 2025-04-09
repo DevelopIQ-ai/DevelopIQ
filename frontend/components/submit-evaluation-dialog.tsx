@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CheckCircle2, AlertTriangle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Upload, FileUp } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import * as XLSX from 'xlsx';
 
@@ -20,7 +20,7 @@ interface SubmitEvaluationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   hasFeedback: boolean;
-  onSubmit: (reviewerName: string) => void;
+  onSubmit: (reviewerName: string, s3Url?: string) => void;
 }
 
 export default function SubmitEvaluationDialog({
@@ -31,6 +31,8 @@ export default function SubmitEvaluationDialog({
 }: SubmitEvaluationDialogProps) {
   const [reviewerName, setReviewerName] = useState<string>("");
   const [additionalComments, setAdditionalComments] = useState<string>("");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
 
   // Function to flatten nested objects for Excel export
   const flattenObject = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
@@ -77,44 +79,41 @@ export default function SubmitEvaluationDialog({
     return result;
   };
 
-  const exportToExcel = () => {
-    try {
-      // Get data from localStorage
-      const propertyAddress = localStorage.getItem("propertyAddress") || "Unknown Address";
-      const feedbackJson = localStorage.getItem("feedback");
-      const propertyDataJson = localStorage.getItem("generalPropertyInfo");
-      const developmentInfoJson = localStorage.getItem("developmentInfo");
-      const newsArticlesJson = localStorage.getItem("newsArticles");
-      
-      // Create base data for Excel
-      const data = [
-        ["Property Assessment Evaluation"],
-        [""],
-        ["Property Address", propertyAddress],
-        ["Reviewer Name", reviewerName],
-        ["Additional Comments", additionalComments],
-        [""],
-        ["Detailed Feedback"],
-      ];
-      
-      // Add feedback data
-      addFeedbackData(data, feedbackJson);
-      
-      // Add report data sections
-      data.push([""], [""], ["REPORT DATA"], [""]);
-      
-      // Add property, development, and news data
-      addPropertyData(data, propertyDataJson);
-      addDevelopmentData(data, developmentInfoJson);
-      addNewsArticlesData(data, newsArticlesJson);
-      
-      // Generate and download Excel file
-      return generateExcelFile(data);
-    } catch (error) {
-      console.error("Error exporting to Excel:", error);
-      alert("There was an error exporting to Excel. Please try again.");
-      return null;
-    }
+  // Create Excel workbook data
+  const createExcelData = () => {
+    // Get data from localStorage
+    const propertyAddress = localStorage.getItem("propertyAddress") || "Unknown Address";
+    const feedbackJson = localStorage.getItem("feedback");
+    const propertyDataJson = localStorage.getItem("generalPropertyInfo");
+    const developmentInfoJson = localStorage.getItem("developmentInfo");
+    const newsArticlesJson = localStorage.getItem("newsArticles");
+    
+    // Create base data for Excel
+    const data = [
+      ["Property Assessment Evaluation"],
+      [""],
+      ["Property Address", propertyAddress],
+      ["Reviewer Name", reviewerName],
+      ["Additional Comments", additionalComments],
+      [""],
+      ["Detailed Feedback"],
+    ];
+    
+    // Add feedback data
+    addFeedbackData(data, feedbackJson);
+    
+    // Add report data sections
+    data.push([""], [""], ["REPORT DATA"], [""]);
+    
+    // Add property, development, and news data
+    addPropertyData(data, propertyDataJson);
+    addDevelopmentData(data, developmentInfoJson);
+    addNewsArticlesData(data, newsArticlesJson);
+    
+    return {
+      data,
+      propertyAddress
+    };
   };
 
   // Helper function to add feedback data to Excel
@@ -128,8 +127,8 @@ export default function SubmitEvaluationDialog({
         
         // Process feedback data based on the structure
         if (Array.isArray(feedbackData)) {
-            console.log("Feedback data is an array");
-            feedbackData.forEach(item => {
+          console.log("Feedback data is an array");
+          feedbackData.forEach(item => {
             console.log("Item:", item);
             if (item && typeof item === 'object') {
               const propertyName = Object.keys(item)[0] || '';
@@ -248,49 +247,80 @@ export default function SubmitEvaluationDialog({
     }
   };
 
-  // Helper function to generate and download Excel file
-  const generateExcelFile = (data: any[][]) => {
-    // Create workbook and worksheet
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    
-    // Set column widths
-    const wscols = [
-      { wch: 25 },  // A
-      { wch: 80 }   // B
-    ];
-    ws['!cols'] = wscols;
-    
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(wb, ws, "Evaluation");
-    
-    // Generate Excel file
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    
-    // Convert to Blob
-    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    
-    // Create download URL
-    const url = URL.createObjectURL(blob);
-    
-    // Open in new tab
-    window.open(url, '_blank');
-    
-    return url;
+  // Function to generate Excel file and send to API for S3 upload
+  const exportToS3 = async () => {
+    try {
+      setIsUploading(true);
+      setUploadStatus("uploading");
+      
+      // Get Excel data
+      const { data, propertyAddress } = createExcelData();
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const fileName = `${propertyAddress.replace(/[^a-zA-Z0-9]/g, '_')} - ${timestamp}.xlsx`;
+      
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      
+      // Set column widths
+      const wscols = [
+        { wch: 25 },  // A
+        { wch: 80 }   // B
+      ];
+      ws['!cols'] = wscols;
+      
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, "Evaluation");
+      
+      // Generate Excel file as array buffer
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      
+      // Create form data for API upload
+      const formData = new FormData();
+      formData.append('file', blob, fileName);
+      formData.append('propertyAddress', propertyAddress);
+      formData.append('reviewerName', reviewerName);
+      
+      // Send to API route
+      const response = await fetch('/api/upload-evals', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      console.log("Upload successful:", result);
+      setUploadStatus("success");
+      
+      // Return S3 URL
+      return result.fileUrl;
+    } catch (error) {
+      console.error("Error uploading to S3:", error);
+      setUploadStatus("error");
+      alert("There was an error uploading to S3. Please try again.");
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!reviewerName.trim()) {
       alert("Please enter your name");
       return;
     }
     
-    // Export to Excel and get the URL
-    const excelUrl = exportToExcel();
+    // Export to S3 and get the S3 URL
+    const s3Url = await exportToS3();
     
-    if (excelUrl) {
-      console.log("Excel URL:", excelUrl);      
-      onSubmit(reviewerName);
+    if (s3Url) {
+      console.log("File uploaded to:", s3Url);
+      onSubmit(reviewerName, s3Url);
     }
   };
 
@@ -348,12 +378,55 @@ export default function SubmitEvaluationDialog({
                 <div>
                   <h4 className="font-medium text-amber-800">No Feedback Recorded</h4>
                   <p className="text-sm text-amber-700 mt-1">
-                    Please provide feedback on the report before submitting your evaluation. Your insights are important to us.
+                    No specific property feedback recorded. You can still submit with additional comments.
                   </p>
                 </div>
               </div>
             )}
           </div>
+          
+          {/* Upload status indicator */}
+          {uploadStatus === "uploading" && (
+            <div className="p-4 rounded-md bg-blue-50">
+              <div className="flex items-start gap-3">
+                <FileUp className="h-5 w-5 text-blue-500 mt-0.5 animate-pulse" />
+                <div>
+                  <h4 className="font-medium text-blue-800">Uploading Evaluation</h4>
+                  <p className="text-sm text-blue-700 mt-1">
+                    Your evaluation is being securely uploaded. This may take a moment...
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {uploadStatus === "success" && (
+            <div className="p-4 rounded-md bg-green-50">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-green-800">Upload Successful</h4>
+                  <p className="text-sm text-green-700 mt-1">
+                    Your evaluation has been successfully uploaded to secure storage.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {uploadStatus === "error" && (
+            <div className="p-4 rounded-md bg-red-50">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
+                <div>
+                  <h4 className="font-medium text-red-800">Upload Failed</h4>
+                  <p className="text-sm text-red-700 mt-1">
+                    There was an error uploading your evaluation. Please try again or contact support.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         <DialogFooter className="pt-4 border-t flex justify-end gap-3">
@@ -362,13 +435,23 @@ export default function SubmitEvaluationDialog({
           </Button>
           <Button 
             onClick={handleSubmit}
-            disabled={!hasFeedback}
             className={hasFeedback ? "bg-green-600 hover:bg-green-700" : ""}
+            disabled={isUploading}
           >
-            Submit Evaluation
+            {isUploading ? (
+              <span className="flex items-center gap-2">
+                <FileUp className="h-4 w-4 animate-pulse" />
+                Uploading...
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <FileUp className="h-4 w-4" />
+                Submit Evaluation
+              </span>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-} 
+}
