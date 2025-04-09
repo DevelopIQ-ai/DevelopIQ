@@ -1,40 +1,6 @@
 // File: app/api/upload-to-s3/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
-import { mkdir } from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid';
-
-// Define function to save file to temp directory
-async function saveFileToTemp(formData: FormData, fieldName: string): Promise<string | null> {
-  const file = formData.get(fieldName) as File | null;
-  
-  if (!file) {
-    return null;
-  }
-  
-  // Create temp directory if it doesn't exist
-  const tempDir = join(process.cwd(), 'tmp');
-  try {
-    await mkdir(tempDir, { recursive: true });
-  } catch (error) {
-    console.error('Error creating temp directory:', error);
-  }
-  
-  // Generate unique filename
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  
-  // Create a unique file path
-  const uniqueId = uuidv4();
-  const filePath = join(tempDir, `${uniqueId}-${file.name}`);
-  
-  // Write file to disk
-  await writeFile(filePath, buffer);
-  
-  return filePath;
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -48,16 +14,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
-      );
-    }
-    
-    // Save file to temp directory
-    const filePath = await saveFileToTemp(formData, 'file');
-    
-    if (!filePath) {
-      return NextResponse.json(
-        { error: 'Failed to save file' },
-        { status: 500 }
       );
     }
     
@@ -83,7 +39,7 @@ export async function POST(request: NextRequest) {
       },
     });
     
-    // Get file buffer to upload
+    // Get file buffer to upload directly from the file object
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     

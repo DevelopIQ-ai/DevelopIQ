@@ -256,7 +256,6 @@ export default function SubmitEvaluationDialog({
       // Get Excel data
       const { data, propertyAddress } = createExcelData();
       
-      // Generate timestamp for filename
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const fileName = `${propertyAddress.replace(/[^a-zA-Z0-9]/g, '_')} - ${timestamp}.xlsx`;
       
