@@ -48,6 +48,25 @@ LANDSCAPING_QUERIES = {
     "performance_guarantee": "What are the performance guarantee and warranty requirements for landscaping in {zone_code} zone? Provide a summary."
 }
 
+#Permitted Uses Queries
+PERMITTED_USES_QUERIES = {
+    "permitted_uses": """
+    <INSTRUCTIONS>
+    - Only list uses that are permitted in the {zone_code} zone, as denoted by the cell value having 'P' or 'S' in that column. Permitted uses ONLY include 'P' or 'S'.
+    - Ignore cells with any other values
+    </INSTRUCTIONS>
+
+    <QUESTION>
+    What are the permitted uses for {zone_code} zone? List the use along with the cell value in the response.
+    </QUESTION>
+
+    <EXAMPLE>
+    Bed and Breakfast Establishments (P)
+    Recreational Facilities (S)
+    </EXAMPLE>
+    """
+}
+
 # Enhanced query templates with more specific instructions for better extraction
 ENHANCED_QUERY_TEMPLATES = {
     "numeric_with_unit": "What is the {measurement_name} in {zone_code} zone? Please respond with ONLY the numeric value and unit (e.g., '10 feet'). If multiple values exist for different contexts, list each one with its specific context.",

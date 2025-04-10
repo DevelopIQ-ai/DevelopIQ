@@ -3,6 +3,13 @@ from bs4 import BeautifulSoup
 import re
 import os
 import uuid
+import pandas as pd
+import math
+from io import StringIO
+import pandas as pd
+import csv
+import numpy as np
+from tabulate import tabulate
 
 def parse_table(table_element, output_dir="./tables"):
     """
@@ -96,11 +103,62 @@ def parse_table(table_element, output_dir="./tables"):
         
     return result
 
-import json
-from bs4 import BeautifulSoup
-import re
-import os
-import uuid
+def normalize_table(html_content):
+    html_content = StringIO(str(html_content))
+    # Load tables
+    tables = pd.read_html(html_content)
+
+    # Create a set to track seen rows
+    seen_rows = set()
+    combined_rows = []
+
+    # Process all tables and combine into a single collection
+    table = tables[0]
+    if table.empty:
+        return None
+    
+    # Process only rows that don't have the same value in all columns
+    for idx in range(len(table)):
+        row = table.iloc[idx]
+        
+        # Skip rows where all values are the same
+        if row.nunique() == 1:
+            continue
+            
+        # This is a regular data row
+        row_data = []
+        for cell in row:
+            # Replace NaN with empty string
+            if pd.isna(cell) or (isinstance(cell, str) and cell.lower() in ['nan', 'na']):
+                cell = ''
+            else:
+                # Convert to string but keep commas
+                cell = str(cell)
+            row_data.append(cell)
+        
+        # Skip rows where all values are empty
+        if all(cell == '' for cell in row_data):
+            continue
+            
+        row_tuple = tuple(row_data)
+        
+        # Add to combined rows if not a duplicate
+        if row_tuple not in seen_rows:
+            seen_rows.add(row_tuple)
+            combined_rows.append(row_data)
+
+    # Implement tabulate with the combined rows
+    if combined_rows:
+        # Assuming first row contains headers
+        headers = combined_rows[0]
+        data = combined_rows[1:] if len(combined_rows) > 1 else []
+        
+        # Create and print the table
+        markdown_table = tabulate(data, headers=headers, tablefmt='pretty')
+    else:
+        markdown_table = ""
+
+    return markdown_table
 
 def load_html(html_content):
 
@@ -110,7 +168,15 @@ def load_html(html_content):
         print(f"Error loading HTML document: {e}")
         return None
     
-
+def clean_nans(obj):
+    if isinstance(obj, float) and math.isnan(obj):
+        return None
+    elif isinstance(obj, dict):
+        return {k: clean_nans(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_nans(i) for i in obj]
+    else:
+        return obj
 
 def extract_section_text(section_element):
     """
@@ -137,11 +203,11 @@ def extract_section_text(section_element):
         if next_element.name in ['div', 'p', 'ul', 'ol', 'table']:
             # If it's a <table> directly
             if next_element.name == 'table':
-                table_data = parse_table(next_element)
+                table_data = normalize_table(next_element)
                 if table_data:
                     # Convert to JSON, then wrap with delimiters
-                    table_json = json.dumps(table_data)
-                    content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+                    # table_json = json.dumps(table_data)
+                    content_chunks.append(f"\n\n{table_data}\n\n")
             else:
                 nested_tables = []
                 for table in next_element.find_all('table', recursive=True):
@@ -149,10 +215,10 @@ def extract_section_text(section_element):
                     if not header_parent:
                         nested_tables.append(table)
                 for tbl in nested_tables:
-                    tbl_data = parse_table(tbl)
+                    tbl_data = normalize_table(tbl)
                     if tbl_data:
-                        table_json = json.dumps(tbl_data)
-                        content_chunks.append(f"--BEGIN-TABLE--\n{table_json}\n--END-TABLE--")
+                        # table_json = json.dumps(tbl_data)
+                        content_chunks.append(f"\n\n{tbl_data}\n\n")
                     tbl.decompose()
                 
                 # After removing tables, any leftover text remains
@@ -163,7 +229,7 @@ def extract_section_text(section_element):
         next_element = next_element.next_sibling
     
     # Merge them all into one giant string. Prepend the section title at the top.
-    final_string = section_title + "\n\n" + "\n".join(content_chunks)
+    final_string = section_title + "\n" + "\n".join(content_chunks) + "块"
     return final_string
 
 def find_section_element(soup, chapter_number, section_number):
