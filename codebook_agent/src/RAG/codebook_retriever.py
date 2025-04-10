@@ -2,12 +2,15 @@ import os
 import uuid
 import asyncio
 import shutil
+import json
+import time
 from dotenv import load_dotenv
 from typing import List, Dict
 from pathlib import Path
 
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_anthropic import ChatAnthropic
+from langchain.text_splitter import RecursiveCharacterTextSplitter, RecursiveJsonSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 
@@ -45,9 +48,10 @@ class CodebookRetriever:
 
         self.html_content = html_content
         self.collection_name = html_document_id
-
+        
         self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
-        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=8000, chunk_overlap=500, separators=["块"], keep_separator=False)
+        # self.json_splitter = RecursiveJsonSplitter(max_chunk_size=4000, min_chunk_size=500)
 
         # Async client for ingestion
         self.async_client = AsyncQdrantClient(
@@ -61,13 +65,17 @@ class CodebookRetriever:
             api_key=os.getenv("QDRANT_API_KEY"),
         )
 
-        self.llm = ChatOpenAI(
+        self.openai_llm = ChatOpenAI(
             temperature=0,
             openai_api_key=os.getenv("OPENAI_API_KEY"),
             model="gpt-4o-mini"
         )
 
-        # self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=8)
+        self.claude_llm = ChatAnthropic(
+            temperature=0,
+            api_key=os.getenv("ANTHROPIC_API_KEY"),
+            model="claude-3-7-sonnet-latest"
+        )
 
         print("CodebookRetriever initialized with Qdrant")
 
@@ -104,22 +112,13 @@ class CodebookRetriever:
         for batch in chunked(points, batch_size):
             await self._upsert_batch(batch)
 
-    async def embed_chunks(self, chunks: List[str], batch_size: int = 16) -> List[List[float]]:
-        embeddings = []
-
-        for batch in chunked(chunks, batch_size):
-            batch_embeddings = await self.embeddings.aembed_documents(batch)
-            embeddings.extend(batch_embeddings)
-
-        return embeddings
-
     async def process_section(self, section_info: Dict, extract_section_content) -> int:
         section_name = section_info['sectionName']
         section_number = section_info['sectionNumber']
         chapter_number = section_info['chapterNumber']
         full_number = f"{chapter_number}.{section_number}"
 
-        content_dict = extract_section_content(self.html_document_id, full_number)
+        content_dict = extract_section_content(self.html_content, full_number)
         if "error" in content_dict:
             print(f"Error extracting content: {content_dict['error']}")
             return 0
@@ -132,9 +131,6 @@ class CodebookRetriever:
         thread_name = threading.current_thread().name
         print(f"[{thread_name}] Starting section {section_info['chapterNumber']}.{section_info['sectionNumber']}")
 
-        # loop = asyncio.get_event_loop()
-        # embeddings = await loop.run_in_executor(self.executor, self.embeddings.aembed_documents, chunks)
-        # embeddings = await self.embeddings.aembed_documents(chunks)
         embeddings = []
 
         for batch in chunked(chunks, 32):
@@ -160,7 +156,7 @@ class CodebookRetriever:
         await self.upsert_in_batches(points)
         print(f"[{thread_name}] Finished section {section_info['chapterNumber']}.{section_info['sectionNumber']}")
         return len(chunks)
-
+    
     async def process_all_sections(self, sections_list: List[Dict], extract_section_content) -> int:
         print("Processing all sections asynchronously...")
         tasks = [
@@ -204,16 +200,106 @@ class CodebookRetriever:
             offset = next_offset
 
         return all_payloads
+    
+    async def retrieve_from_section(self, retriever, query):
+        # Retrieves all chunks from the sections returned by the initial query
+
+        # Get initial search results
+        search_docs = await retriever.ainvoke(query)
+        doc_ids = [doc.metadata.get("_id") for doc in search_docs if doc.metadata.get("_id")]
+        all_points = []
+        
+        # If we have document IDs but missing metadata, fetch the complete points
+        if doc_ids:
+            # First try to get the complete points by their IDs
+            for doc_id in doc_ids:
+                try:
+                    point = await self.async_client.retrieve(
+                        collection_name=self.collection_name,
+                        ids=[doc_id],
+                        with_payload=True
+                    )
+                    if point and point[0].payload:
+                        chapter = point[0].payload.get("chapterNumber")
+                        section = point[0].payload.get("sectionNumber")
+                        
+                        if chapter is not None and section is not None:
+
+                            # Create filter to get chunks from the same section
+                            filter_ = Filter(
+                                must=[
+                                    FieldCondition(
+                                        key="chapterNumber",
+                                        match=MatchValue(value=chapter)
+                                    ),
+                                    FieldCondition(
+                                        key="sectionNumber",
+                                        match=MatchValue(value=section)
+                                    )
+                                ]
+                            )
+                            
+                            # Get all chunks from this section
+                            section_points, _ = await self.async_client.scroll(
+                                collection_name=self.collection_name,
+                                scroll_filter=filter_,
+                                limit=10,
+                                with_payload=True
+                            )
+                            print('Query: ', query)
+                            print(f"Found {len(section_points)} points in section {chapter}.{section}")
+                            all_points.extend(section_points)
+
+                except Exception as e:
+                    print(f"Error retrieving document {doc_id}: {e}")
+        
+        # Combine retrieved docs with their neighbors
+        context_texts = [doc.page_content for doc in search_docs if doc.page_content]
+        
+        # Add unique neighbors to context
+        for point in all_points:
+            if point.payload["text"] not in context_texts:
+                context_texts.append(point.payload["text"])
+        
+        # Combine all unique chunks as context
+        combined_context = "\n\n".join(context_texts)
+        
+        # Create the chunks array with required metadata
+        chunks = []
+        for point in all_points:
+            if point.payload:
+                chunk = {
+                    "id": point.id,
+                    "sectionNumber": point.payload.get("sectionNumber"),
+                    "chapterNumber": point.payload.get("chapterNumber"),
+                    "sectionName": point.payload.get("sectionName", ""),
+                    "text": point.payload.get("text", "")
+                }
+                chunks.append(chunk)
+        
+        # Return both the structured chunks and raw content
+        return {
+            "chunks": chunks,
+            "raw_content": combined_context
+        }
 
     async def query_codebook(self, question, structured_output):
         await self._ensure_collection_exists()
 
-        print("Querying Qdrant with LangChain retriever....")
+        # First get the top k chunks by similarity
         retriever = QdrantVectorStore(
             client=self.client,
             collection_name=self.collection_name,
             embedding=self.embeddings,
         ).as_retriever(search_kwargs={"k": 5})
+        
+        retriever_content = await self.retrieve_from_section(retriever, question)
+        raw_context = retriever_content['raw_content']
+        chunks = retriever_content['chunks']
+
+        # print('######################### RAW CONTEXT #########################')
+        # print(raw_context)
+        # print('######################### END RAW CONTEXT #########################')
 
         prompt = ChatPromptTemplate.from_template(
             """Answer the question based only on the following context:
@@ -224,10 +310,88 @@ class CodebookRetriever:
         )
 
         chain = (
-            {"context": retriever, "query": RunnablePassthrough()}
+            {"context": lambda _: raw_context, "query": RunnablePassthrough()}
             | prompt
-            | self.llm.with_structured_output(structured_output)
+            | self.openai_llm.with_structured_output(structured_output)
         )
 
         result = await chain.ainvoke(question)
-        return result
+        return result, {
+            "chunks": chunks,
+            "raw_context": raw_context
+        }
+    
+    async def query_codebook_permitted_uses(self, question, structured_output):
+        await self._ensure_collection_exists()
+
+        retriever = QdrantVectorStore(
+            client=self.client,
+            collection_name=self.collection_name,
+            embedding=self.embeddings,
+        ).as_retriever(search_kwargs={"k": 3})
+
+        # Step 1: Get the raw context first
+        retriever_content = await self.retrieve_from_section(retriever, question)
+        raw_context = retriever_content['raw_content']
+        chunks = retriever_content['chunks']
+
+        # print('######################### RAW CONTEXT #########################')
+        # print(raw_context)
+        # print('######################### END RAW CONTEXT #########################')
+
+        # Step 3: Use the processed context in the final chain
+        final_prompt = ChatPromptTemplate.from_template(
+            """
+            You are a helpful assistant that answers questions about a municipality's codebook.
+            Sometimes, the content has tables, which are formatted in markdown.
+            
+            <TABLE DIRECTIONS>
+                - Ensure you only rely on the content inside the table.
+                - Scan every single row.
+                - Do not make up any information.
+                - Always check if the zone code is a column header; if it is, ensure you only look for cell values in that column that align with the question.
+                - Ignore any columns that do not have the zone code as a header.
+                - If asked about a specific row or column, ensure you only rely on the content inside that row or column.
+                - If dealing with multiple tables, refer to that table's header row to determine which column to look at.
+            </TABLE DIRECTIONS>
+
+            <INDUSTRY EXPERT HINT>
+            The answer is always in the context. 
+            Permitted Uses and Special Exceptions are often found in the PERMITTED USES section, PERMITTED USES TABLE section, or in similar sections.
+            </INDUSTRY EXPERT HINT>
+
+            Answer the question based only on the following context:
+            {context}
+
+            Question: {query}
+            """
+        )
+
+        final_chain = (
+            {"context": lambda _: raw_context, "query": RunnablePassthrough()}
+            | final_prompt
+            | self.claude_llm.with_structured_output(structured_output)
+        )
+
+        result = await final_chain.ainvoke(question)
+        # print('######################### RESULT #########################')
+        # print(result)
+        # print('######################### END RESULT #########################')
+        return result, {
+            "chunks": chunks,
+            "raw_context": raw_context
+        }
+    
+    # result[structured_output],
+    # sources = {
+    #     chunks:[
+    #         {
+    #             id: "34534534534543",
+    #             sectionNumber: "154.040",
+    #             sectionName: "Residential",
+    #             chapterNumber: "154",
+    #             text: "chunk"
+    #         }
+    #     ],
+    #     raw_context: "..."
+    # }

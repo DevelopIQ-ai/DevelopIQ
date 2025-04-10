@@ -40,18 +40,16 @@ def init_state(state: DocumentState, config: RunnableConfig) -> DocumentState:
     
     # Create document ID from municipality and state
     document_id = f"{configuration.municipality.lower().replace(' ', '_')}_{configuration.state.lower()}"
-    
     # Return updated state with initial values
     return {
         **state,
-        "html_document_id": document_id,
+        "html_document_id": document_id
     }
 
 def get_alp_codebook(state: DocumentState, config: RunnableConfig) -> DocumentState:
     """Retrieve the HTML document."""
     configuration = get_config(config)
     document_id = state["html_document_id"]
-    
     print(configuration.test_mode)    # If not in cache, try to fetch from web (unless in test mode)
     if not configuration.test_mode:
         try:
