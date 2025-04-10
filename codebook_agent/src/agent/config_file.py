@@ -13,9 +13,9 @@ class Configuration:
     """The configuration for the municipal code retrieval agent."""
 
     # Municipal code retrieval parameters
-    municipality: str = "Richmond"
+    municipality: str = "Bargersville"
     state: str = "IN"
-    zone_code: str = "RR"
+    zone_code: str = "R-R"
     model_name: str = "gpt-4o-mini"
     test_mode: bool = False
     use_html_cache: bool = True
