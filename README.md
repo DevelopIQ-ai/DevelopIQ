@@ -24,6 +24,7 @@ The project is organized into two main components:
 - Node.js 18+ and npm/yarn for the frontend
 - Python 3.11+ and Poetry for the server
 - Docker (optional, for containerized deployment)
+- Langgraph
 
 ### Frontend Setup
 
@@ -38,13 +39,13 @@ The frontend will be available at http://localhost:3000
 
 ### Server Setup
 
+Use Langsmith. After setting up a project, input the langgraph environment variables from your project. Specifically LANGGRAPH_URL = {url} and LANGGRAPH_TRACEABLE_V2 = True. Then, you may run
+
 ```bash
-cd server
-poetry install
-poetry run uvicorn api.main:app --reload
+langgraph dev
 ```
 
-The API will be available at http://localhost:8000
+The API will be available at the Langgraph URL, which is at {url}
 
 ## 🛠️ Technologies
 
@@ -56,8 +57,7 @@ The API will be available at http://localhost:8000
 - **Data Validation**: Zod
 
 ### Backend
-- **Framework**: FastAPI
-- **Data Processing**: Pandas, BeautifulSoup4
+- **Framework**: Langgraph
 - **Async Operations**: asyncio, aiohttp
 - **Web Automation**: Playwright
 - **Agent System**: AgentQL, BrowserBase
