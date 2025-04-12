@@ -13,8 +13,7 @@ class Chunk(BaseModel):
 
 class Source(BaseModel):
     chunks: List[Chunk] = Field(description="List of chunks")
-    raw_context: str = Field(description="Raw context of the query")
-
+    section_list: List[str] = Field(description="List of section numbers")
 
 # Unit-based models
 class UnitsPerAcre(BaseModel):
