@@ -203,6 +203,9 @@ class CodebookRetriever:
     
     async def retrieve_from_section(self, retriever, query):
         # Retrieves all chunks from the sections returned by the initial query
+        
+        # Initialize unique sections set
+        unique_sections = set()
 
         # Get initial search results
         search_docs = await retriever.ainvoke(query)
@@ -224,6 +227,8 @@ class CodebookRetriever:
                         section = point[0].payload.get("sectionNumber")
                         
                         if chapter is not None and section is not None:
+                            # Add to unique sections
+                            unique_sections.add(f"{chapter}.{section}")
 
                             # Create filter to get chunks from the same section
                             filter_ = Filter(
@@ -277,10 +282,14 @@ class CodebookRetriever:
                 }
                 chunks.append(chunk)
         
+        # Convert unique sections to a sorted list
+        section_list = sorted(list(unique_sections))
+        
         # Return both the structured chunks and raw content
         return {
             "chunks": chunks,
-            "raw_content": combined_context
+            "raw_content": combined_context,
+            "section_list": section_list  # New field with section numbers
         }
 
     async def query_codebook(self, question, structured_output):
@@ -296,6 +305,7 @@ class CodebookRetriever:
         retriever_content = await self.retrieve_from_section(retriever, question)
         raw_context = retriever_content['raw_content']
         chunks = retriever_content['chunks']
+        section_list = retriever_content['section_list']
 
         # print('######################### RAW CONTEXT #########################')
         # print(raw_context)
@@ -318,7 +328,7 @@ class CodebookRetriever:
         result = await chain.ainvoke(question)
         return result, {
             "chunks": chunks,
-            "raw_context": raw_context
+            "section_list": section_list
         }
     
     async def query_codebook_permitted_uses(self, question, structured_output):
@@ -334,6 +344,7 @@ class CodebookRetriever:
         retriever_content = await self.retrieve_from_section(retriever, question)
         raw_context = retriever_content['raw_content']
         chunks = retriever_content['chunks']
+        section_list = retriever_content['section_list']
 
         # print('######################### RAW CONTEXT #########################')
         # print(raw_context)
@@ -379,19 +390,5 @@ class CodebookRetriever:
         # print('######################### END RESULT #########################')
         return result, {
             "chunks": chunks,
-            "raw_context": raw_context
+            "section_list": section_list
         }
-    
-    # result[structured_output],
-    # sources = {
-    #     chunks:[
-    #         {
-    #             id: "34534534534543",
-    #             sectionNumber: "154.040",
-    #             sectionName: "Residential",
-    #             chapterNumber: "154",
-    #             text: "chunk"
-    #         }
-    #     ],
-    #     raw_context: "..."
-    # }
