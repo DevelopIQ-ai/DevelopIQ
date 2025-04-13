@@ -1,14 +1,14 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
 import Link from "next/link"
-import Image from "next/image"
 import { Clock, Search, Zap, MousePointer } from "lucide-react"
 import { CalendarButton } from "@/components/calendar-button"
 import { useEffect, useRef } from "react"
 import "@/styles/animations.css"
 import { Button } from "@/components/ui/button"
 import { NavBar } from "@/components/nav-bar"
+import { FeatureCard } from "@/components/feature-card"
+import { CarouselImage } from "@/components/carousel-image"
 
 export default function Home() {
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
@@ -39,6 +39,64 @@ export default function Home() {
 
     return () => observer.disconnect()
   }, [])
+
+  const carouselImages = [
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rose-ZQTzVi9ahKDc5ATRSF6DKJVXR0vl4s.png",
+      alt: "Rose-Hulman"
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/thompsonthrift-6ef1QqM6OIUNoaNE2MjQWW2aic7eX6.png",
+      alt: "Thompson Thrift"
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/envoy-5xqmEFuIKXq7oapYzMCc5khDDV4HSD.png",
+      alt: "Envoy"
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cornell-HhYDsU2FCYvphKu1RDevOIkmCfUP6U.png",
+      alt: "Cornell University"
+    },
+    {
+      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tesla-cPt9iXNojJWWf9sMgmpQVN2rNyXt9k.png",
+      alt: "Tesla"
+    },
+    {
+      src: "/images/uf.png",
+      alt: "University of Florida"
+    },
+    {
+      src: "/images/xrph.png",
+      alt: "XRP Healthcare"
+    },
+    {
+      src: "/images/um.png",
+      alt: "University of Miami"
+    },
+  ];
+
+  const featureCards = [
+    {
+      title: "Get reports of aggregated public information instantly",
+      description: "Access comprehensive property data in seconds",
+      icon: <Zap className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "Never Miss a data point",
+      description: "Our AI ensures complete coverage of all relevant information",
+      icon: <Search className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "Save hours that you can spend on assessing more properties",
+      description: "Focus on analysis, not data gathering",
+      icon: <Clock className="h-6 w-6 text-primary" />
+    },
+    {
+      title: "Interact with your data seamlessly",
+      description: "Intuitive interface for exploring property information",
+      icon: <MousePointer className="h-6 w-6 text-primary" />
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col opacity-0 animate-fade-in">
@@ -87,66 +145,9 @@ export default function Home() {
             <div className="flex animate-scroll">
               {[...Array(2)].map((_, i) => (
                 <div key={i} className="flex items-center gap-32 px-16">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rose-ZQTzVi9ahKDc5ATRSF6DKJVXR0vl4s.png"
-                        alt="Rose-Hulman"
-                        fill
-                        sizes="(max-width: 96px) 100vw, 96px"
-                        className="object-contain opacity-50 hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">Rose-Hulman</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/thompsonthrift-6ef1QqM6OIUNoaNE2MjQWW2aic7eX6.png"
-                        alt="Thompson Thrift"
-                        fill
-                        sizes="(max-width: 96px) 100vw, 96px"
-                        className="object-contain opacity-50 hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">Thompson Thrift</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/envoy-5xqmEFuIKXq7oapYzMCc5khDDV4HSD.png"
-                        alt="Envoy"
-                        fill
-                        sizes="(max-width: 96px) 100vw, 96px"
-                        className="object-contain opacity-50 hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">Envoy</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cornell-HhYDsU2FCYvphKu1RDevOIkmCfUP6U.png"
-                        alt="Cornell University"
-                        fill
-                        sizes="(max-width: 96px) 100vw, 96px"
-                        className="object-contain opacity-50 hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">Cornell</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-24 h-24 relative">
-                      <Image
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tesla-cPt9iXNojJWWf9sMgmpQVN2rNyXt9k.png"
-                        alt="Tesla"
-                        fill
-                        sizes="(max-width: 96px) 100vw, 96px"
-                        className="object-contain opacity-50 hover:opacity-100 transition-opacity"
-                      />
-                    </div>
-                    <span className="text-sm text-muted-foreground">Tesla</span>
-                  </div>
+                  {carouselImages.map((image, index) => (
+                    <CarouselImage key={index} {...image} />
+                  ))}
                 </div>
               ))}
             </div>
@@ -166,35 +167,9 @@ export default function Home() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="bg-primary/5 border-primary/10 p-8 space-y-4 transition-all duration-300 hover:bg-primary/10 hover:scale-105">
-                <Zap className="h-6 w-6 text-primary" />
-                <h3 className="text-lg font-medium text-foreground">
-                  Get reports of aggregated public information instantly
-                </h3>
-                <p className="text-sm text-muted-foreground">Access comprehensive property data in seconds</p>
-              </Card>
-
-              <Card className="bg-primary/5 border-primary/10 p-8 space-y-4 transition-all duration-300 hover:bg-primary/10 hover:scale-105">
-                <Search className="h-6 w-6 text-primary" />
-                <h3 className="text-lg font-medium text-foreground">Never Miss a data point</h3>
-                <p className="text-sm text-muted-foreground">
-                  Our AI ensures complete coverage of all relevant information
-                </p>
-              </Card>
-
-              <Card className="bg-primary/5 border-primary/10 p-8 space-y-4 transition-all duration-300 hover:bg-primary/10 hover:scale-105">
-                <Clock className="h-6 w-6 text-primary" />
-                <h3 className="text-lg font-medium text-foreground">
-                  Save hours that you can spend on assessing more properties
-                </h3>
-                <p className="text-sm text-muted-foreground">Focus on analysis, not data gathering</p>
-              </Card>
-
-              <Card className="bg-primary/5 border-primary/10 p-8 space-y-4 transition-all duration-300 hover:bg-primary/10 hover:scale-105">
-                <MousePointer className="h-6 w-6 text-primary" />
-                <h3 className="text-lg font-medium text-foreground">Interact with your data seamlessly</h3>
-                <p className="text-sm text-muted-foreground">Intuitive interface for exploring property information</p>
-              </Card>
+              {featureCards.map((card, index) => (
+                <FeatureCard key={index} {...card} />
+              ))}
             </div>
           </div>
         </section>
