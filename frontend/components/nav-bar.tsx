@@ -1,4 +1,3 @@
-import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -11,10 +10,6 @@ export const NavBar = () => {
         </Link>
         </div>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Docs
-          </Link>
           <a
             href="mailto:kushbhuwalka@gmail.com"
             className="inline-flex h-10 items-center justify-center rounded-md bg-primary/5 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background"
