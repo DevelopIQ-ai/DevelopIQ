@@ -55,7 +55,7 @@ export default function Home() {
             Docs
           </Link>
           <a
-            href="mailto:kushbhuwalka@gmail.com"
+            href="mailto:kush@developiq.ai"
             className="inline-flex h-10 items-center justify-center rounded-md bg-primary/5 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background"
           >
             Contact Us

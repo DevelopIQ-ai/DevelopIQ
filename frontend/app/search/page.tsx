@@ -173,10 +173,8 @@ export default function GetStarted() {
         {/* Map container with rounded corners */}
         <div
           id="map"
-          className="rounded-xl overflow-hidden shadow-md mt-12"
+          className="rounded-xl overflow-hidden shadow-md mt-12 w-full aspect-square sm:h-[600px] sm:w-[600px]"
           style={{
-            height: "600px",
-            width: "600px",
             backgroundColor: "#ffffff",
           }}
         ></div>
