@@ -24,16 +24,13 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
   const [selectedValue, setSelectedValue] = useState<string | number | null>(null)
 
   useEffect(() => {
-    console.log('dev-info useEffect');
     if (developmentInfoError) {
-      console.log('dev-info useEffect: developmentInfoError is true');
       setError(developmentInfoError);
       setIsLoading(false);
       return;
     }
 
     if (developmentInfoLoading) {
-      console.log('dev-info useEffect: developmentInfoLoading is true');
       return
     }
 
@@ -41,19 +38,14 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
     // When loading finishes, fetch data if we don't have it yet
     if (!reportData && reportHandler) {
       try {
-        console.log(reportHandler)
         const data = reportHandler.getDevelopmentInfo()
-        console.log('dev-info useEffect: data', data);
         setReportData(data)
         setIsLoading(false)
-        console.log('dev-info useEffect: reportData and reportHandler are not null');
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load property data")
         setIsLoading(false)
-        console.log('dev-info useEffect: error');
       }
     } else if (!reportHandler) {
-      console.log('dev-info useEffect: reportHandler is null');
       setIsLoading(false)
     }
   }, [developmentInfoLoading, reportHandler, reportData, developmentInfoError])
