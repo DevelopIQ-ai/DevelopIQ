@@ -86,4 +86,3 @@ MIT License
 - Kush Bhuwalka (rhit-bhuwalk)
 - Logan McLaughlin (loganmclaughlin)
 - Evan Brooks (evanbrooks)
-

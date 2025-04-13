@@ -14,7 +14,7 @@ from langsmith import traceable
 from src.utils.alp_scraper import scrape_html_from_alp
 from src.utils.codebook_helpers import extract_table_of_contents, get_section_content
 from src.RAG.codebook_retriever import CodebookRetriever
-from src.agent.config_file import Configuration
+from agent_graphs.configurations import Configuration
 from dotenv import load_dotenv
 load_dotenv()
 

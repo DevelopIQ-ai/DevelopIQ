@@ -39,7 +39,7 @@ from src.RAG.query_models import (
     PermittedUses,
     PermittedUsesList
 )
-from src.agent.config_file import Configuration
+from agent_graphs.configurations import Configuration
 
 # Custom reducer function for dictionary merge
 def dict_merge(existing: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
@@ -120,7 +120,6 @@ async def building_requirements_node(state: Dict[str, Any], config: RunnableConf
         height_query = format_query(BUILDING_REQUIREMENTS_QUERIES["building_height"], zone_code=zone_code)
         height_result, height_source = await retriever.query_codebook(height_query, Feet)
         
-        # Query for lot coverage
         coverage_query = format_query(BUILDING_REQUIREMENTS_QUERIES["lot_coverage"], zone_code=zone_code)
         coverage_result, coverage_source = await retriever.query_codebook(coverage_query, Percentage)
         
