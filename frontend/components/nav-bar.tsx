@@ -6,7 +6,9 @@ export const NavBar = () => {
   return (
     <header className="w-full mx-auto px-4 py-2 flex justify-between items-center fixed top-0 left-0 right-0 z-50 bg-background backdrop-blur-sm header-nav shadow-sm">
       <div className="flex items-center gap-2">
+        <Link href="/">
           <Image src="/logos/developiq_logo_large.png" alt="DevelopIQ Logo" width={150} height={50} />
+        </Link>
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
