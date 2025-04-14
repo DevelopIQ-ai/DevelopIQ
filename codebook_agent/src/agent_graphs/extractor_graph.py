@@ -18,6 +18,7 @@ from src.utils.codebook_helpers import extract_table_of_contents, get_section_co
 from agent_graphs.configurations import ExtractorConfiguration
 from qdrant_wrapper.qdrant_base import DocumentStatus
 from qdrant_wrapper.qdrant_ingestor import QdrantIngestor
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -38,7 +39,6 @@ def get_config(config: RunnableConfig) -> ExtractorConfiguration:
 
 def create_document_id(municipality: str, state: str) -> str:
     return f"{municipality.lower().replace(' ', '_')}_{state.lower()}"
-
 
 def fetch_from_s3(document_id: str) -> Optional[str]:
     """Fetch HTML document from S3."""
@@ -80,13 +80,10 @@ async def router_func(state: ExtractorState) -> Literal["get_codebook_alp", "fin
     codebook_exists = await qclient.document_exists_and_is_indexed(state["document_id"])
     print("CODEBOOK EXISTS: ", codebook_exists)
     if codebook_exists is DocumentStatus.INDEXED:
-        print("INDEX INDEX INDEX")
         return "final_node"
     elif codebook_exists is DocumentStatus.UDC:
-        print("UDC UDC UDC")
         return "final_node"
     elif codebook_exists is DocumentStatus.EMPTY:
-        print("EMPTY EMPTY EMPTY")
         return "final_node"
     elif codebook_exists is DocumentStatus.NOT_EXISTS:
         print("NOT EXISTS NOT EXISTS NOT EXISTS")
@@ -99,13 +96,9 @@ async def get_codebook_alp(state: ExtractorState, config: RunnableConfig) -> Ext
     """Retrieve the HTML document from S3 or by scraping if not available in S3."""
     configuration = get_config(config)
     document_id = state["document_id"]
-    
-    # Try to get document from S3 first
     document_content = fetch_from_s3(document_id)
     if document_content is not None:
         return {**state, "document_content": document_content}
-    
-    # If S3 fetch failed, try direct scraping
     try:
         html_url = scrape_html_from_alp(state["municipality"], state["state_code"])
         response = requests.get(html_url)
@@ -170,7 +163,6 @@ async def get_section_names_alp(state: ExtractorState, config: RunnableConfig) -
     
     print(f"Found {len(section_list)} sections in {selection['selected_chapter']}")
     return {**state, "section_list": section_list}
-
 
 async def chunk_alp(state: ExtractorState, config: RunnableConfig) -> ExtractorState:
     """Chunk the sections and ingest them into Qdrant."""

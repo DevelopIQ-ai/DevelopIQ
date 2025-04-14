@@ -26,7 +26,6 @@ class QdrantBase:
     """Base class for Qdrant operations with shared functionality."""
     
     def __init__(self):
-        
         # Initialize embeddings
         self.async_client = AsyncQdrantClient(
             url=os.getenv("QDRANT_URL"),
@@ -36,6 +35,7 @@ class QdrantBase:
             url=os.getenv("QDRANT_URL"),
             api_key=os.getenv("QDRANT_API_KEY"),
         )
+        self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
     
     async def document_exists_and_is_indexed(self, document_id: str) -> DocumentStatus:
         """Check if a collection exists and has indexed documents."""

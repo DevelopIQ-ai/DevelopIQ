@@ -18,7 +18,8 @@
     "langchain-anthropic>=0.2.1"
   ],
   "graphs": {
-    "extractor_graph": "./src/agent_graphs/extractor_graph.py:graph"
+    "extractor_graph": "./src/agent_graphs/extractor_graph.py:graph",
+    "querier_graph": "./src/agent_graphs/querier_graph.py:graph"
   },
   "env": ".env"
 }

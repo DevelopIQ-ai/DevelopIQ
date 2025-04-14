@@ -36,8 +36,8 @@ BUILDING_PLACEMENT_QUERIES = {
 
 # Building Requirements Queries
 BUILDING_REQUIREMENTS_QUERIES = {
-    "building_height": "What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.",
-    "lot_coverage": "What is the maximum lot coverage allowed in {zone_code} zone? Provide the percentage."
+    "maximum_building_height": "What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.",
+    "maximum_lot_coverage": "What is the maximum lot coverage allowed in {zone_code} zone? Provide the percentage."
 }
 
 # Landscaping Requirements Queries
