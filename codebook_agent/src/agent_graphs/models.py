@@ -15,29 +15,6 @@ class Source(BaseModel):
     chunks: List[Chunk] = Field(description="List of chunks")
     section_list: List[str] = Field(description="List of section numbers")
 
-class Feet(BaseModel):
-    feet: str = Field(description="Measurement in feet")
+class NumericalAnswer(BaseModel):
+    answer: str = Field(description="Answer to the question. This should be a number followed by the unit of measurement.")
 
-class FeetWithSource(BaseModel):
-    feet: Feet = Field(description="Measurement in feet")
-    source: Source = Field(description="Source of the measurement in feet")
-  
-
-class Percentage(BaseModel):
-    percentage: str = Field(description="Measurement in percentage")
-
-class PercentageWithSource(BaseModel):
-    percentage: Percentage = Field(description="Measurement in percentage")
-    source: Source = Field(description="Source of the measurement in percentage")
-  
-class BuildingRequirements(BaseModel):
-    maximum_building_height: Optional[FeetWithSource] = Field(None, alias="Maximum Building Height")
-    maximum_lot_coverage: Optional[PercentageWithSource] = Field(None, alias="Maximum Lot Coverage")
-    
-    class Config:
-        populate_by_name = True
-        arbitrary_types_allowed = True
-
-class QueryResult(BaseModel):
-    building_requirements: Optional[BuildingRequirements] = None
-    errors: Dict[str, str] = Field(default_factory=dict)

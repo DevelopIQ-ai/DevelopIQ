@@ -40,7 +40,6 @@ class QdrantIngestor(QdrantBase):
             separators=[SEPARATOR], 
             keep_separator=False
         )
-        self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
         self.document_id = document_id
         self.document_content = document_content
 
