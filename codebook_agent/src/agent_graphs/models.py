@@ -15,6 +15,6 @@ class Source(BaseModel):
     chunks: List[Chunk] = Field(description="List of chunks")
     section_list: List[str] = Field(description="List of section numbers")
 
-class NumericalAnswer(BaseModel):
-    answer: str = Field(description="Answer to the question. This should be a number followed by the unit of measurement.")
+class Answer(BaseModel):
+    answer: str = Field(description="Answer to the question.")
 

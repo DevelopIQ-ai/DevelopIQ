@@ -220,86 +220,86 @@ async def building_requirements_node(state: Dict[str, Any], config: RunnableConf
 #             }
 #         }
 
-# # Parking requirements query node
-# async def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
-#     """Query parking requirements from the municipal code."""
-#     html_document_id = state["html_document_id"]
-#     zone_code = state["zone_code"]
+# Parking requirements query node
+async def parking_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query parking requirements from the municipal code."""
+    html_document_id = state["html_document_id"]
+    zone_code = state["zone_code"]
     
-#     # Create a new retriever instance for this node
-#     retriever = get_retriever(html_document_id)
-#     if not retriever:
-#         return {
-#             "errors": {
-#                 "parking_requirements": "Failed to get retriever"
-#             }
-#         }
+    # Create a new retriever instance for this node
+    retriever = get_retriever(html_document_id)
+    if not retriever:
+        return {
+            "errors": {
+                "parking_requirements": "Failed to get retriever"
+            }
+        }
     
-#     try:
-#         # Query for aisle width
-#         aisle_width_query = format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code)
-#         aisle_width_result, aisle_width_source = await retriever.query_codebook(aisle_width_query, AisleWidth)
+    try:
+        # Query for aisle width
+        aisle_width_query = format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code)
+        aisle_width_result, aisle_width_source = await retriever.query_codebook(aisle_width_query, AisleWidth)
         
-#         # Query for curbing requirements
-#         curbing_query = format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code)
-#         curbing_result, curbing_source = await retriever.query_codebook(curbing_query, SummaryRequirement)
+        # Query for curbing requirements
+        curbing_query = format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code)
+        curbing_result, curbing_source = await retriever.query_codebook(curbing_query, SummaryRequirement)
         
-#         # Query for striping requirements
-#         striping_query = format_query(PARKING_QUERIES["striping_requirements"], zone_code=zone_code)
-#         striping_result, striping_source = await retriever.query_codebook(striping_query, SummaryRequirement)
+        # Query for striping requirements
+        striping_query = format_query(PARKING_QUERIES["striping_requirements"], zone_code=zone_code)
+        striping_result, striping_source = await retriever.query_codebook(striping_query, SummaryRequirement)
         
-#         # Query for drainage requirements
-#         drainage_query = format_query(PARKING_QUERIES["drainage_requirements"], zone_code=zone_code)
-#         drainage_result, drainage_source = await retriever.query_codebook(drainage_query, SummaryRequirement)
+        # Query for drainage requirements
+        drainage_query = format_query(PARKING_QUERIES["drainage_requirements"], zone_code=zone_code)
+        drainage_result, drainage_source = await retriever.query_codebook(drainage_query, SummaryRequirement)
         
-#         # Query for required parking stalls
-#         stalls_query = format_query(PARKING_QUERIES["parking_stalls"], zone_code=zone_code)
-#         stalls_result, stalls_source = await retriever.query_codebook(stalls_query, SummaryRequirement)
+        # Query for required parking stalls
+        stalls_query = format_query(PARKING_QUERIES["parking_stalls"], zone_code=zone_code)
+        stalls_result, stalls_source = await retriever.query_codebook(stalls_query, SummaryRequirement)
         
-#         # Create Pydantic model for parking requirements
-#         parking_requirements = ParkingRequirements(
-#             **{
-#                 "Minimum Aisle Width": {
-#                     "feet": aisle_width_result,
-#                     "source": aisle_width_source
-#                 },
-#                 "Curbing Requirements": {
-#                     "summary": curbing_result,
-#                     "source": curbing_source
-#                 },
-#                 "Striping Requirements": {
-#                     "summary": striping_result,
-#                     "source": striping_source
-#                 },
-#                 "Drainage Requirements": {
-#                     "summary": drainage_result,
-#                     "source": drainage_source
-#                 },
-#                 "Parking Stalls Required": {
-#                     "summary": stalls_result,
-#                     "source": stalls_source
-#                 }
-#             }
-#         )
+        # Create Pydantic model for parking requirements
+        parking_requirements = ParkingRequirements(
+            **{
+                "Minimum Aisle Width": {
+                    "feet": aisle_width_result,
+                    "source": aisle_width_source
+                },
+                "Curbing Requirements": {
+                    "summary": curbing_result,
+                    "source": curbing_source
+                },
+                "Striping Requirements": {
+                    "summary": striping_result,
+                    "source": striping_source
+                },
+                "Drainage Requirements": {
+                    "summary": drainage_result,
+                    "source": drainage_source
+                },
+                "Parking Stalls Required": {
+                    "summary": stalls_result,
+                    "source": stalls_source
+                }
+            }
+        )
         
-#         # Return only the requirements we're updating
-#         return {
-#             "requirements": {
-#                 "parking_requirements": parking_requirements.model_dump()
-#             }
-#         }
+        # Return only the requirements we're updating
+        return {
+            "requirements": {
+                "parking_requirements": parking_requirements.model_dump()
+            }
+        }
     
-#     except Exception as e:
-#         # Handle errors
-#         error_message = f"Error querying parking requirements: {str(e)}"
-#         print(error_message)
+    except Exception as e:
+        # Handle errors
+        error_message = f"Error querying parking requirements: {str(e)}"
+        print(error_message)
         
-#         # Return only the error we're adding
-#         return {
-#             "errors": {
-#                 "parking_requirements": error_message
-#             }
-#         }
+        # Return only the error we're adding
+        return {
+            "errors": {
+                "parking_requirements": error_message
+            }
+        }
 
 # # Lot requirements query node
 # async def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
