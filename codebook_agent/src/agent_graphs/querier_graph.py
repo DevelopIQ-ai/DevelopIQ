@@ -43,6 +43,7 @@ def init_state(state: QuerierState, config: RunnableConfig) -> QuerierState:
         **state,
         "results": {}
     }
+
 async def building_requirements_node(state: QuerierState, config: RunnableConfig) -> QuerierState:
     """Query building requirements from the municipal code."""
     document_id = state["document_id"]
