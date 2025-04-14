@@ -1,17 +1,20 @@
 """Query graph for municipal code data extraction."""
 
 from __future__ import annotations
-import os
-import operator
-from typing import Dict, Any, Annotated, TypedDict, Optional
+from typing import Dict, Any, TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from langchain_core.runnables import RunnableConfig
 import json
 from agent_graphs.queries import (
     BUILDING_REQUIREMENTS_QUERIES,
+    PARKING_QUERIES,
+    SIGNAGE_QUERIES,
+    LOT_REQUIREMENTS_QUERIES,
+    BUILDING_PLACEMENT_QUERIES,
+    LANDSCAPING_QUERIES,
     format_query
 )
-from agent_graphs.models import NumericalAnswer
+from agent_graphs.models import Answer
 from agent_graphs.configurations import QuerierConfiguration
 from qdrant_wrapper.qdrant_retriever import QdrantRetriever
 
@@ -28,7 +31,7 @@ def dict_merge(existing: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
 class QuerierState(TypedDict):
     document_id: str
     zone_code: str
-    results: Dict[str, Dict[str, Any]]
+    results: Annotated[Dict[str, Dict[str, Any]], dict_merge]
 
 def get_config(config: RunnableConfig) -> QuerierConfiguration:
     """Get the full configuration object."""
@@ -43,7 +46,7 @@ def init_state(state: QuerierState, config: RunnableConfig) -> QuerierState:
         **state,
         "results": {}
     }
-
+    
 async def building_requirements_node(state: QuerierState, config: RunnableConfig) -> QuerierState:
     """Query building requirements from the municipal code."""
     document_id = state["document_id"]
@@ -63,46 +66,167 @@ async def building_requirements_node(state: QuerierState, config: RunnableConfig
     query_vars = list(queries.keys())
     
     # Execute queries in parallel as before
-    raw_results = await retriever.execute_queries_in_parallel(questions, NumericalAnswer)
-    
-    # Reorganize results into a dictionary using the query types
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
     results = {
         query_var: raw_results[i] 
         for i, query_var in enumerate(query_vars)
     }
     return {
+        "results": {
+            "building_requirements": results
+        }
+    }
+
+async def parking_node(state: QuerierState, config: RunnableConfig) -> Dict[str, Any]:
+    """Query parking requirements from the municipal code."""
+    document_id = state["document_id"]
+    zone_code = state["zone_code"]  
+   
+    queries = {
+        "aisle_width": format_query(PARKING_QUERIES["aisle_width"], zone_code=zone_code),
+        "curbing_requirements": format_query(PARKING_QUERIES["curbing_requirements"], zone_code=zone_code),
+        "striping_requirements": format_query(PARKING_QUERIES["striping_requirements"], zone_code=zone_code),
+        "drainage_requirements": format_query(PARKING_QUERIES["drainage_requirements"], zone_code=zone_code),
+        "parking_stalls": format_query(PARKING_QUERIES["parking_stalls"], zone_code=zone_code)
+    }
+    
+    retriever = QdrantRetriever(document_id=document_id)
+    await retriever.initialize()
+
+    # Get the questions list and keep track of which index corresponds to which query type
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    # Execute queries in parallel as before
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    return {
+        "results": {
+            "parking_requirements": results
+        }
+    }
+
+async def signs_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query signage requirements from the municipal code."""
+    document_id = state["document_id"]
+    zone_code = state["zone_code"]  
+   
+    # Create a dictionary mapping query types to their queries
+    queries = {
+        "permitted_signs": format_query(SIGNAGE_QUERIES["permitted_signs"], zone_code=zone_code),
+        "prohibited_signs": format_query(SIGNAGE_QUERIES["prohibited_signs"], zone_code=zone_code),
+        "design_requirements": format_query(SIGNAGE_QUERIES["design_requirements"], zone_code=zone_code)
+    }
+    
+    retriever = QdrantRetriever(document_id=document_id)
+    await retriever.initialize()
+
+    # Get the questions list and keep track of which index corresponds to which query type
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    # Execute queries in parallel as before
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    return {
+        "results": {
+            "signage_requirements": results
+        }
+    }
+   
+async def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query lot requirements from the municipal code."""
+    document_id = state["document_id"]
+    zone_code = state["zone_code"]
+    
+    queries = {
+        "density": format_query(LOT_REQUIREMENTS_QUERIES["density"], zone_code=zone_code),
+        "lot_size": format_query(LOT_REQUIREMENTS_QUERIES["lot_size"], zone_code=zone_code),
+        "lot_width": format_query(LOT_REQUIREMENTS_QUERIES["lot_width"], zone_code=zone_code),
+        "lot_frontage": format_query(LOT_REQUIREMENTS_QUERIES["lot_frontage"], zone_code=zone_code),
+        "living_area": format_query(LOT_REQUIREMENTS_QUERIES["living_area"], zone_code=zone_code)
+    }   
+    
+    # Create a new retriever instance for this node
+    retriever = QdrantRetriever(document_id=document_id)
+    await retriever.initialize()
+
+async def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query building placement requirements from the municipal code."""
+    document_id = state["document_id"]
+    zone_code = state["zone_code"]
+    
+    # Create a new retriever instance for this node
+    retriever = QdrantRetriever(document_id=document_id)
+    await retriever.initialize()
+
+    queries = {
+        "front_setback": format_query(BUILDING_PLACEMENT_QUERIES["front_setback"], zone_code=zone_code),
+        "street_side_setback": format_query(BUILDING_PLACEMENT_QUERIES["street_side_setback"], zone_code=zone_code),
+        "side_yard_setback": format_query(BUILDING_PLACEMENT_QUERIES["side_yard_setback"], zone_code=zone_code),
+        "rear_setback": format_query(BUILDING_PLACEMENT_QUERIES["rear_setback"], zone_code=zone_code),
+        "accessory_building_setback": format_query(BUILDING_PLACEMENT_QUERIES["accessory_building_setback"], zone_code=zone_code)
+    }
+
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    return {
+        "results": {
+            "building_placement_requirements": results
+        }
+    }
+
+async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query landscaping requirements from the municipal code."""
+    document_id = state["document_id"]
+    zone_code = state["zone_code"]
+    
+    # Create a new retriever instance for this node
+    retriever = QdrantRetriever(document_id=document_id)
+    await retriever.initialize()
+    
+    queries = {
+        "plant_sizes": format_query(LANDSCAPING_QUERIES["plant_sizes"], zone_code=zone_code),
+        "landscape_plan_review": format_query(LANDSCAPING_QUERIES["landscape_plan_review"], zone_code=zone_code),
+        "species_variation": format_query(LANDSCAPING_QUERIES["species_variation"], zone_code=zone_code),
+        "performance_guarantee": format_query(LANDSCAPING_QUERIES["performance_guarantee"], zone_code=zone_code)
+    }
+    
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    return {
+        "results": {
+            "landscaping_requirements": results
+        }
+    }
+    
+
+def combine_results_node(state: QuerierState) -> Dict[str, Any]:
+    """Combine results from parallel nodes into a consolidated schema."""
+    # Get all requirements and errors
+    results = state.get("results", {})
+    return {
         **state,
         "results": results
     }
-# def combine_results_node(state: Dict[str, Any]) -> Dict[str, Any]:
-#     """Combine results from parallel nodes into a consolidated schema."""
-#     # Get all requirements and errors
-#     requirements = state.get("requirements", {})
-#     errors = state.get("errors", {})
-    
-#     try:
-#         # Create the final QueryResult with all nested data
-#         result = QueryResult(
-#             building_requirements=requirements.get("building_requirements"),
-#             errors=errors
-#         )
-        
-#         # Return the model as a dictionary
-#         return {
-#             "html_document_id": state.get("html_document_id", ""),
-#             "zone_code": state.get("zone_code", ""),
-#             "result": result.model_dump()
-#         }
-#     except Exception as e:
-#         # If validation fails, add error
-#         error_message = f"Error validating results: {str(e)}"
-#         print(error_message)
-        
-#         return {
-#             "html_document_id": state.get("html_document_id", ""),
-#             "zone_code": state.get("zone_code", ""),
-#             "errors": {**errors, "validation": error_message}
-#         }
 
 # Create the query graph
 def create_graph() -> StateGraph:
@@ -112,21 +236,35 @@ def create_graph() -> StateGraph:
     # Add nodes
     querier_graph.add_node("init_state_node", init_state)
     querier_graph.add_node("building_requirements_node", building_requirements_node)
-    # graph.add_node("combine_results_node", combine_results_node)
+    querier_graph.add_node("parking_node", parking_node)
+    querier_graph.add_node("signs_node", signs_node)
+    querier_graph.add_node("lot_requirements_node", lot_requirements_node)
+    querier_graph.add_node("building_placement_node", building_placement_node)
+    querier_graph.add_node("landscaping_requirements_node", landscaping_requirements_node)
+    querier_graph.add_node("combine_results_node", combine_results_node)
     
     # Add edges
     querier_graph.add_edge(START, "init_state_node")    
     querier_graph.add_edge("init_state_node", "building_requirements_node")
-    querier_graph.add_edge("building_requirements_node", END)
-    # graph.add_edge("building_requirements_node", "combine_results_node")
-    # graph.add_edge("combine_results_node", END)
+    querier_graph.add_edge("init_state_node", "parking_node")
+    querier_graph.add_edge("init_state_node", "signs_node")
+    querier_graph.add_edge("init_state_node", "lot_requirements_node")
+    querier_graph.add_edge("init_state_node", "building_placement_node")
+    querier_graph.add_edge("init_state_node", "landscaping_requirements_node")
+    querier_graph.add_edge("building_requirements_node", "combine_results_node")
+    querier_graph.add_edge("parking_node", "combine_results_node")
+    querier_graph.add_edge("signs_node", "combine_results_node")
+    querier_graph.add_edge("lot_requirements_node", "combine_results_node")
+    querier_graph.add_edge("building_placement_node", "combine_results_node")
+    querier_graph.add_edge("landscaping_requirements_node", "combine_results_node")
+    querier_graph.add_edge("combine_results_node", END)
     return querier_graph.compile()
 
 querier_graph = create_graph()
 graph = querier_graph
 # Main execution function
 def run_query(
-    html_document_id: str,
+    document_id: str,
     zone_code: str,
     model_name: str = "gpt-4o-mini"
 ) -> Dict[str, Any]:
@@ -141,10 +279,9 @@ def run_query(
     
     # Initial state
     initial_state = {
-        "html_document_id": html_document_id,
+        "document_id": document_id,
         "zone_code": zone_code,
-        "requirements": {},
-        "errors": {}
+        "results": {}
     }
     
     # Run the graph
@@ -155,7 +292,7 @@ def run_query(
 
 if __name__ == "__main__":
     results = run_query(
-        html_document_id="bargersville_in",
+        document_id="bargersville_in",
         zone_code="RR"
     )
     print("\nDevelopment Requirements:")

@@ -90,7 +90,6 @@ async def answer_matching_evaluator(outputs: dict, reference_outputs: dict) -> d
         return {"key": "answer_matching", "score": None, "error": str(e)}
 
 
-
 # Input transformation function
 def transform_dataset_inputs(inputs: dict) -> dict:
     """Transform dataset inputs to the format expected by the node."""
