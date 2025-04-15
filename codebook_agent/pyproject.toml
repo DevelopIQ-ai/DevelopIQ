@@ -23,6 +23,7 @@ langchain-qdrant = "^0.2.0"
 nest-asyncio = "^1.6.0"
 lxml = "^5.3.2"
 openevals = "^0.0.18"
+pandas = "^2.2.3"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=1.11.1"

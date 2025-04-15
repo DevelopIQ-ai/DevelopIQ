@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Dict, Any, TypedDict, Annotated
+from RAG.query_models import PermittedUses
 from langgraph.graph import StateGraph, START, END
 from langchain_core.runnables import RunnableConfig
 import json
@@ -12,7 +13,9 @@ from agent_graphs.queries import (
     LOT_REQUIREMENTS_QUERIES,
     BUILDING_PLACEMENT_QUERIES,
     LANDSCAPING_QUERIES,
-    format_query
+    PERMITTED_USES_QUERIES,
+    format_query,
+
 )
 from agent_graphs.models import Answer
 from agent_graphs.configurations import QuerierConfiguration
@@ -218,54 +221,34 @@ async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableC
         }
     }
     
-# # Permitted uses query node
-# async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
-#     """Query permitted uses from the municipal code."""
-#     html_document_id = state["html_document_id"]
-#     zone_code = state["zone_code"]
+# Permitted uses query node
+async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+    """Query permitted uses from the municipal code."""
+    html_document_id = state["html_document_id"]
+    zone_code = state["zone_code"]
     
-#     # Create a new retriever instance for this node
-#     retriever = get_retriever(html_document_id)
-#     if not retriever:
-#         return {
-#             "errors": {
-#                 "permitted_uses": "Failed to get retriever"
-#             }
-#         }
+    # Create a new retriever instance for this node
+    retriever = QdrantRetriever(document_id=html_document_id)
+    await retriever.initialize()
     
-#     try:
-#         # Query for permitted uses
-#         permitted_uses_query = format_query(PERMITTED_USES_QUERIES["permitted_uses"], zone_code=zone_code)
-#         permitted_uses_result, permitted_uses_source = await retriever.query_codebook_permitted_uses(permitted_uses_query, PermittedUsesList)
-
-#         # Create Pydantic model for permitted uses
-#         permitted_uses = PermittedUses(
-#             **{
-#                 "Permitted Uses": {
-#                     "permitted_uses": permitted_uses_result,
-#                     "source": permitted_uses_source
-#                 }
-#             }
-#         )
-        
-#         # Return only the requirements we're updating
-#         return {
-#             "requirements": {
-#                 "permitted_uses": permitted_uses.model_dump()
-#             }
-#         }
-
-#     except Exception as e:
-#         error_message = f"Error querying permitted uses: {str(e)}"
-#         print(error_message)
-        
-#         # Return only the error we're adding
-#         return {
-#             "errors": {
-#                 "permitted_uses": error_message
-#             }
-#         }
-
+    queries = {
+        "permitted_uses": format_query(PERMITTED_USES_QUERIES["permitted_uses"], zone_code=zone_code)
+    }
+    
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    
+    return {
+        "results": {
+            "permitted_uses": results
+        }
+    }
 
 def combine_results_node(state: QuerierState) -> Dict[str, Any]:
     """Combine results from parallel nodes into a consolidated schema."""
