@@ -226,7 +226,8 @@ async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> 
     """Query permitted uses from the municipal code."""
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
-    
+    configs = get_config(config)
+    model_name = configs.model_name
     # Create a new retriever instance for this node
     retriever = QdrantRetriever(document_id=html_document_id)
     await retriever.initialize()
@@ -257,7 +258,7 @@ async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> 
     questions = list(queries.values())
     query_vars = list(queries.keys())
     
-    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    raw_results = await retriever.send_query(questions[0], Answer, custom_assistant_prompt)
     results = {
         query_var: raw_results[i] 
         for i, query_var in enumerate(query_vars)
