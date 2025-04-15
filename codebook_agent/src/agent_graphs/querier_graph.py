@@ -218,6 +218,54 @@ async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableC
         }
     }
     
+# # Permitted uses query node
+# async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+#     """Query permitted uses from the municipal code."""
+#     html_document_id = state["html_document_id"]
+#     zone_code = state["zone_code"]
+    
+#     # Create a new retriever instance for this node
+#     retriever = get_retriever(html_document_id)
+#     if not retriever:
+#         return {
+#             "errors": {
+#                 "permitted_uses": "Failed to get retriever"
+#             }
+#         }
+    
+#     try:
+#         # Query for permitted uses
+#         permitted_uses_query = format_query(PERMITTED_USES_QUERIES["permitted_uses"], zone_code=zone_code)
+#         permitted_uses_result, permitted_uses_source = await retriever.query_codebook_permitted_uses(permitted_uses_query, PermittedUsesList)
+
+#         # Create Pydantic model for permitted uses
+#         permitted_uses = PermittedUses(
+#             **{
+#                 "Permitted Uses": {
+#                     "permitted_uses": permitted_uses_result,
+#                     "source": permitted_uses_source
+#                 }
+#             }
+#         )
+        
+#         # Return only the requirements we're updating
+#         return {
+#             "requirements": {
+#                 "permitted_uses": permitted_uses.model_dump()
+#             }
+#         }
+
+#     except Exception as e:
+#         error_message = f"Error querying permitted uses: {str(e)}"
+#         print(error_message)
+        
+#         # Return only the error we're adding
+#         return {
+#             "errors": {
+#                 "permitted_uses": error_message
+#             }
+#         }
+
 
 def combine_results_node(state: QuerierState) -> Dict[str, Any]:
     """Combine results from parallel nodes into a consolidated schema."""

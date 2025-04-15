@@ -35,7 +35,7 @@ class QuerierConfiguration:
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None
-    ) -> ExtractorConfiguration:
+    ) -> QuerierConfiguration:
         """Create a Configuration instance from a RunnableConfig object."""
         configurable = (config.get("configurable") or {}) if config else {}
         _fields = {f.name for f in fields(cls) if f.init}
