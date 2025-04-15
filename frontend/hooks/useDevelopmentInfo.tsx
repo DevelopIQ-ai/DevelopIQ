@@ -128,7 +128,7 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                         },
                         body: JSON.stringify({ state: stateCode, municipality, zone_code: zoneCode })
                     })
-
+                    console.log('response', response);
                     const result = await response.json();
                     // Set development info in the report handler
                     if (result.status === 'success') {
