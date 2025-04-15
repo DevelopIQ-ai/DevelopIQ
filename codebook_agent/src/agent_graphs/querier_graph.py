@@ -227,7 +227,6 @@ async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> 
     html_document_id = state["html_document_id"]
     zone_code = state["zone_code"]
     configs = get_config(config)
-    model_name = configs.model_name
     # Create a new retriever instance for this node
     retriever = QdrantRetriever(document_id=html_document_id)
     await retriever.initialize()
