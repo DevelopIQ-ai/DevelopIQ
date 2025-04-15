@@ -77,7 +77,10 @@ async def router_func(state: ExtractorState) -> Literal["get_codebook_alp", "fin
     qclient = QdrantBase()
     if not state["document_id"]:
         raise ValueError("Missing required keys: document_id")
-    codebook_exists = await qclient.document_exists_and_is_indexed(state["document_id"])
+    try:
+        codebook_exists = await qclient.document_exists_and_is_indexed(state["document_id"])
+    except Exception as e:
+        raise Exception(f"Error checking if document exists and is indexed: {e}")
     print("CODEBOOK EXISTS: ", codebook_exists)
     if codebook_exists is DocumentStatus.INDEXED:
         return "final_node"

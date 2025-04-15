@@ -49,6 +49,6 @@ class QdrantBase:
             if stats.count < 10:
                 return DocumentStatus.UDC
             return DocumentStatus.INDEXED
-        except Exception:
-            return False
+        except Exception as e:
+            raise Exception(f"Error checking if document exists and is indexed: {e}")
     
