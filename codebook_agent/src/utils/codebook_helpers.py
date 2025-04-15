@@ -1,14 +1,8 @@
-import json
 from bs4 import BeautifulSoup
 import re
-import os
-import uuid
-import pandas as pd
 import math
 from io import StringIO
 import pandas as pd
-import csv
-import numpy as np
 from tabulate import tabulate
 
 def parse_table(table_element, output_dir="./tables"):
