@@ -4,7 +4,6 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 interface DevelopmentInfoResult {
     developmentInfoLoading: boolean;
     developmentInfoError: string | null;
-    submitFeedback: (fieldName: string, feedback: string) => Promise<boolean>;
 }
 
 export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, generalPropertyInfoError: string | null): DevelopmentInfoResult => {
@@ -102,23 +101,6 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     }
                 }
 
-                // console.log("INPUTS for development info API:", stateCode, municipality, zoneCode);
-                // console.log("Fetching development info - this may take several minutes...");
-                
-                // // MOCK API CALL
-                // console.log("STARTING mock development info API call (10 second delay)");
-                // await new Promise(resolve => setTimeout(resolve, 10000));
-                // console.log("COMPLETED mock development info API call");
-
-                // // Mock API response
-                // const result = {
-                //     status: 'success',
-                //     requirements: {
-                //         "building_placement_requirements": {}
-                //     },
-                //     error: null
-                // };
-
                 if (stateCode && municipality && zoneCode) {
                     console.log("Fetching development info from API");
                     const response = await fetch('/api/development-info', {
@@ -130,23 +112,16 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     })
                     console.log('response', response);
                     const result = await response.json();
-                    // Set development info in the report handler
                     if (result.status === 'success') {
-                        
-                       
-                        const developmentInfo = {"requirements": result.requirements.requirements };
-                        
-                        // Save development info to local storage
+                        const developmentInfo = result.requirements
                         try {
                             localStorage.setItem('developmentInfo', JSON.stringify(developmentInfo));
                         } catch (storageError) {
                             console.error('Failed to save development info to local storage:', storageError);
                         }
-                        
                         reportHandler.setDevelopmentInfo(developmentInfo);
-                        
                         setDevelopmentInfoLoading(false);
-                        setDevelopmentInfoError(null);console.log("Development info loading set to FALSE");
+                        setDevelopmentInfoError(null);
                     } else if (!response.ok) {
                         throw new Error(result.error || "Unknown error fetching development info");
                     }
@@ -164,24 +139,6 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
 
     // You might want to add a mutation function here to handle feedback submission
     // For example:
-    
-    const submitFeedback = async (fieldName: string, feedback: string) => {
-        try {
-            // This would be your API call to submit feedback
-            // await fetch('/api/feedback', {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({ fieldName, feedback, section: 'development-info' }),
-            // });
-            
-            // For now, we'll just log it
-            console.log(`Feedback submitted for ${fieldName}: ${feedback}`);
-            return true;
-        } catch (error) {
-            console.error('Error submitting feedback:', error);
-            return false;
-        }
-    };
 
-    return { developmentInfoLoading, developmentInfoError, submitFeedback };
+    return { developmentInfoLoading, developmentInfoError };
 }

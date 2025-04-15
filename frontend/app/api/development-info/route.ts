@@ -107,7 +107,6 @@ export async function POST(request: Request) {
       }
     );  
 
-    console.log("QUERY RESULT: ", queryResult);
     return NextResponse.json({
       status: 'success',
       documentProcessing: documentResult,
