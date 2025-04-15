@@ -8,7 +8,7 @@ SCROLL_LIMIT = 100
 class RetrievalStrategy(Protocol):
     """Protocol defining the interface for document retrieval strategies."""
     
-    async def retrieve(self, retriever: Any, query: str) -> Dict[str, Any]:
+    def retrieve(self, retriever: Any, query: str) -> Dict[str, Any]:
         """Retrieve relevant content based on the query."""
         ...
 
@@ -97,8 +97,6 @@ class SectionBasedRetrieval:
         for point in all_points:
             if point.payload["text"] not in context_texts:
                 context_texts.append(point.payload["text"])
-        
-        # Combine all unique chunks as context
         combined_context = "\n\n".join(context_texts)
         
         # Create the chunks array with required metadata

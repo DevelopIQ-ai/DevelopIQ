@@ -512,3 +512,6 @@ def extract_table_of_contents(html_content, hierarchy_depth="titles_only", targe
 
     
     return toc
+
+
+
