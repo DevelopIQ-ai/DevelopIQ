@@ -234,6 +234,25 @@ async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> 
     queries = {
         "permitted_uses": format_query(PERMITTED_USES_QUERIES["permitted_uses"], zone_code=zone_code)
     }
+    custom_assistant_prompt = """
+            You are a helpful assistant that answers questions about a municipality's codebook.
+            Sometimes, the content has tables, which are formatted in markdown.
+            
+            <TABLE DIRECTIONS>
+                - Ensure you only rely on the content inside the table.
+                - Scan every single row.
+                - Do not make up any information.
+                - Always check if the zone code is a column header; if it is, ensure you only look for cell values in that column that align with the question.
+                - Ignore any columns that do not have the zone code as a header.
+                - If asked about a specific row or column, ensure you only rely on the content inside that row or column.
+                - If dealing with multiple tables, refer to that table's header row to determine which column to look at.
+            </TABLE DIRECTIONS>
+
+            <INDUSTRY EXPERT HINT>
+            The answer is always in the context. 
+            Permitted Uses and Special Exceptions are often found in the PERMITTED USES section, PERMITTED USES TABLE section, or in similar sections.
+            </INDUSTRY EXPERT HINT>
+            """
     
     questions = list(queries.values())
     query_vars = list(queries.keys())
