@@ -111,13 +111,19 @@ class QdrantRetriever(QdrantBase):
 
         return all_payloads
     
-    async def send_query(self, question: str, structured_output, custom_prompt: str = None):
+    async def send_query(self, question: str, structured_output, custom_prompt: str = None, model_name: str = OPENAI_MODEL):
         """Query the codebook with a question and return structured output."""
-        # Use the configured retrieval strategy
         rag_result = self.retrieval_strategy.retrieve(self.retriever, question)
         raw_context = rag_result['raw_content']
         chunks = rag_result['chunks']
         section_list = rag_result['section_list']
+        
+        if model_name == OPENAI_MODEL:
+            llm = self.openai_llm
+        elif model_name == CLAUDE_MODEL:
+            llm = self.claude_llm
+        else:
+            raise ValueError(f"Invalid model name: {model_name}")
 
         if custom_prompt:
             prompt = ChatPromptTemplate.from_template(custom_prompt + "\n\n\n\n" + STANDARD_QUERY_PROMPT)
@@ -127,7 +133,7 @@ class QdrantRetriever(QdrantBase):
         chain = (
             {"context": lambda _: raw_context, "query": RunnablePassthrough()}
             | prompt
-            | self.openai_llm.with_structured_output(structured_output)
+            | llm.with_structured_output(structured_output)
         )
 
         # Execute the chain and return results
