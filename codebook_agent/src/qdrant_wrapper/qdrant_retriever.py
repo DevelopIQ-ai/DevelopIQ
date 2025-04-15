@@ -19,6 +19,11 @@ CLAUDE_MODEL = "claude-3-7-sonnet-latest"
 DEFAULT_RETRIEVAL_K = 5
 PERMITTED_USES_RETRIEVAL_K = 3
 SCROLL_LIMIT = 100
+STANDARD_QUERY_PROMPT = """Answer the question based only on the following context:
+            {context}
+
+            Question: {query}
+            """
 
 class QdrantRetriever(QdrantBase):
     """Class for retrieving and querying documents from Qdrant."""
@@ -106,7 +111,7 @@ class QdrantRetriever(QdrantBase):
 
         return all_payloads
     
-    async def send_query(self, question: str, structured_output):
+    async def send_query(self, question: str, structured_output, custom_prompt: str = None):
         """Query the codebook with a question and return structured output."""
         # Use the configured retrieval strategy
         rag_result = self.retrieval_strategy.retrieve(self.retriever, question)
@@ -114,15 +119,10 @@ class QdrantRetriever(QdrantBase):
         chunks = rag_result['chunks']
         section_list = rag_result['section_list']
 
-        # Standard query prompt
-        STANDARD_QUERY_PROMPT = """Answer the question based only on the following context:
-            {context}
-
-            Question: {query}
-            """
-
-        prompt = ChatPromptTemplate.from_template(STANDARD_QUERY_PROMPT)
-
+        if custom_prompt:
+            prompt = ChatPromptTemplate.from_template(custom_prompt + "\n\n\n\n" + STANDARD_QUERY_PROMPT)
+        else:
+            prompt = ChatPromptTemplate.from_template(STANDARD_QUERY_PROMPT)
         # Build the LangChain pipeline
         chain = (
             {"context": lambda _: raw_context, "query": RunnablePassthrough()}
@@ -153,6 +153,27 @@ class QdrantRetriever(QdrantBase):
         # Wait for all tasks to complete
         results = await asyncio.gather(*tasks)    
         return results
-    
 
-   
+        """Query the codebook with a question and return structured output."""
+        # Use the configured retrieval strategy
+        rag_result = self.retrieval_strategy.retrieve(self.retriever, question)
+        raw_context = rag_result['raw_content']
+        chunks = rag_result['chunks']
+        section_list = rag_result['section_list']
+
+        custom_prompt = prompt + "\n\n\n\n" + STANDARD_QUERY_PROMPT
+        prompt = ChatPromptTemplate.from_template(custom_prompt)
+        # Build the LangChain pipeline
+        chain = (
+            {"context": lambda _: raw_context, "query": RunnablePassthrough()}
+            | prompt
+            | self.openai_llm.with_structured_output(structured_output)
+        )
+        # Execute the chain and return results
+        result = await chain.ainvoke(question)
+        result = result.model_dump()
+        result.update({
+            "section_list": section_list,
+            "chunks": chunks
+        })
+        return result

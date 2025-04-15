@@ -16,7 +16,8 @@
     "more-itertools>=10.6.0",
     "nest-asyncio>=1.0.0",
     "langchain-anthropic>=0.2.1",
-    "pandas>=2.2.2"
+    "pandas>=2.2.2",
+    "tabulate>=0.9.0"
   ],
   "graphs": {
     "extractor_graph": "./src/agent_graphs/extractor_graph.py:graph",
