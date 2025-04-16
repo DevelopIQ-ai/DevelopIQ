@@ -6,7 +6,7 @@ import { Client } from "@langchain/langgraph-sdk";
 interface ExtractorGraphResponse {
   document_id: string;
   // Add other fields that might be in the response
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Get LangGraph client with server-side env variables
