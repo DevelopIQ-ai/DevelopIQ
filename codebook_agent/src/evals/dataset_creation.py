@@ -10,7 +10,7 @@ def main():
 
     examples = building_requirements_dataset_json
     client = Client(api_key=os.getenv("LANGCHAIN_API_KEY"), api_url=os.getenv("LANGCHAIN_API_URL"))
-    DATASET_NAME = "Building Requirements Evaluation Dataset"
+    DATASET_NAME = "Building Requirements Evaluation Dataset Test"
     
     # Check if dataset exists and create it if it doesn't
     try:

@@ -36,7 +36,26 @@ BUILDING_PLACEMENT_QUERIES = {
 
 # Building Requirements Queries
 BUILDING_REQUIREMENTS_QUERIES = {
-    "maximum_building_height": "What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.",
+    "maximum_building_height": 
+    """
+    What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.
+    If you cannot find the information, respond with 'N/A'. Be concise and to the point.
+    If for the {zone_code} zone, there is only one answer, respond with that answer.
+    If there are multiple answers with different caveats or use cases for maximum building height, list all of them.
+    Think before you answer.
+    Here are some examples of answers you might give:
+    <EXAMPLE OUTPUTS>
+    <EXAMPLE>
+     10 feet
+    </EXAMPLE>
+    <EXAMPLE>
+    Single-Family Dwelling: 35% Corner Lot, 30% interior lot
+    Two-Family Dwelling: 40% Corner Lot, 35% interior lot
+    Group House and Garden Apartments: 50% Corner Lot, 40% interior lot
+    Apartment House: 60% Corner Lot, 50% interior lot
+    </EXAMPLE>
+    </EXAMPLE OUTPUTS>
+    """,
     "maximum_lot_coverage": "What is the maximum lot coverage allowed in {zone_code} zone? Provide the percentage."
 }
 

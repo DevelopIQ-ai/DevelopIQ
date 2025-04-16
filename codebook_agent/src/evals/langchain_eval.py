@@ -110,16 +110,22 @@ async def run_node(inputs: dict) -> dict:
         target_node = querier_graph.nodes[NODE_NAME] 
         transformed_inputs = transform_dataset_inputs(inputs)
         result = await target_node.ainvoke(transformed_inputs)       
-        # result = await target_node(state=transformed_inputs, config={})
-        if isinstance(result, dict) and "results" in result:
-            # If query_type is specified, return just that result
-            query_type = inputs.get("query_type")
-            if query_type and query_type in result["results"]:
-                return result["results"][query_type]
+        print("result", result)
+        
+        # If query_type is specified, look one level deeper
+        query_type = inputs.get("query_type")
+        if query_type and isinstance(result, dict) and "results" in result:
+            # Find the category that contains the query_type
+            for category, category_data in result["results"].items():
+                if isinstance(category_data, dict) and query_type in category_data:
+                    # Return just the specific result without its parent category
+                    return category_data[query_type]
+        
+        # If not found or no query_type, return the whole result
+        return result
     except Exception as e:
         logger.error(f"Error running node: {str(e)}")
         return {"error": str(e)}
-
 # Main evaluation function
 async def evaluate_node():
     client = Client()
