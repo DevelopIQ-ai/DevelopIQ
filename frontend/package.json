@@ -47,7 +47,6 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
     "xlsx": "^0.18.5",
-    "zeroentropy": "^0.1.0-alpha.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
