@@ -112,3 +112,8 @@
   animation: loading 2s infinite linear;
 }
 
+.market-data-section {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}

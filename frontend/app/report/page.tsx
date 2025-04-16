@@ -7,6 +7,7 @@ import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
+import { MarketResearchTab } from "@/app/report/market-research";
 import { NewsArticlesTab } from "@/app/report/news-articles";
 import { PrintDialog } from "@/components/print-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -32,6 +33,8 @@ import SubmitEvaluationDialog from "@/components/submit-evaluation-dialog";
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
+  const [county, setCounty] = useState<string | null>(null);
+  const [state, setState] = useState<string | null>(null);
   const [hasFeedback, setHasFeedback] = useState<boolean>(false);
   const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
   const [previousAddress, setPreviousAddress] = useState<string | null>(null);
@@ -48,6 +51,11 @@ export default function PropertyAnalysisDashboard() {
       if (!address) {
         return;
       }
+
+      const county = localStorage.getItem("county");
+      setCounty(county || null);
+      const state = localStorage.getItem("state");
+      setState(state || null);
       
       // Check if this is a new property search
       if (previousAddress && previousAddress !== address) {
@@ -56,6 +64,8 @@ export default function PropertyAnalysisDashboard() {
         localStorage.removeItem("propertyData");
         localStorage.removeItem("developmentInfo");
         localStorage.removeItem("newsArticles");
+        localStorage.removeItem("county");
+        localStorage.removeItem("state");
         // Any other property-specific data that should be cleared
         
         // Update feedback state immediately
@@ -70,6 +80,8 @@ export default function PropertyAnalysisDashboard() {
       
       setPreviousAddress(address);
       setPropertyAddress(address);
+      setCounty(county || null);
+      setState(state || null);
       if (!reportHandler) {
         const handler = new PropertyReportHandler();
         setReportHandler(handler);
@@ -238,6 +250,7 @@ export default function PropertyAnalysisDashboard() {
           <TabsList className="tabs-list">
             <TabsTrigger value="property">General Property Information</TabsTrigger>
             <TabsTrigger value="development">Development Info</TabsTrigger>
+            <TabsTrigger value="market_research">Market Research</TabsTrigger>
             <TabsTrigger value="news">News Articles</TabsTrigger>
           </TabsList>
 
@@ -259,6 +272,16 @@ export default function PropertyAnalysisDashboard() {
               </p>
             </div>
             <DevelopmentInfoTab reportHandler={reportHandler!} developmentInfoLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
+          </TabsContent>
+
+          <TabsContent value="market_research" className="m-0" data-section="market_research">
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4">Market Research</h2>
+              <p className="text-muted-foreground">
+                Market research and analysis of the area.
+              </p>
+            </div>
+            <MarketResearchTab county={county} state={state} />
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">

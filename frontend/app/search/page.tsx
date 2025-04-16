@@ -53,7 +53,7 @@ export default function GetStarted() {
         mapRef.current = new window.google.maps.Map(
           document.getElementById("map") as HTMLElement,
           {
-            center: { lat: 37.7749, lng: -122.4194 }, // Default center; update as needed
+            center: { lat: 39.7691, lng: -86.1580 }, // Default center; update as needed
             zoom: 12,
             backgroundColor: "#ffffff",
           }
@@ -68,13 +68,22 @@ export default function GetStarted() {
           {
             types: ["address"],
             componentRestrictions: { country: "us" },
-            fields: ["formatted_address", "geometry"],
+            fields: ["formatted_address", "geometry", "address_components"],
           }
         )
 
         autocompleteInstance.current.addListener("place_changed", () => {
           const place = autocompleteInstance.current?.getPlace()
           if (place?.formatted_address) {
+            if (autocompleteInstance.current) {
+              // const place = autocompleteInstance.current.getPlace();
+              console.log("place", place);
+              if (!place || !isAddressInIndiana(place)) {
+                setError("Sorry, we only support properties in Indiana at this time.");
+                setIsLoading(false);
+                return;
+              }
+            }
             setAddress(place.formatted_address)
             if (place.geometry?.location && mapRef.current) {
               // Center the map on the selected location
@@ -107,6 +116,19 @@ export default function GetStarted() {
     }
   }, [])
 
+  // Add a function to check if address is in Indiana
+  const isAddressInIndiana = (place: google.maps.places.PlaceResult): boolean => {
+    if (!place.address_components) return false;
+    
+    // Find the state component
+    const stateComponent = place.address_components.find(component => 
+      component.types.includes("administrative_area_level_1")
+    );
+
+    // Check if the state is Indiana (IN)
+    return stateComponent?.short_name === "IN" || stateComponent?.long_name === "Indiana";
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setError(null)
     e.preventDefault()
@@ -127,6 +149,28 @@ export default function GetStarted() {
     // Set the new property address
     localStorage.setItem("propertyAddress", address)
 
+    // Ensure address is in Indiana
+    if (autocompleteInstance.current) {
+      const place = autocompleteInstance.current.getPlace();
+      console.log("place", place);
+      if (!place || !isAddressInIndiana(place)) {
+        setError("Sorry, we only support properties in Indiana at this time.");
+        setIsLoading(false);
+        return;
+      }
+      const countyComponent = place.address_components?.find(component => 
+        component.types.includes("administrative_area_level_2")
+      );
+      const county = countyComponent?.long_name || countyComponent?.short_name;
+      localStorage.setItem("county", county || "");
+
+      const stateComponent = place.address_components?.find(component => 
+        component.types.includes("administrative_area_level_1")
+      );
+      const state = stateComponent?.long_name || stateComponent?.short_name;
+      localStorage.setItem("state", state || "");
+    }
+
     const canFetch = await canFetchAttomData(address)
     if (!canFetch) {
       setError("We are unable to process this address. Please try with a different address.")
@@ -144,9 +188,14 @@ export default function GetStarted() {
 
       <main className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] py-12 mt-12">
         <div className="w-full max-w-md space-y-8 mb-12">
-          <h1 className="text-2xl font-bold text-center">
-            Enter your property address to begin
-          </h1>
+          <div>
+            <h1 className="text-2xl font-bold text-center">
+              Enter your property address to begin
+            </h1>
+            <p className="text-xs text-gray-500 text-center mt-1">
+              *We only support properties in Indiana at this time.
+            </p>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
               type="text"
