@@ -14,8 +14,8 @@ from agent_graphs.queries import (
     LANDSCAPING_QUERIES,
     PERMITTED_USES_QUERIES,
     format_query,
-
 )
+
 from agent_graphs.models import Answer
 from agent_graphs.configurations import QuerierConfiguration
 from qdrant_wrapper.qdrant_retriever import QdrantRetriever
