@@ -99,7 +99,6 @@ async def parking_node(state: QuerierState, config: RunnableConfig) -> Dict[str,
     questions = list(queries.values())
     query_vars = list(queries.keys())
     
-    # Execute queries in parallel as before
     raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
     results = {
         query_var: raw_results[i] 
