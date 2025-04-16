@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from langchain_openai import OpenAIEmbeddings
 from qdrant_client import QdrantClient, AsyncQdrantClient
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, stop_after_attempt, wait_fixed, retry_if_exception_type
 import httpx
 from qdrant_client.http.exceptions import ResponseHandlingException
 # Load environment variables    
@@ -42,8 +42,8 @@ class QdrantBase:
     
    
     @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
+        stop=stop_after_attempt(5),
+        wait=wait_fixed(15),
         retry=retry_if_exception_type((httpx.ConnectTimeout, ResponseHandlingException))
     )
     async def document_exists_and_is_indexed(self, document_id: str) -> DocumentStatus:
@@ -59,5 +59,5 @@ class QdrantBase:
                 return DocumentStatus.UDC
             return DocumentStatus.INDEXED
         except Exception as e:
-            raise Exception(f"Error checking if document exists and is indexed: {e}")
+            raise Exception(f"Error checking if document exists and is indexed: {e}") from e
     
