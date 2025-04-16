@@ -53,9 +53,7 @@ export default function PropertyAnalysisDashboard() {
       }
 
       const county = localStorage.getItem("county");
-      setCounty(county || null);
       const state = localStorage.getItem("state");
-      setState(state || null);
       
       // Check if this is a new property search
       if (previousAddress && previousAddress !== address) {
