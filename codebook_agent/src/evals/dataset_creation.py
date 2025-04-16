@@ -6,13 +6,6 @@ from src.datasets.building_requirements import building_requirements_dataset_jso
 load_dotenv()
 
 # Dataset examples
-from langsmith import Client
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-# Dataset examples
 def main():
 
     examples = building_requirements_dataset_json
