@@ -20,6 +20,13 @@ export const DevelopmentInfoSchema = z.object({
   "document_id": z.string(),
   "zone_code": z.string(),
   "results": z.object({
+    "lot_requirements": z.object({
+      "maximum_density": RegulationAnswerSchema,
+      "minimum_lot_size": RegulationAnswerSchema,
+      "minimum_lot_width": RegulationAnswerSchema,
+      "minimum_lot_frontage": RegulationAnswerSchema,
+      "minimum_living_area": RegulationAnswerSchema
+    }),
     "building_placement_requirements": z.object({
       "front_setback": RegulationAnswerSchema,
       "street_side_setback": RegulationAnswerSchema,
@@ -31,24 +38,24 @@ export const DevelopmentInfoSchema = z.object({
       "maximum_building_height": RegulationAnswerSchema,
       "maximum_lot_coverage": RegulationAnswerSchema
     }),
-    // "landscaping_requirements": z.object({
-    //   "plant_sizes": RegulationAnswerSchema,
-    //   "landscape_plan_review": RegulationAnswerSchema,
-    //   "species_variation": RegulationAnswerSchema,
-    //   "performance_guarantee": RegulationAnswerSchema
-    // }),
-    // "parking_requirements": z.object({
-    //   "aisle_width": RegulationAnswerSchema,
-    //   "curbing_requirements": RegulationAnswerSchema,
-    //   "striping_requirements": RegulationAnswerSchema,
-    //   "drainage_requirements": RegulationAnswerSchema,
-    //   "parking_stalls": RegulationAnswerSchema
-    // }),
-    // "signage_requirements": z.object({
-    //   "permitted_signs": RegulationAnswerSchema,
-    //   "prohibited_signs": RegulationAnswerSchema,
-    //   "design_requirements": RegulationAnswerSchema
-    // })
+    "landscaping_requirements": z.object({
+      "plant_sizes": RegulationAnswerSchema,
+      "landscape_plan_review": RegulationAnswerSchema,
+      "species_variation": RegulationAnswerSchema,
+      "performance_guarantee": RegulationAnswerSchema
+    }),
+    "parking_requirements": z.object({
+      "aisle_width": RegulationAnswerSchema,
+      "curbing_requirements": RegulationAnswerSchema,
+      "striping_requirements": RegulationAnswerSchema,
+      "drainage_requirements": RegulationAnswerSchema,
+      "parking_stalls": RegulationAnswerSchema
+    }),
+    "signage_requirements": z.object({
+      "permitted_signs": RegulationAnswerSchema,
+      "prohibited_signs": RegulationAnswerSchema,
+      "design_requirements": RegulationAnswerSchema
+    })
   })
 });
 
