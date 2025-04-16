@@ -34,7 +34,6 @@ export default function SubmitEvaluationDialog({
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
 
-  // Function to flatten nested objects for Excel export
   const flattenObject = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
     let result: Record<string, string> = {};
     
