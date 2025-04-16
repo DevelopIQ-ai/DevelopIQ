@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const NEXT_PUBLIC_GOOGLE_API_KEY_MAPS = process.env.NEXT_PUBLIC_GOOGLE_API_KEY_MAPS;
 
 export async function POST(request: Request) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!GOOGLE_API_KEY) {
+    if (!NEXT_PUBLIC_GOOGLE_API_KEY_MAPS) {
       return NextResponse.json(
         { error: 'Google API key is not configured' },
         { status: 500 }
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // First, geocode the address to get coordinates
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`;
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`;
     const geocodeResponse = await fetch(geocodeUrl);
     const geocodeData = await geocodeResponse.json();
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const { lat, lng } = geocodeData.results[0].geometry.location;
 
     // Get Street View metadata to check if Street View is available
-    const metadataUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${lat},${lng}&key=${GOOGLE_API_KEY}`;
+    const metadataUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${lat},${lng}&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`;
     const metadataResponse = await fetch(metadataUrl);
     const metadata = await metadataResponse.json();
 
@@ -49,22 +49,22 @@ export async function POST(request: Request) {
     // Generate Street View images from different angles
     const images = [
       {
-        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=0&pitch=0&key=${GOOGLE_API_KEY}`,
+        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=0&pitch=0&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`,
         source: 'Google Street View',
         alt: 'Front view of property',
       },
       {
-        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=90&pitch=0&key=${GOOGLE_API_KEY}`,
+        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=90&pitch=0&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`,
         source: 'Google Street View',
         alt: 'Right side view of property',
       },
       {
-        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=180&pitch=0&key=${GOOGLE_API_KEY}`,
+        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=180&pitch=0&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`,
         source: 'Google Street View',
         alt: 'Back view of property',
       },
       {
-        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=270&pitch=0&key=${GOOGLE_API_KEY}`,
+        url: `https://maps.googleapis.com/maps/api/streetview?size=800x600&location=${lat},${lng}&heading=270&pitch=0&key=${NEXT_PUBLIC_GOOGLE_API_KEY_MAPS}`,
         source: 'Google Street View',
         alt: 'Left side view of property',
       },

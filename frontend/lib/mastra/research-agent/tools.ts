@@ -58,11 +58,11 @@ const searchMultipleQueries = async (queries: string[]) => {
 };
 
 const searchLocation = async (searchQuery: string) => {
-  const apiKey = process.env.GOOGLE_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const searchEngineId = process.env.GOOGLE_CSE_ID;
   
   if (!apiKey) {
-    throw new Error('GOOGLE_API_KEY environment variable is not set');
+    throw new Error('NEXT_PUBLIC_GOOGLE_API_KEY environment variable is not set');
   }
   
   if (!searchEngineId) {
