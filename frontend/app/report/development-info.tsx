@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Loader2, Ruler, Flag, FlagIcon } from "lucide-react"
 import type { PropertyReportHandler } from "@/lib/report-handler"
 import type { DevelopmentInfo, RegulationAnswer } from "@/schemas/views/development-info-schema"
+import FeedbackModal from "@/components/FeedbackModal"
 
 interface DevelopmentInfoTabProps {
   reportHandler: PropertyReportHandler | null
@@ -138,8 +139,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
                           data={fieldData}
                           title={formatFieldName(fieldName)} 
                           developmentInfoLoading={developmentInfoLoading}
-                          // Commented out flag functionality for now
-                          // onFlagClick={handleFlagClick} 
+                          onFlagClick={handleFlagClick} 
                         />
                       ))}
                     </div>
@@ -150,7 +150,6 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
           </div>
         </div>
       </div>
-      {/* 
       <FeedbackModal
         isOpen={feedbackModalOpen}
         onClose={() => setFeedbackModalOpen(false)}
@@ -158,7 +157,6 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
         originalValue={selectedValue}
         onSubmit={handleFeedbackSubmit}
       />
-      */}
     </div>
   )
 }
@@ -198,19 +196,18 @@ interface RegulationAnswerDisplayProps {
   data: RegulationAnswer
   title: string
   developmentInfoLoading: boolean
-  // onFlagClick: (fieldName: string, value: string | number | null) => void
+  onFlagClick: (fieldName: string, value: string | number | null) => void
 }
 
-function RegulationAnswerDisplay({ data, title, developmentInfoLoading }: RegulationAnswerDisplayProps) {
+function RegulationAnswerDisplay({ data, title, developmentInfoLoading, onFlagClick }: RegulationAnswerDisplayProps) {
   const { answer, section_list } = data
-  // const hasFeedback = hasFeedbackForField(title);
+  const hasFeedback = hasFeedbackForField(title);
   
   return (
-    <div className="grid grid-cols-12 divide-x divide-gray-100">
+    <div className={`grid grid-cols-12 divide-x divide-gray-100 ${hasFeedback ? 'bg-orange-50' : ''}`}>
       <div className="col-span-3 text-sm px-4 py-2 relative">
         <div className="flex justify-between items-center">
           <span>{title}</span>
-          {/* Commented out flag functionality
           {!developmentInfoLoading && (
             <button 
               onClick={() => onFlagClick(title, answer)}
@@ -220,7 +217,6 @@ function RegulationAnswerDisplay({ data, title, developmentInfoLoading }: Regula
               {hasFeedback ? <FlagIcon size={14} fill="currentColor" /> : <Flag size={14} />}
             </button>
           )}
-          */}
         </div>
       </div>
       <div className="col-span-6 text-sm px-4 py-2 whitespace-pre-wrap">

@@ -31,24 +31,24 @@ export const DevelopmentInfoSchema = z.object({
       "maximum_building_height": RegulationAnswerSchema,
       "maximum_lot_coverage": RegulationAnswerSchema
     }),
-    "landscaping_requirements": z.object({
-      "plant_sizes": RegulationAnswerSchema,
-      "landscape_plan_review": RegulationAnswerSchema,
-      "species_variation": RegulationAnswerSchema,
-      "performance_guarantee": RegulationAnswerSchema
-    }),
-    "parking_requirements": z.object({
-      "aisle_width": RegulationAnswerSchema,
-      "curbing_requirements": RegulationAnswerSchema,
-      "striping_requirements": RegulationAnswerSchema,
-      "drainage_requirements": RegulationAnswerSchema,
-      "parking_stalls": RegulationAnswerSchema
-    }),
-    "signage_requirements": z.object({
-      "permitted_signs": RegulationAnswerSchema,
-      "prohibited_signs": RegulationAnswerSchema,
-      "design_requirements": RegulationAnswerSchema
-    })
+    // "landscaping_requirements": z.object({
+    //   "plant_sizes": RegulationAnswerSchema,
+    //   "landscape_plan_review": RegulationAnswerSchema,
+    //   "species_variation": RegulationAnswerSchema,
+    //   "performance_guarantee": RegulationAnswerSchema
+    // }),
+    // "parking_requirements": z.object({
+    //   "aisle_width": RegulationAnswerSchema,
+    //   "curbing_requirements": RegulationAnswerSchema,
+    //   "striping_requirements": RegulationAnswerSchema,
+    //   "drainage_requirements": RegulationAnswerSchema,
+    //   "parking_stalls": RegulationAnswerSchema
+    // }),
+    // "signage_requirements": z.object({
+    //   "permitted_signs": RegulationAnswerSchema,
+    //   "prohibited_signs": RegulationAnswerSchema,
+    //   "design_requirements": RegulationAnswerSchema
+    // })
   })
 });
 
