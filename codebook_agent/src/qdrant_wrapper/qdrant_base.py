@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 
 from langchain_openai import OpenAIEmbeddings
 from qdrant_client import QdrantClient, AsyncQdrantClient
-
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+import httpx
+from qdrant_client.http.exceptions import ResponseHandlingException
 # Load environment variables    
 load_dotenv()
 
@@ -30,6 +32,7 @@ class QdrantBase:
         self.async_client = AsyncQdrantClient(
             url=os.getenv("QDRANT_URL"),
             api_key=os.getenv("QDRANT_API_KEY"),
+            
         )
         self.client = QdrantClient(
             url=os.getenv("QDRANT_URL"),
@@ -37,6 +40,12 @@ class QdrantBase:
         )
         self.embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
     
+   
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+        retry=retry_if_exception_type((httpx.ConnectTimeout, ResponseHandlingException))
+    )
     async def document_exists_and_is_indexed(self, document_id: str) -> DocumentStatus:
         """Check if a collection exists and has indexed documents."""
         try:

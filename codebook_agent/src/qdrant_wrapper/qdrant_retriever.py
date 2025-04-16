@@ -2,6 +2,7 @@ import os
 import asyncio
 from typing import List, Dict, Tuple, Any
 
+import httpx
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
@@ -12,7 +13,8 @@ from langchain_qdrant import QdrantVectorStore
 
 from qdrant_wrapper.qdrant_base import QdrantBase, DocumentStatus
 from qdrant_wrapper.rag_strategies import RetrievalStrategy, SectionBasedRetrieval
-
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from qdrant_client.http.exceptions import ResponseHandlingException
 # Configuration constants
 OPENAI_MODEL = "gpt-4o-mini"
 CLAUDE_MODEL = "claude-3-7-sonnet-latest"
@@ -111,6 +113,11 @@ class QdrantRetriever(QdrantBase):
 
         return all_payloads
     
+    @retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+        retry=retry_if_exception_type((httpx.ConnectTimeout, ResponseHandlingException))
+    )
     async def send_query(self, question: str, structured_output, custom_prompt: str = None, model_name: str = OPENAI_MODEL):
         """Query the codebook with a question and return structured output."""
         rag_result = self.retrieval_strategy.retrieve(self.retriever, question)
