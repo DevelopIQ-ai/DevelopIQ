@@ -38,6 +38,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
     if (!reportData && reportHandler) {
       try {
         const data = reportHandler.getDevelopmentInfo()
+        console.log("data", data);
         setReportData(data)
         setIsLoading(false)
       } catch (err) {
@@ -99,7 +100,8 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
 
   // Check if the new structure with "results" is present
   const requirementsData = reportData.results;
-
+  console.log("requirementsData", requirementsData);
+  
   if (!requirementsData) {
     return (
       <Alert variant="destructive">
@@ -119,12 +121,7 @@ export function DevelopmentInfoTab({ reportHandler, developmentInfoLoading, deve
             <h2 className="text-lg font-semibold">Development Standards</h2>
           </div>
           <div className="p-4">
-            {Object.entries(requirementsData).map(([sectionTitle, sectionData], sectionIndex, sectionsArray) => {
-              // Skip document_id and zone_code, only process section objects
-              if (sectionTitle === 'document_id' || sectionTitle === 'zone_code') {
-                return null;
-              }
-              
+            {Object.entries(requirementsData).map(([sectionTitle, sectionData], sectionIndex, sectionsArray) => {            
               return (
                 <div
                   key={sectionTitle}

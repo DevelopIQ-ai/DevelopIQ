@@ -56,7 +56,11 @@ export class PropertyReportHandler {
         ? this.mergeDevelopmentInfo(this.developmentInfo, data)
         : data;
       this.rawData = { ...this.rawData, ...data };
-      this.developmentInfo = PropertyReportHandler.validateDevelopmentInfo(mergedData as DevelopmentInfo);
+      try {
+        this.developmentInfo = PropertyReportHandler.validateDevelopmentInfo(mergedData as DevelopmentInfo);
+      } catch (error) {
+        console.log("validation error", error);
+      }
       this.updatedAt = new Date();
       this.status = "updated";
     } catch (error) {

@@ -170,27 +170,27 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
   "zone_code": "CMX-5",
   "results": {
     "lot_requirements": {
-      "maximum_density": {
+      "density": {
         "answer": "10 units per acre is the maximum density allowed.",
         "section_list": ["Demo Section 1.1"],
         "chunks": []
       },
-      "minimum_lot_size": {
+      "lot_size": {
         "answer": "1000 square feet is the minimum lot size required.",
         "section_list": ["Demo Section 1.2"],
         "chunks": []
       },
-      "minimum_lot_width": {
+      "lot_width": {
         "answer": "100 feet is the minimum lot width required.",
         "section_list": ["Demo Section 1.3"],
         "chunks": []
       },
-      "minimum_lot_frontage": {
+      "lot_frontage": {
         "answer": "100 feet of street frontage is required for all lots.",
         "section_list": ["Demo Section 1.4"],
         "chunks": []
       },
-      "minimum_living_area": {
+      "living_area": {
         "answer": "1000 square feet minimum living area is required.",
         "section_list": ["Demo Section 1.5"],
         "chunks": []

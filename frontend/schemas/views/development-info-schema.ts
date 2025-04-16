@@ -21,11 +21,11 @@ export const DevelopmentInfoSchema = z.object({
   "zone_code": z.string(),
   "results": z.object({
     "lot_requirements": z.object({
-      "maximum_density": RegulationAnswerSchema,
-      "minimum_lot_size": RegulationAnswerSchema,
-      "minimum_lot_width": RegulationAnswerSchema,
-      "minimum_lot_frontage": RegulationAnswerSchema,
-      "minimum_living_area": RegulationAnswerSchema
+      "density": RegulationAnswerSchema,
+      "lot_size": RegulationAnswerSchema,
+      "lot_width": RegulationAnswerSchema,
+      "lot_frontage": RegulationAnswerSchema,
+      "living_area": RegulationAnswerSchema
     }),
     "building_placement_requirements": z.object({
       "front_setback": RegulationAnswerSchema,

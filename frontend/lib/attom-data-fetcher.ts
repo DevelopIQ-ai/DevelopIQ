@@ -21,7 +21,6 @@ export async function fetchAttomData(handler: PropertyReportHandler, propertyAdd
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ endpoint: "property/expandedprofile", params }),
   });
-  console.log("response", response);
   if (!response.ok) {
     console.error("Failed to fetch property data", response);
     throw new Error("Failed to fetch property data");
@@ -51,9 +50,6 @@ export async function canFetchAttomData(propertyAddress: string) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ endpoint: "property/basicprofile", params }),
     });
-
-    console.log("response", response);
-
     if (!response.ok) {
       console.error("Failed to fetch property data", response);
       throw new Error("Failed to fetch property data");

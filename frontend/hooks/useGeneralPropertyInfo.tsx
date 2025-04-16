@@ -91,7 +91,6 @@ export const useGeneralPropertyInfo = (reportHandler: PropertyReportHandler | nu
                         // Fetch Zoneomics data if we have coordinates
                         if (latitude && longitude) {
                             try {
-                                console.log("Found coordinates, fetching Zoneomics data:", { latitude, longitude });
                                 await fetchZoneomicsData(reportHandler, latitude, longitude);
                                 console.log("Zoneomics data fetch completed");
                                 

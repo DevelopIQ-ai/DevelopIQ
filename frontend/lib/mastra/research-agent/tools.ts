@@ -33,8 +33,6 @@ export const googleCustomSearchTool = createTool({
   }),
   execute: async ({ context }) => {
     const { searchQuery } = context;
-    // console.log('searchQuery', searchQuery);
-    // Convert searchQuery to array if it's a string
     const queries = Array.isArray(searchQuery) ? searchQuery : [searchQuery];
     return await searchMultipleQueries(queries);
   },

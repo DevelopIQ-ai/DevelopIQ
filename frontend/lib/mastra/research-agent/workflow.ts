@@ -16,7 +16,6 @@ const fetchNews = new Step({
     }
 
     const prompt = `Find news articles that would appeal to a real estate developer looking for reasons to develop property in ${triggerData.location}.`;
-    // console.log("Prompt: ", prompt);
 
     const response = await researchAgent.generate([
       {
@@ -43,7 +42,6 @@ const fetchNews = new Step({
       };
     } catch (error) {
       console.error('Failed to extract or parse JSON from response:', error);
-      // console.log('Raw response:', response.text);
       throw new Error('Could not process the research agent response');
     }
     

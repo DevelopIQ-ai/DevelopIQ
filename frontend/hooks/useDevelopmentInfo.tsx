@@ -26,12 +26,12 @@ export const useDevelopmentInfo = (reportHandler: PropertyReportHandler | null, 
                     setDevelopmentInfoLoading(false);
                     return;
                 }
-
                 // Check if development info exists in local storage
                 try {
                     const storedDevelopmentInfo = localStorage.getItem('developmentInfo');
                     if (storedDevelopmentInfo) {
                         const parsedInfo = JSON.parse(storedDevelopmentInfo);
+                        console.log("parsedInfo", parsedInfo);
                         reportHandler.setDevelopmentInfo(parsedInfo);
                         setDevelopmentInfoLoading(false);
                         return;
