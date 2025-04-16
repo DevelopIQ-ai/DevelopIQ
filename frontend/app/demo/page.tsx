@@ -38,7 +38,7 @@ const loadGoogleMapsScript = (callback: () => void) => {
     }
     return;
   }
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY; // ensure this is set correctly
+  const apiKey = process.env.GOOGLE_API_KEY; // ensure this is set correctly
   const script = document.createElement("script");
   script.id = "google-maps-script";
   script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
