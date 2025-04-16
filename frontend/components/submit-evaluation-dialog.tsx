@@ -34,7 +34,6 @@ export default function SubmitEvaluationDialog({
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
 
-  // Function to flatten nested objects for Excel export
   const flattenObject = (obj: Record<string, any>, prefix = ''): Record<string, string> => {
     let result: Record<string, string> = {};
     
@@ -121,35 +120,16 @@ export default function SubmitEvaluationDialog({
     if (feedbackJson) {
       try {
         const feedbackData = JSON.parse(feedbackJson);
-        console.log("Feedback data:", feedbackData);
         // Add header row for feedback table
         data.push(["Property Attribute", "Original Value", "Correction", "Reason", "Source", "Timestamp"]);
         
-        // Process feedback data based on the structure
-        if (Array.isArray(feedbackData)) {
-          console.log("Feedback data is an array");
-          feedbackData.forEach(item => {
-            console.log("Item:", item);
-            if (item && typeof item === 'object') {
-              const propertyName = Object.keys(item)[0] || '';
-              const details = item[propertyName] || {};
-              
-              const originalValue = details.originalValue || '';
-              const correction = details.correction || '';
-              const reason = details.reason || '';
-              const source = details.source || '';
-              const timestamp = details.timestamp || '';
-              
-              data.push([propertyName, originalValue, correction, reason, source, timestamp]);
-            }
-          });
-        } else if (feedbackData && typeof feedbackData === 'object') {
-          // If it's an object with multiple property feedbacks
+        // If it's an object with multiple property feedbacks
+        if (feedbackData && typeof feedbackData === 'object' && !Array.isArray(feedbackData)) {
           Object.entries(feedbackData).forEach(([propertyName, details]) => {
             if (details && typeof details === 'object') {
               // Type assertion to tell TypeScript about the expected structure
               const typedDetails = details as {
-                originalValue?: string;
+                originalValue?: string | number | null;
                 correction?: string;
                 reason?: string;
                 source?: string;
@@ -158,12 +138,27 @@ export default function SubmitEvaluationDialog({
               
               data.push([
                 propertyName, 
-                typedDetails.originalValue || '', 
+                typedDetails.originalValue !== null ? String(typedDetails.originalValue || '') : 'NOT FOUND', 
                 typedDetails.correction || '', 
                 typedDetails.reason || '', 
                 typedDetails.source || '', 
                 typedDetails.timestamp || ''
               ]);
+            }
+          });
+        } else if (Array.isArray(feedbackData)) {
+          feedbackData.forEach(item => {
+            if (item && typeof item === 'object') {
+              const propertyName = Object.keys(item)[0] || '';
+              const details = item[propertyName] || {};
+              
+              const originalValue = details.originalValue !== null ? String(details.originalValue || '') : 'NOT FOUND';
+              const correction = details.correction || '';
+              const reason = details.reason || '';
+              const source = details.source || '';
+              const timestamp = details.timestamp || '';
+              
+              data.push([propertyName, originalValue, correction, reason, source, timestamp]);
             }
           });
         }
@@ -177,7 +172,7 @@ export default function SubmitEvaluationDialog({
 
   // Helper function to add property data to Excel
   const addPropertyData = (data: any[][], propertyDataJson: string | null) => {
-    data.push(["General Property Information"]);
+    data.push([""], ["General Property Information"]);
     
     if (propertyDataJson) {
       try {
@@ -196,21 +191,48 @@ export default function SubmitEvaluationDialog({
     }
   };
 
-  // Helper function to add development data to Excel
+  // Helper function to add development data to Excel - updated for new structure
   const addDevelopmentData = (data: any[][], developmentInfoJson: string | null) => {
     data.push([""], ["Development Information"]);
     
     if (developmentInfoJson) {
       try {
         const developmentInfo = JSON.parse(developmentInfoJson);
-        data.push(["Development Attribute", "Value"]);
+        data.push(["Requirement Category", "Attribute", "Value", "Referenced Sections"]);
         
-        const flattenedInfo = flattenObject(developmentInfo);
-        Object.entries(flattenedInfo).forEach(([key, value]) => {
-          data.push([key, value]);
-        });
+        // Extract results data from the new structure
+        const resultsData = developmentInfo.results || {};
+        
+        // Skip document_id and zone_code
+        Object.entries(resultsData)
+          .filter(([key]) => key !== 'document_id' && key !== 'zone_code')
+          .forEach(([category, categoryData]) => {
+            const formattedCategory = category.replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+            
+            // Process each regulation answer within the category
+            Object.entries(categoryData as Record<string, any>).forEach(([attribute, attrData]) => {
+              const formattedAttribute = attribute.replace(/_/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+              
+              // Check if it's a regulation answer structure
+              if (attrData && typeof attrData === 'object' && 'answer' in attrData) {
+                const answer = attrData.answer || 'Not specified';
+                const sections = Array.isArray(attrData.section_list) ? attrData.section_list.join(', ') : 'None';
+                
+                data.push([formattedCategory, formattedAttribute, answer, sections]);
+              } else {
+                // For any other structure, add as is
+                data.push([
+                  formattedCategory, 
+                  formattedAttribute, 
+                  JSON.stringify(attrData), 
+                  ''
+                ]);
+              }
+            });
+          });
       } catch (e) {
         data.push(["Development Info", "Error parsing development information"]);
+        console.error("Error processing development info for Excel:", e);
       }
     } else {
       data.push(["Development Info", "No development information available"]);
@@ -266,7 +288,9 @@ export default function SubmitEvaluationDialog({
       // Set column widths
       const wscols = [
         { wch: 25 },  // A
-        { wch: 80 }   // B
+        { wch: 25 },  // B
+        { wch: 60 },  // C
+        { wch: 20 }   // D
       ];
       ws['!cols'] = wscols;
       

@@ -36,8 +36,27 @@ BUILDING_PLACEMENT_QUERIES = {
 
 # Building Requirements Queries
 BUILDING_REQUIREMENTS_QUERIES = {
-    "building_height": "What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.",
-    "lot_coverage": "What is the maximum lot coverage allowed in {zone_code} zone? Provide the percentage."
+    "maximum_building_height": 
+    """
+    What is the maximum building height allowed in {zone_code} zone? Provide the measurement in feet.
+    If you cannot find the information, respond with 'N/A'. Be concise and to the point.
+    If for the {zone_code} zone, there is only one answer, respond with that answer.
+    If there are multiple answers with different caveats or use cases for maximum building height, list all of them.
+    Think before you answer.
+    Here are some examples of answers you might give:
+    <EXAMPLE OUTPUTS>
+    <EXAMPLE>
+     10 feet
+    </EXAMPLE>
+    <EXAMPLE>
+    Single-Family Dwelling: 35% Corner Lot, 30% interior lot
+    Two-Family Dwelling: 40% Corner Lot, 35% interior lot
+    Group House and Garden Apartments: 50% Corner Lot, 40% interior lot
+    Apartment House: 60% Corner Lot, 50% interior lot
+    </EXAMPLE>
+    </EXAMPLE OUTPUTS>
+    """,
+    "maximum_lot_coverage": "What is the maximum lot coverage allowed in {zone_code} zone? Provide the percentage."
 }
 
 # Landscaping Requirements Queries
@@ -46,6 +65,25 @@ LANDSCAPING_QUERIES = {
     "landscape_plan_review": "What is the landscape plan review process for {zone_code} zone? Provide a summary.",
     "species_variation": "What are the species variation requirements for landscaping in {zone_code} zone? Provide a summary.",
     "performance_guarantee": "What are the performance guarantee and warranty requirements for landscaping in {zone_code} zone? Provide a summary."
+}
+
+#Permitted Uses Queries
+PERMITTED_USES_QUERIES = {
+    "permitted_uses": """
+    <INSTRUCTIONS>
+    - Only list uses that are permitted in the {zone_code} zone, as denoted by the cell value having 'P' or 'S' in that column. Permitted uses ONLY include 'P' or 'S'.
+    - Ignore cells with any other values
+    </INSTRUCTIONS>
+
+    <QUESTION>
+    What are the permitted uses for {zone_code} zone? List the use along with the cell value in the response.
+    </QUESTION>
+
+    <EXAMPLE>
+    Bed and Breakfast Establishments (P)
+    Recreational Facilities (S)
+    </EXAMPLE>
+    """
 }
 
 # Enhanced query templates with more specific instructions for better extraction

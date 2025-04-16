@@ -165,303 +165,286 @@ export const mockPropertyData: Record<string, MockPropertyData> = {
         },
       },
     },
-    "Development Information": {
-        "requirements": {
-          "lot_requirements": {
-            "maximum_density": {
-              "unit": "units",
-              "value": "10",
-              "source": "Demo Data",
-              "alias": "Maximum Density",
-            },
-            "minimum_lot_size": {
-              "unit": "square_feet",
-              "value": "1000",
-              "source": "Demo Data",
-              "alias": "Minimum Lot Size",
-            },
-            "minimum_lot_width": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Lot Width",
-            },
-            "minimum_lot_frontage": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Lot Frontage",
-            },
-            "minimum_living_area": {
-              "unit": "square_feet",
-              "value": "1000",
-              "source": "Demo Data",
-              "alias": "Minimum Living Area",
-            }
-          },
-          "building_placement_requirements": {
-            "minimum_front_setback": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Front Setback",
-            },
-            "minimum_street_side_setback": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Street Side Setback",
-            },
-            "minimum_side_yard_setback": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Side Yard Setback",
-            },
-            "minimum_rear_setback": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Rear Setback",
-            },
-            "accessory_building_setback": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Accessory Building Setback",
-            }
-          },
-          "building_requirements": {
-            "maximum_building_height": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Maximum Building Height",
-            },
-            "maximum_lot_coverage": {
-              "unit": "percentage",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Maximum Lot Coverage",
-            }
-          },
-          "landscaping_requirements": {
-            "minimum_plant_sizes": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Plant Sizes",
-            },
-            "landscape_plan_review_summary": {
-              "summary": dataPoint(`
-                The landscape plan review process for the RR (Rural Residential) zone involves several key steps and requirements as outlined in the regulations. A landscape plan must be submitted as part of all site plan and permit applications, detailing perimeter areas, buffer yards, common areas, entryways, and any other relevant open spaces. The plan must be drawn to the same scale as the site plan and include:
-
-                1. **Proposed Landscaping**: All proposed plants must be indicated with circles showing their anticipated size at maturity.
-                2. **Plant Table**: A table listing the scientific and common names, quantities, and sizes of all proposed plants.
-                3. **Compliance Calculations**: Calculations demonstrating how the plan meets the chapter's requirements.
-                4. **Existing Features**: Identification of existing natural and man-made landscape features, as well as proposed buildings and structures.
-                5. **Tree Management**: Existing trees of eight-inch caliper or greater must be labeled for removal or preservation, with protective measures noted for those to be saved.
-                6. **Contours**: Contours should be shown at two-foot intervals.
-
-                The submitted landscape plans are subject to review and approval by the Plan Commission or Administrator, who may modify requirements if existing vegetation or topography makes compliance difficult. Overall, the process aims to ensure that landscaping contributes positively to the community's health, attractiveness, and environmental sensitivity.
-                `, "Demo Data", "Landscape Plan Review Summary"),
-            },
-            "species_variation_requirement_summary": {
-              "summary": dataPoint(`
-                In the RR (Rural Residential) zone, the species variation requirements for landscaping stipulate that no single species of tree can constitute more than 35% of the total number of trees planted, and similarly, no single species of shrub can make up more than 35% of the total number of shrubs. This regulation is designed to promote biodiversity and prevent over-reliance on a single species in landscaping.
-                `, "Demo Data", "Species Variation Requirement Summary"),
-            },
-            "performance_guarantee_warranty_requirements_summary": {
-              "summary": dataPoint(`
-                In the RR (Rural Residential) zone, the performance guarantee for landscaping requires the applicant to provide a financial guarantee to ensure that all landscaping is installed according to the approved plan and in compliance with the relevant regulations. This guarantee is mandated by the Plan Commission and is outlined in §154.161. Additionally, landscaping materials must be installed before a certificate of occupancy is issued, although the Administrator may allow a delay of up to 120 days due to adverse weather or other scheduling conflicts. During any delay, a surety or guarantee may be required to cover the estimated installation costs. Furthermore, all landscaping must be maintained, with dead or damaged plants needing replacement by the end of the growing season to remain compliant.
-                `, "Demo Data", "Performance Guarantee Warranty Requirements Summary"),
-            }
-          },
-          "parking_requirements": {
-            "minimum_aisle_width": {
-              "unit": "feet",
-              "value": "100",
-              "source": "Demo Data",
-              "alias": "Minimum Aisle Width",
-            },
-            "curbing_requirements": {
-              "summary": dataPoint(`
-                Curbing requirements for parking areas in the RR zone include the necessity for curbs and gutters to be built according to the town's construction standards. These curbs must be installed around the perimeter of all parking facilities and landscape islands within the parking facilities. The purpose of this requirement is to prevent parked vehicles from extending beyond the parking area onto a street right-of-way or adjacent property, as well as to protect landscaped areas.
-                `, "Demo Data", "Curbing Requirements"),
-            },
-            "striping_requirements": {
-              "summary": dataPoint(`
-                Parking areas in the RR (Residential Rural) zone must be striped and maintained to clearly identify each parking space. This requirement ensures that parking spaces are organized and easily recognizable for users.
-                `, "Demo Data", "Striping Requirements"),
-            },
-            "drainage_requirements": {
-              "summary": dataPoint(`
-                Parking areas must be graded and drained to ensure that water does not flow onto adjacent property or public sidewalks. Additionally, runoff generated by parking areas must be collected in appropriate drainage facilities in accordance with the Bargersville storm water standards
-                `, "Demo Data", "Drainage Requirements"),
-            },
-            "parking_stalls_required": {
-              "summary": dataPoint(`
-                In the RR (Residential Rural) zone, the parking requirements are not explicitly detailed in the provided context. However, it is mentioned that except for certain residential uses, there are no minimum required parking spaces. Instead, the owner is responsible for providing parking spaces based on factors such as the number of employees, expected customer traffic, or actual counts at similar establishments. The presence of convenient municipal off-street parking or on-street spaces adjacent to the site, as well as pedestrian connections to nearby residential neighborhoods or employment centers, are also considered. 
-
-                For specific uses, the maximum number of parking spaces permitted is determined based on the gross square footage of the use or as outlined in the Permitted Use Table. If the calculation results in a fraction, it is rounded up to the next whole number. 
-
-                In summary, the RR zone does not have a fixed number of required parking stalls; instead, it allows flexibility based on the specific circumstances of each establishment.
-                `, "Demo Data", "Parking Stalls Required"),
-            }
-          },
-          "signage_requirements": {
-            "permitted_sign_types": {
-              "signs": [
-                "Door signs (not covering more than 25% of the door area and not illuminated)",
-                "Wall-mounted cabinet signs (in nonresidential districts, stylized in shape)"
-              ],
-            },
-            "prohibited_sign_types": {
-              "signs": [
-                "Abandoned signs",
-                "Signs that are animated, blink, flash, move, rotate, or have scrolling text",
-                "Balloon or inflatable signs",
-                "Billboards or off-premise advertising signs",
-                "Pole signs",
-                "Reflective or fluorescent signs",
-                "Signs attached to or painted on trees or natural features",
-                "Signs within the right-of-way",
-                "Signs installed, attached to, or painted on fences",
-                "Signs or sign support structures obstructing a means of egress, including any fire escape, window, door opening, stairway, exit, walkway, any utility access, or fire department connection",
-                "Signs interfering with any opening required for ventilation",
-                "Signs resembling traffic control device signs",
-                "Signs with exposed raceways",
-                "Snipe or bandit signs",
-                "Unlawful vehicle signs",
-              ]
-            },
-            "design_requirements": {
-              "requirements": dataPoint(`
-                1. **Material Requirements:**  
-                  - Sign design themes and materials must be compatible with the architecture, colors, and materials of the project.  
-                  - Permanent signs located in residential districts cannot be separately or specially illuminated, except for identification signs at the entrance of a residential subdivision.  
-
-                2. **Illumination Requirements:**  
-                  - Permanent signs in residential districts must not have internal illumination unless specified otherwise.  
-                  - Signs in nonresidential districts may use internal illumination, internal indirect (halo) illumination, or external indirect illumination.  
-                  - Outdoor internally illuminated signs must have an opaque background with translucent letters or graphics, or a colored background with lighter letters or graphics.  
-                  - Exposed light sources are prohibited, and light sources must be shielded to prevent light trespass onto adjacent properties.  
-                  - Signs located within 50 feet of a single-family district cannot be internally illuminated.  
-
-                3. **Size Requirements:**  
-                  - Signs must be no larger than necessary for visibility and legibility.  
-                  - A master sign plan must not contain a freestanding sign exceeding any maximum height standard by more than 50%.  
-                  - A wall sign must not exceed any maximum sign area standard by more than 25%.  
-                  - The number of signs must be sufficient for internal traffic and navigation for vehicles and pedestrians.`, "Demo Data", "Design Requirements"),
-            }
-          }
-        }
+   "Development Information": {
+  "document_id": "demo_document",
+  "zone_code": "CMX-5",
+  "results": {
+    "lot_requirements": {
+      "density": {
+        "answer": "10 units per acre is the maximum density allowed.",
+        "section_list": ["Demo Section 1.1"],
+        "chunks": []
+      },
+      "lot_size": {
+        "answer": "1000 square feet is the minimum lot size required.",
+        "section_list": ["Demo Section 1.2"],
+        "chunks": []
+      },
+      "lot_width": {
+        "answer": "100 feet is the minimum lot width required.",
+        "section_list": ["Demo Section 1.3"],
+        "chunks": []
+      },
+      "lot_frontage": {
+        "answer": "100 feet of street frontage is required for all lots.",
+        "section_list": ["Demo Section 1.4"],
+        "chunks": []
+      },
+      "living_area": {
+        "answer": "1000 square feet minimum living area is required.",
+        "section_list": ["Demo Section 1.5"],
+        "chunks": []
       }
+    },
+    "building_placement_requirements": {
+      "front_setback": {
+        "answer": "100 feet minimum front setback is required.",
+        "section_list": ["Demo Section 2.1"],
+        "chunks": []
+      },
+      "street_side_setback": {
+        "answer": "100 feet minimum street side setback is required for corner lots.",
+        "section_list": ["Demo Section 2.2"],
+        "chunks": []
+      },
+      "side_yard_setback": {
+        "answer": "100 feet minimum side yard setback is required.",
+        "section_list": ["Demo Section 2.3"],
+        "chunks": []
+      },
+      "rear_setback": {
+        "answer": "100 feet minimum rear setback is required.",
+        "section_list": ["Demo Section 2.4"],
+        "chunks": []
+      },
+      "accessory_building_setback": {
+        "answer": "100 feet minimum accessory building setback is required.",
+        "section_list": ["Demo Section 2.5"],
+        "chunks": []
+      }
+    },
+    "building_requirements": {
+      "maximum_building_height": {
+        "answer": "100 feet is the maximum building height allowed.",
+        "section_list": ["Demo Section 3.1"],
+        "chunks": []
+      },
+      "maximum_lot_coverage": {
+        "answer": "100% maximum lot coverage is permitted.",
+        "section_list": ["Demo Section 3.2"],
+        "chunks": []
+      }
+    },
+    "landscaping_requirements": {
+      "plant_sizes": {
+        "answer": "Minimum plant size is 100 feet.",
+        "section_list": ["Demo Section 4.1"],
+        "chunks": []
+      },
+      "landscape_plan_review": {
+        "answer": "The landscape plan review process involves submitting detailed plans showing proposed plants, plant tables, compliance calculations, existing features, tree management, and contours at two-foot intervals.",
+        "section_list": ["Demo Section 4.2"],
+        "chunks": []
+      },
+      "species_variation": {
+        "answer": "No single species of tree or shrub can constitute more than 35% of the total number of that plant type.",
+        "section_list": ["Demo Section 4.3"],
+        "chunks": []
+      },
+      "performance_guarantee": {
+        "answer": "A financial guarantee is required to ensure landscaping is installed according to plan, with installation before certificate of occupancy or within 120 days due to weather delays.",
+        "section_list": ["Demo Section 4.4"],
+        "chunks": []
+      }
+    },
+    "parking_requirements": {
+      "aisle_width": {
+        "answer": "100 feet minimum aisle width is required.",
+        "section_list": ["Demo Section 5.1"],
+        "chunks": []
+      },
+      "curbing_requirements": {
+        "answer": "Curbs and gutters must be built around parking facilities and landscape islands to prevent vehicles from extending beyond the parking area.",
+        "section_list": ["Demo Section 5.2"],
+        "chunks": []
+      },
+      "striping_requirements": {
+        "answer": "Parking areas must be striped and maintained to clearly identify each parking space.",
+        "section_list": ["Demo Section 5.3"],
+        "chunks": []
+      },
+      "drainage_requirements": {
+        "answer": "Parking areas must be graded and drained to prevent water flow onto adjacent properties or sidewalks, with runoff collected in appropriate drainage facilities.",
+        "section_list": ["Demo Section 5.4"],
+        "chunks": []
+      },
+      "parking_stalls": {
+        "answer": "The number of required parking spaces is based on factors such as number of employees, expected customer traffic, or actual counts at similar establishments.",
+        "section_list": ["Demo Section 5.5"],
+        "chunks": []
+      }
+    },
+    "signage_requirements": {
+      "permitted_signs": {
+        "answer": "Permitted signs include door signs and wall-mounted cabinet signs in non-residential districts.",
+        "section_list": ["Demo Section 6.1"],
+        "chunks": []
+      },
+      "prohibited_signs": {
+        "answer": "Prohibited signs include abandoned signs, animated signs, balloon signs, billboards, pole signs, and signs within the right-of-way.",
+        "section_list": ["Demo Section 6.2"],
+        "chunks": []
+      },
+      "design_requirements": {
+        "answer": "Sign design must be compatible with architecture and materials of the project, with specific requirements for illumination and size based on location and purpose.",
+        "section_list": ["Demo Section 6.3"],
+        "chunks": []
+      }
+    }
+  }
+}
   }
 }
 
 // Helper function to create development info mock data
+// Helper function to create development info mock data
 export const createDevelopmentInfoMockData = () => {
   return {
-    "requirements": {
+    "document_id": "mock_document",
+    "zone_code": "R1",
+    "results": {
       "lot_requirements": {
-        "lot_size": {
-          "minimum_lot_area": {
-            alias: "Minimum Lot Area",
-            value: "5,000",
-            source: "Mock data",
-            unit: "Sq. Ft."
-          },
-          "minimum_lot_width": {
-            alias: "Minimum Lot Width",
-            value: "50",
-            source: "Mock data",
-            unit: "Ft."
-          },
-          "summary": {
-            alias: "Lot Size Summary",
-            value: "Minimum lot size of 5,000 sq. ft. with 50 ft. minimum width required for all residential developments.",
-            source: "Mock data"
-          }
+        "maximum_density": {
+          "answer": "8 units per acre is the maximum density allowed in this zone.",
+          "section_list": ["154.042", "154.050"],
+          "chunks": []
+        },
+        "minimum_lot_size": {
+          "answer": "5,000 square feet is the minimum lot size required for all residential developments.",
+          "section_list": ["154.042"],
+          "chunks": []
+        },
+        "minimum_lot_width": {
+          "answer": "50 feet is the minimum lot width required.",
+          "section_list": ["154.042"],
+          "chunks": []
+        },
+        "minimum_lot_frontage": {
+          "answer": "40 feet of street frontage is required for all residential lots.",
+          "section_list": ["154.042", "154.045"],
+          "chunks": []
+        },
+        "minimum_living_area": {
+          "answer": "1,200 square feet minimum living area is required for single-family dwellings.",
+          "section_list": ["154.048"],
+          "chunks": []
         }
       },
       "building_placement_requirements": {
-        "setbacks": {
-          "front_setback": {
-            alias: "Front Setback",
-            value: "25",
-            source: "Mock data",
-            unit: "Ft."
-          },
-          "side_setback": {
-            alias: "Side Setback",
-            value: "10",
-            source: "Mock data",
-            unit: "Ft."
-          },
-          "rear_setback": {
-            alias: "Rear Setback",
-            value: "20",
-            source: "Mock data",
-            unit: "Ft."
-          },
-          "summary": {
-            alias: "Setback Summary",
-            value: "Front: 25 ft, Side: 10 ft, Rear: 20 ft minimum setbacks required.",
-            source: "Mock data"
-          }
+        "minimum_front_setback": {
+          "answer": "25 feet minimum front setback is required from property line to structure.",
+          "section_list": ["154.043"],
+          "chunks": []
+        },
+        "minimum_street_side_setback": {
+          "answer": "15 feet minimum street side setback is required for corner lots.",
+          "section_list": ["154.043"],
+          "chunks": []
+        },
+        "minimum_side_yard_setback": {
+          "answer": "10 feet minimum side yard setback is required for interior lot lines.",
+          "section_list": ["154.043"],
+          "chunks": []
+        },
+        "minimum_rear_setback": {
+          "answer": "20 feet minimum rear setback is required for primary structures.",
+          "section_list": ["154.043"],
+          "chunks": []
+        },
+        "accessory_building_setback": {
+          "answer": "5 feet minimum setback is required for accessory buildings from side and rear property lines.",
+          "section_list": ["154.044"],
+          "chunks": []
         }
       },
       "building_requirements": {
-        "height": {
-          "maximum_height": {
-            alias: "Maximum Height",
-            value: "35",
-            source: "Mock data",
-            unit: "Ft."
-          },
-          "summary": {
-            alias: "Height Summary",
-            value: "Buildings may not exceed 35 feet in height.",
-            source: "Mock data"
-          }
+        "maximum_building_height": {
+          "answer": "35 feet is the maximum building height allowed for primary structures.",
+          "section_list": ["154.046"],
+          "chunks": []
         },
-        "density": {
-          "maximum_density": {
-            alias: "Maximum Density",
-            value: "8",
-            source: "Mock data",
-            unit: "Units per Acre"
-          }
+        "maximum_lot_coverage": {
+          "answer": "40% maximum lot coverage by structures is permitted.",
+          "section_list": ["154.047"],
+          "chunks": []
         }
       },
       "landscaping_requirements": {
-        "general": {
-          "requirements": {
-            alias: "Landscaping Requirements",
-            value: "Minimum 20% of the lot must be landscaped. Street trees required every 40 ft. along frontage.",
-            source: "Mock data"
-          }
+        "plant_sizes": {
+          "answer": "Deciduous trees must be at least 2 inch caliper, evergreen trees must be at least 6 feet tall, and shrubs must be at least 18 inches tall at time of planting.",
+          "section_list": ["154.090", "154.092"],
+          "chunks": []
+        },
+        "landscape_plan_review": {
+          "answer": "Landscape plans must be submitted as part of all site plan and permit applications, detailing perimeter areas, buffer yards, common areas, and entryways. Plans must show proposed plants, include a plant table listing scientific and common names, quantities, and sizes, and demonstrate compliance with requirements.",
+          "section_list": ["154.091"],
+          "chunks": []
+        },
+        "species_variation": {
+          "answer": "No single species of tree or shrub can constitute more than 35% of the total number of that plant type.",
+          "section_list": ["154.093"],
+          "chunks": []
+        },
+        "performance_guarantee": {
+          "answer": "A financial guarantee must be provided to ensure landscaping is installed according to approved plans. Landscaping must be installed before certificate of occupancy is issued, with possible delay up to 120 days due to adverse weather.",
+          "section_list": ["154.161"],
+          "chunks": []
         }
       },
       "parking_requirements": {
-        "residential": {
-          "requirements": {
-            alias: "Residential Parking",
-            value: "2 parking spaces per dwelling unit. Additional visitor parking at 1 space per 4 units for developments with more than 10 units.",
-            source: "Mock data"
-          }
+        "aisle_width": {
+          "answer": "24 feet minimum aisle width required for 90-degree parking spaces, 18 feet for 60-degree parking, and 12 feet for parallel parking.",
+          "section_list": ["154.110", "154.112"],
+          "chunks": []
+        },
+        "curbing_requirements": {
+          "answer": "Curbs and gutters must be built according to town construction standards around the perimeter of all parking facilities and landscape islands to prevent vehicles from extending beyond parking areas.",
+          "section_list": ["154.115"],
+          "chunks": []
+        },
+        "striping_requirements": {
+          "answer": "Parking areas must be striped and maintained to clearly identify each parking space.",
+          "section_list": ["154.116"],
+          "chunks": []
+        },
+        "drainage_requirements": {
+          "answer": "Parking areas must be graded and drained to ensure water does not flow onto adjacent property or public sidewalks. Runoff must be collected in appropriate drainage facilities according to town stormwater standards.",
+          "section_list": ["154.117"],
+          "chunks": []
+        },
+        "parking_stalls": {
+          "answer": "For residential uses, 2 parking spaces per dwelling unit are required. For multi-family developments with more than 10 units, an additional visitor parking space is required per 4 units.",
+          "section_list": ["154.108", "154.109"],
+          "chunks": []
         }
       },
       "signage_requirements": {
         "permitted_signs": {
-          "signs": [
-            "One monument sign not to exceed 24 sq. ft. and 6 ft. in height",
-            "Building identification sign not to exceed 6 sq. ft.",
-            "Temporary real estate sign not to exceed 6 sq. ft."
-          ]
+          "answer": "Permitted signs include: monument signs, wall signs, door signs, and temporary real estate signs, subject to specific size and placement regulations.",
+          "section_list": ["154.130", "154.132"],
+          "chunks": []
+        },
+        "prohibited_signs": {
+          "answer": "Prohibited signs include: animated or flashing signs, balloon signs, billboards, pole signs, signs in right-of-way, signs on trees or natural features, and signs obstructing means of egress.",
+          "section_list": ["154.131"],
+          "chunks": []
+        },
+        "design_requirements": {
+          "answer": "Sign design must be compatible with architecture and materials of the project. Permanent signs in residential districts cannot be separately illuminated except for subdivision entrance signs. Illuminated signs must have opaque backgrounds with translucent letters, and light sources must be shielded.",
+          "section_list": ["154.135", "154.136"],
+          "chunks": []
         }
       }
     }
   };
-}; 
+};

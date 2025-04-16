@@ -7,25 +7,35 @@ from typing import Optional
 
 from langchain_core.runnables import RunnableConfig
 
-
 @dataclass(kw_only=True)
-class Configuration:
+class ExtractorConfiguration:
     """The configuration for the municipal code retrieval agent."""
 
-    # Municipal code retrieval parameters
-    municipality: str = "Richmond"
-    state: str = "IN"
-    zone_code: str = "RR"
     model_name: str = "gpt-4o-mini"
     test_mode: bool = False
-    use_html_cache: bool = True
-    use_chunk_cache: bool = True
-    use_query_cache: bool = False
+
     
     @classmethod
     def from_runnable_config(
         cls, config: Optional[RunnableConfig] = None
-    ) -> Configuration:
+    ) -> ExtractorConfiguration:
+        """Create a Configuration instance from a RunnableConfig object."""
+        configurable = (config.get("configurable") or {}) if config else {}
+        _fields = {f.name for f in fields(cls) if f.init}
+        return cls(**{k: v for k, v in configurable.items() if k in _fields})
+    
+@dataclass(kw_only=True)
+class QuerierConfiguration:
+    """The configuration for the municipal code retrieval agent."""
+
+    model_name: str = "gpt-4o-mini"
+    test_mode: bool = False
+
+    
+    @classmethod
+    def from_runnable_config(
+        cls, config: Optional[RunnableConfig] = None
+    ) -> QuerierConfiguration:
         """Create a Configuration instance from a RunnableConfig object."""
         configurable = (config.get("configurable") or {}) if config else {}
         _fields = {f.name for f in fields(cls) if f.init}

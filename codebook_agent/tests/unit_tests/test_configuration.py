@@ -1,4 +1,4 @@
-from agent.configuration import Configuration
+from agent_graphs.configuration import Configuration
 
 
 def test_configuration_empty() -> None:

@@ -1,6 +1,13 @@
-// app/api/development-info/route.js
+// app/api/development-info/route.ts
 import { NextResponse } from 'next/server';
 import { Client } from "@langchain/langgraph-sdk";
+
+// Define the expected response type from the extractor graph
+interface ExtractorGraphResponse {
+  document_id: string;
+  // Add other fields that might be in the response
+  [key: string]: unknown;
+}
 
 // Get LangGraph client with server-side env variables
 function getLangGraphClient() {
@@ -24,12 +31,7 @@ function getLangGraphClient() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("BODY: ", body);
     const { municipality, state, zone_code } = body;
-
-    console.log("MUNICIPALITY: ", municipality);
-    console.log("STATE: ", state);
-    console.log("ZONE CODE: ", zone_code);
     
     // Validate required parameters
     if (!municipality) {
@@ -56,72 +58,60 @@ export async function POST(request: Request) {
     console.log(`Processing municipal code for ${municipality}, ${state}, zone: ${zone_code}`);
     
     const client = getLangGraphClient();
-    
-    const documentId = `${municipality.toLowerCase().replace(/\s+/g, '_')}_${state.toLowerCase()}`;
-    
-    // 2. Process the document with first graph
+        
+    // Process the document with first graph
     const initialState = {
-      html_document_id: "",
-      document_content: "",
-      title_list: {},
-      section_list: {},
-      analysis_results: {}
+      municipality: municipality,
+      state_code: state,
+      zone_code: zone_code,
     };
     
     const config = {
       configurable: {
-        municipality: municipality,
-        state: state,
-        zone_code: zone_code,
-        use_html_cache: true,
-        use_chunk_cache: true,
         model_name: "gpt-4o-mini",
       }
     };
     
+    // Execute the graph and type the response
     const documentResult = await client.runs.wait(
       null,  // null for stateless run
-      "extract_and_index_graph", // Assistant ID/Graph name
+      "extractor_graph", // Assistant ID/Graph name
       {
         input: initialState,
         config
       }
     );
     
-    // 3. Query requirements with second graph
-    console.log(`Querying requirements for ${documentId}, zone: ${zone_code}`);
+    const typedResult = documentResult as ExtractorGraphResponse;
     
+    // Check if document_id exists in the response
+    if (!typedResult.document_id) {
+      throw new Error("Extractor graph failed to provide a document_id");
+    }
+    
+    // Now document_id is safely typed and verified
+    const document_id = typedResult.document_id;
+
     const queryInitialState = {
-      html_document_id: documentId,
-      zone_code,
+      document_id: document_id,
+      zone_code: zone_code,
       requirements: {},
-      errors: {}
     };
     
-    const queryConfig = {
-      configurable: {
-        model_name: "gpt-4o-mini",
-        zone_code
-      }
-    };
-    
-    // Execute the second graph using wait method
     const queryResult = await client.runs.wait(
       null, // null for stateless run
-      "query_graph", // Assistant ID/Graph name
+      "querier_graph", // Assistant ID/Graph name
       {
         input: queryInitialState,
-        config: queryConfig
+        config
       }
-    );
-    
-    // Return combined results
+    );  
+
     return NextResponse.json({
       status: 'success',
       documentProcessing: documentResult,
       requirements: queryResult
     });
-    
   } catch (error) {
     console.error("Error processing development info:", error);
     return NextResponse.json(
