@@ -35,8 +35,6 @@ class ExtractorState(TypedDict):
 def get_config(config: RunnableConfig) -> ExtractorConfiguration:
     return ExtractorConfiguration.from_runnable_config(config)
 
-#### HELPERS #####
-
 def create_document_id(municipality: str, state: str) -> str:
     return f"{municipality.lower().replace(' ', '_')}_{state.lower()}"
 

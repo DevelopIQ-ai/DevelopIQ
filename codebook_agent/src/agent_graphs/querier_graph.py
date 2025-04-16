@@ -221,13 +221,13 @@ async def landscaping_requirements_node(state: Dict[str, Any], config: RunnableC
     }
     
 # Permitted uses query node
-async def permitted_uses_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
+async def permitted_uses_node(state: QuerierState, config: RunnableConfig) -> QuerierState:
     """Query permitted uses from the municipal code."""
-    html_document_id = state["html_document_id"]
+    document_id = state["document_id"]
     zone_code = state["zone_code"]
     configs = get_config(config)
     # Create a new retriever instance for this node
-    retriever = QdrantRetriever(document_id=html_document_id)
+    retriever = QdrantRetriever(document_id=document_id)
     await retriever.initialize()
     
     queries = {
