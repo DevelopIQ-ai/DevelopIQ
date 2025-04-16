@@ -94,25 +94,6 @@ class QdrantRetriever(QdrantBase):
         )
         return [point.payload for point in result]
 
-    async def list_all_chunks(self) -> List[Dict]:
-        """List all chunks in the collection."""
-        
-        all_payloads = []
-        offset = None
-        while True:
-            result, next_offset = await self.async_client.scroll(
-                collection_name=self.collection_name,
-                offset=offset,
-                limit=SCROLL_LIMIT,
-                with_payload=True
-            )
-            all_payloads.extend([pt.payload for pt in result])
-            if next_offset is None:
-                break
-            offset = next_offset
-
-        return all_payloads
-    
     @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=1, max=10),
@@ -166,27 +147,3 @@ class QdrantRetriever(QdrantBase):
         # Wait for all tasks to complete
         results = await asyncio.gather(*tasks)    
         return results
-
-        """Query the codebook with a question and return structured output."""
-        # Use the configured retrieval strategy
-        rag_result = self.retrieval_strategy.retrieve(self.retriever, question)
-        raw_context = rag_result['raw_content']
-        chunks = rag_result['chunks']
-        section_list = rag_result['section_list']
-
-        custom_prompt = prompt + "\n\n\n\n" + STANDARD_QUERY_PROMPT
-        prompt = ChatPromptTemplate.from_template(custom_prompt)
-        # Build the LangChain pipeline
-        chain = (
-            {"context": lambda _: raw_context, "query": RunnablePassthrough()}
-            | prompt
-            | self.openai_llm.with_structured_output(structured_output)
-        )
-        # Execute the chain and return results
-        result = await chain.ainvoke(question)
-        result = result.model_dump()
-        result.update({
-            "section_list": section_list,
-            "chunks": chunks
-        })
-        return result
