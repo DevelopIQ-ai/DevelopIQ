@@ -158,6 +158,19 @@ async def lot_requirements_node(state: Dict[str, Any], config: RunnableConfig) -
     # Create a new retriever instance for this node
     retriever = QdrantRetriever(document_id=document_id)
     await retriever.initialize()
+    questions = list(queries.values())
+    query_vars = list(queries.keys())
+    
+    raw_results = await retriever.execute_queries_in_parallel(questions, Answer)    
+    results = {
+        query_var: raw_results[i] 
+        for i, query_var in enumerate(query_vars)
+    }
+    return {
+        "results": {
+            "lot_requirements": results
+        }
+    }
 
 async def building_placement_node(state: Dict[str, Any], config: RunnableConfig) -> Dict[str, Any]:
     """Query building placement requirements from the municipal code."""
@@ -254,13 +267,9 @@ async def permitted_uses_node(state: QuerierState, config: RunnableConfig) -> Qu
             """
     
     questions = list(queries.values())
-    query_vars = list(queries.keys())
     
     raw_results = await retriever.send_query(questions[0], Answer, custom_assistant_prompt)
-    results = {
-        query_var: raw_results[i] 
-        for i, query_var in enumerate(query_vars)
-    }
+    results = raw_results
     
     return {
         "results": {
