@@ -13,7 +13,7 @@ from langchain_qdrant import QdrantVectorStore
 
 from qdrant_wrapper.qdrant_base import QdrantBase, DocumentStatus
 from qdrant_wrapper.rag_strategies import RetrievalStrategy, SectionBasedRetrieval
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 from qdrant_client.http.exceptions import ResponseHandlingException
 # Configuration constants
 OPENAI_MODEL = "gpt-4o-mini"
@@ -96,7 +96,7 @@ class QdrantRetriever(QdrantBase):
 
     @retry(
     stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=10),
+    wait=wait_fixed(60),
         retry=retry_if_exception_type((httpx.ConnectTimeout, ResponseHandlingException))
     )
     async def send_query(self, question: str, structured_output, custom_prompt: str = None, model_name: str = OPENAI_MODEL):
