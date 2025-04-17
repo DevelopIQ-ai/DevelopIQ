@@ -4,13 +4,16 @@ import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PopulationMetrics } from "@/components/population-metrics";
 import { PopulationGraphs } from "@/components/population-graphs";
-import { AlertCircle, Users2 } from "lucide-react";
+import { HousingMetrics } from "@/components/housing-metrics";
+import { AlertCircle, Users2, House, HardHat } from "lucide-react";
 import "@/styles/report.css";
 import { useMarketResearchData } from "@/hooks/useMarketResearchData";
 import { PropertyReportHandler } from "@/lib/report-handler";
+import { IndustryTable } from "@/components/industry-table";
+import { IndustryGraph } from "@/components/industry-graph";
 
 export function MarketResearchTab({ reportHandler, county, state }: { reportHandler: PropertyReportHandler, county: string | null, state: string | null }) {
-  const [startYear, setStartYear] = useState(2013);
+  const [startYear, setStartYear] = useState(2014);
   const [endYear, setEndYear] = useState(2023);
   const [selectedYearRange, setSelectedYearRange] = useState<string>("10-year-data");
   
@@ -18,19 +21,20 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
     marketData, 
     yearlyPopulationData, 
     populationPyramidData, 
+    esriData2024,
     msaName, 
     loading, 
     error 
   } = useMarketResearchData(reportHandler, county, state, startYear, endYear);
   
   const handleFiveYears = () => {
-    setStartYear(2018);
+    setStartYear(2019);
     setEndYear(2023);
     setSelectedYearRange("5-year-data");
   }
 
   const handleTenYears = () => {
-    setStartYear(2013);
+    setStartYear(2014);
     setEndYear(2023);
     setSelectedYearRange("10-year-data");
   }
@@ -70,7 +74,8 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {marketData && (
+        {marketData && esriData2024 && (
+            <>
             <div className="rounded-lg border bg-card shadow-sm">
                 <div className="flex flex-row justify-between items-center gap-2 border-b md:col-span-2 col-span-1 px-6 py-4">
                     <div className="flex items-center gap-2">
@@ -85,11 +90,49 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
                 <div className="p-4">
                     <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state} → {msaName}</p>
                     <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-6">
-                        <PopulationMetrics marketData={marketData} startYear={startYear} endYear={endYear} />
+                        <PopulationMetrics marketData={marketData} startYear={startYear} endYear={endYear} esriData2024={esriData2024} />
                         <PopulationGraphs yearlyPopulationData={yearlyPopulationData} populationPyramidData={populationPyramidData} endYear={endYear} />
                     </div>
                 </div>
             </div>
+            <div className="rounded-lg border bg-card shadow-sm">
+              <div className="flex flex-row justify-between items-center gap-2 border-b md:col-span-2 col-span-1 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                      <House className="h-5 w-5" />
+                      <h2 className="text-lg font-semibold">Housing Information</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                      2024 Esri Data
+                  </div>
+              </div>
+              <div className="p-4">
+                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state}</p>
+                  <div className="grid grid-cols-1 gap-6 mb-6">
+                      <HousingMetrics esriData2024={esriData2024} />
+                  </div>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card shadow-sm">
+              <div className="flex flex-row justify-between items-center gap-2 border-b md:col-span-2 col-span-1 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                      <HardHat className="h-5 w-5" />
+                      <h2 className="text-lg font-semibold">Employment By Industry</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                      2024 Esri Data
+                  </div>
+              </div>
+              <div className="p-4">
+                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state}</p>
+                  <div className="grid grid-cols-1 gap-6 mb-6">
+                      <IndustryTable esriData2024={esriData2024} />
+                      <div className="hidden sm:block">
+                          <IndustryGraph esriData2024={esriData2024} />
+                      </div>
+                  </div>
+              </div>
+            </div>
+            </>
           )}
       </div>
     </div>

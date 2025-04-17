@@ -91,6 +91,7 @@ export const MarketResearchSchema = z.object({
   "location": z.string(),
   "msaName": z.string(),
   "msaId": z.number(),
+  "fipsCode": z.string(),
   "fiveYearData": z.object({
     "marketData": z.object({
             "pop_end": z.number(),
@@ -137,7 +138,78 @@ export const MarketResearchSchema = z.object({
     "populationPyramidData": z.array(populationPyramidDataPointSchema),
     "yearlyPopulationData": z.array(yearlyPopulationGraphDataPointSchema),
   }),
+  "esriData2024": z.object({
+    "averageHouseholdIncome": z.number(),
+    "employmentPopulation": z.number(),
+    "medianHomeValue": z.number(),
+    "medianHouseholdIncome": z.number(),
+    "ownerOccupiedUnits": z.number(),
+    "renterOccupiedUnits": z.number(),
+    "unemploymentPopulation": z.number(),
+    "vacantUnits": z.number(),
+    "workingAgePopulation": z.number(),
+    "unemploymentRate": z.number(),
+    "employmentByIndustry": z.object({
+        "industryBasePopulation": z.number(),
+        "agricultureForestryFishingHuntingPopulation": z.number(),
+        "miningQuarryingOilAndGasExtractionPopulation": z.number(),
+        "constructionPopulation": z.number(),
+        "manufacturingPopulation": z.number(),
+        "wholesaleTradePopulation": z.number(),
+        "retailTradePopulation": z.number(),
+        "transportationWarehousingPopulation": z.number(),
+        "utilitiesPopulation": z.number(),
+        "informationPopulation": z.number(),
+        "financeInsurancePopulation": z.number(),
+        "realEstateRentalLeasingPopulation": z.number(),
+        "professionalScientificTechnicalServicesPopulation": z.number(),
+        "managementOfCompaniesEnterprisesPopulation": z.number(),
+        "administrativeSupportWasteManagementServicesPopulation": z.number(),
+        "educationalServicesPopulation": z.number(),
+        "healthCareSocialAssistancePopulation": z.number(),
+        "artsEntertainmentRecreationPopulation": z.number(),
+        "accommodationFoodServicesPopulation": z.number(),
+        "otherServicesPopulation": z.number(),
+        "publicAdministrationPopulation": z.number(),
+    }).nullable()
+  })
 });
+
+export type EsriData2024Schema = {
+    averageHouseholdIncome: number;
+    employmentPopulation: number;
+    medianHomeValue: number;
+    medianHouseholdIncome: number;
+    ownerOccupiedUnits: number;
+    renterOccupiedUnits: number;
+    unemploymentPopulation: number;
+    vacantUnits: number;
+    workingAgePopulation: number;
+    unemploymentRate: number;
+    employmentByIndustry: {
+        industryBasePopulation: number;
+        agricultureForestryFishingHuntingPopulation: number;
+        miningQuarryingOilAndGasExtractionPopulation: number;
+        constructionPopulation: number;
+        manufacturingPopulation: number;
+        wholesaleTradePopulation: number;
+        retailTradePopulation: number;
+        transportationWarehousingPopulation: number;
+        utilitiesPopulation: number;
+        informationPopulation: number;
+        financeInsurancePopulation: number;
+        realEstateRentalLeasingPopulation: number;
+        professionalScientificTechnicalServicesPopulation: number;
+        managementOfCompaniesEnterprisesPopulation: number;
+        administrativeSupportWasteManagementServicesPopulation: number;
+        educationalServicesPopulation: number;
+        healthCareSocialAssistancePopulation: number;
+        artsEntertainmentRecreationPopulation: number;
+        accommodationFoodServicesPopulation: number;
+        otherServicesPopulation: number;
+        publicAdministrationPopulation: number;
+    } | null;
+} | null;
 
 export type MarketResearch = z.infer<typeof MarketResearchSchema>;
 export type MarketResearchDataSchema = z.infer<typeof marketResearchDataSchema>;

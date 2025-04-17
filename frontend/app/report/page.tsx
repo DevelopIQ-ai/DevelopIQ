@@ -29,6 +29,7 @@ import { useNewsArticles } from "@/hooks/useNewsArticles";
 import { usePropertyImages } from "@/hooks/usePropertyImages";
 import { Button } from "@/components/ui/button";
 import SubmitEvaluationDialog from "@/components/submit-evaluation-dialog";
+import Link from "next/link";
 
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
@@ -42,7 +43,6 @@ export default function PropertyAnalysisDashboard() {
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
   const { images, imagesLoading, imagesError } = usePropertyImages(propertyAddress);
-
   
   // First useEffect: Fetch general property information
   useEffect(() => {
@@ -276,7 +276,7 @@ export default function PropertyAnalysisDashboard() {
             <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">Market Research</h2>
               <p className="text-muted-foreground">
-                Market research and analysis of the area, compiled from US Census data and Esri.
+                Market research and analysis of the area, compiled from US Census data and powered by <Link href="https://www.esri.com/en-us/home">Esri</Link>.
               </p>
             </div>
             <MarketResearchTab reportHandler={reportHandler!} county={county} state={state} />
