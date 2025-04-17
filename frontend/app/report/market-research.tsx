@@ -82,7 +82,7 @@ export function MarketResearchTab({ county, state }: { county: string | null, st
                     </div>
                 </div>
                 <div className="p-4">
-                    <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state} {`>`} {msaName}</p>
+                    <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state} → {msaName}</p>
                     <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-6">
                         <PopulationMetrics marketData={marketData} startYear={startYear} endYear={endYear} />
                         <PopulationGraphs yearlyPopulationData={yearlyPopulationData} populationPyramidData={populationPyramidData} endYear={endYear} />

@@ -84,3 +84,19 @@ export interface YearlyPopulationData {
     population_under_5_percent: number;
     total_population: number;
 }
+
+export interface BaseMarketResearchData {
+    location: string;
+    msaName: string;
+    msaId: number;
+    fiveYearData?: {
+        marketData:MarketResearchData,
+        populationPyramidData: PopulationPyramidDataPoint[],
+        yearlyPopulationData: YearlyPopulationGraphDataPoint[],
+    }
+    tenYearData?: {
+        marketData:MarketResearchData,
+        populationPyramidData: PopulationPyramidDataPoint[],
+        yearlyPopulationData: YearlyPopulationGraphDataPoint[],
+    }
+}
