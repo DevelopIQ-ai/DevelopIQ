@@ -312,10 +312,7 @@ export class PropertyReportHandler {
     existing: MarketResearch,
     updates: Partial<MarketResearch>
   ): MarketResearch {
-    return this.deepMerge(
-      existing as unknown as Record<string, unknown>,
-      updates as unknown as Record<string, unknown>
-    ) as unknown as MarketResearch;
+    return this.deepMerge(existing, updates) as MarketResearch;
   }
 
   private deepMerge(

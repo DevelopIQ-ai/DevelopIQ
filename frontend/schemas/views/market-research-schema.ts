@@ -87,39 +87,59 @@ export const yearlyPopulationDataSchema = z.object({
   total_population: z.number(),
 });
 
-export interface MarketResearch {
-    location: string;
-    msaName: string;
-    msaId: number;
-    fiveYearData: {
-        marketData:MarketResearchDataSchema,
-        populationPyramidData: PopulationPyramidDataPointSchema[],
-        yearlyPopulationData: YearlyPopulationGraphDataPointSchema[],
-    }
-    tenYearData: {
-        marketData:MarketResearchDataSchema,
-        populationPyramidData: PopulationPyramidDataPointSchema[],
-        yearlyPopulationData: YearlyPopulationGraphDataPointSchema[],
-    }
-}
-
 export const MarketResearchSchema = z.object({
   "location": z.string(),
   "msaName": z.string(),
   "msaId": z.number(),
   "fiveYearData": z.object({
-    "marketData": marketResearchDataSchema,
+    "marketData": z.object({
+            "pop_end": z.number(),
+            "pop_start": z.number(),
+            "percent_population_change": z.number().nullable(),
+            "male_percent_end": z.number(),
+            "female_percent_end": z.number(),
+            "male_moe_percent_end": z.number(),
+            "female_moe_percent_end": z.number(),
+            "median_age_end": z.number(),
+            "median_age_start": z.number(),
+            "median_age_change": z.number(),
+            "youth_percent_2023": z.number(),
+            "aging_percent_2023": z.number(),
+            "working_age_percent_2023": z.number(),
+            "age_dependency_ratio_2023": z.number(),
+            "pop_change_25_to_34_percent": z.number().nullable(),
+            "boomer_percent_2023": z.number(),
+            "millennial_percent_2023": z.number(),
+        }),
     "populationPyramidData": z.array(populationPyramidDataPointSchema),
     "yearlyPopulationData": z.array(yearlyPopulationGraphDataPointSchema),
   }),
   "tenYearData": z.object({
-    "marketData": marketResearchDataSchema,
+    "marketData": z.object({
+            "pop_end": z.number(),
+            "pop_start": z.number(),
+            "percent_population_change": z.number().nullable(),
+            "male_percent_end": z.number(),
+            "female_percent_end": z.number(),
+            "male_moe_percent_end": z.number(),
+            "female_moe_percent_end": z.number(),
+            "median_age_end": z.number(),
+            "median_age_start": z.number(),
+            "median_age_change": z.number(),
+            "youth_percent_2023": z.number(),
+            "aging_percent_2023": z.number(),
+            "working_age_percent_2023": z.number(),
+            "age_dependency_ratio_2023": z.number(),
+            "pop_change_25_to_34_percent": z.number().nullable(),
+            "boomer_percent_2023": z.number(),
+            "millennial_percent_2023": z.number(),
+        }),
     "populationPyramidData": z.array(populationPyramidDataPointSchema),
     "yearlyPopulationData": z.array(yearlyPopulationGraphDataPointSchema),
   }),
 });
 
-// export type MarketResearchSchema = z.infer<typeof marketResearchSchema>;
+export type MarketResearch = z.infer<typeof MarketResearchSchema>;
 export type MarketResearchDataSchema = z.infer<typeof marketResearchDataSchema>;
 export type PopulationPyramidDataPointSchema = z.infer<typeof populationPyramidDataPointSchema>;
 export type YearlyPopulationGraphDataPointSchema = z.infer<typeof yearlyPopulationGraphDataPointSchema>;
