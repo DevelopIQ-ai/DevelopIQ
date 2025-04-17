@@ -18,8 +18,8 @@ from qdrant_client.http.exceptions import ResponseHandlingException
 # Configuration constants
 OPENAI_MODEL = "gpt-4o-mini"
 CLAUDE_MODEL = "claude-3-7-sonnet-latest"
-DEFAULT_RETRIEVAL_K = 3
-PERMITTED_USES_RETRIEVAL_K = 3
+DEFAULT_RETRIEVAL_K = 2
+PERMITTED_USES_RETRIEVAL_K = 2
 SCROLL_LIMIT = 100
 STANDARD_QUERY_PROMPT = """Answer the question based only on the following context:
             {context}

@@ -2,7 +2,7 @@ from typing import Dict, Any, Protocol
 from qdrant_client.http.models import Filter, FieldCondition, MatchValue
 
 # Configuration constants
-SECTION_RETRIEVAL_LIMIT = 10
+SECTION_RETRIEVAL_LIMIT = 5
 SCROLL_LIMIT = 100
 
 class RetrievalStrategy(Protocol):
