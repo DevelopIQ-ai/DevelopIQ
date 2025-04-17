@@ -299,7 +299,7 @@ def create_graph() -> StateGraph:
     querier_graph.add_node("building_placement_node", building_placement_node)
     querier_graph.add_node("landscaping_requirements_node", landscaping_requirements_node)
     querier_graph.add_node("combine_results_node", combine_results_node)
-    
+    # querier_graph.add_node("permitted_uses_node", permitted_uses_node)
     # Add edges
     querier_graph.add_edge(START, "init_state_node")    
     querier_graph.add_edge("init_state_node", "building_requirements_node")
@@ -308,12 +308,15 @@ def create_graph() -> StateGraph:
     querier_graph.add_edge("init_state_node", "lot_requirements_node")
     querier_graph.add_edge("init_state_node", "building_placement_node")
     querier_graph.add_edge("init_state_node", "landscaping_requirements_node")
+    # querier_graph.add_edge("init_state_node", "permitted_uses_node")
+
     querier_graph.add_edge("building_requirements_node", "combine_results_node")
     querier_graph.add_edge("parking_node", "combine_results_node")
     querier_graph.add_edge("signs_node", "combine_results_node")
     querier_graph.add_edge("lot_requirements_node", "combine_results_node")
     querier_graph.add_edge("building_placement_node", "combine_results_node")
     querier_graph.add_edge("landscaping_requirements_node", "combine_results_node")
+    # querier_graph.add_edge("permitted_uses_node", "combine_results_node")
     querier_graph.add_edge("combine_results_node", END)
     return querier_graph.compile()
 
