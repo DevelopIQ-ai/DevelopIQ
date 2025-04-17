@@ -13,6 +13,7 @@ export const useNewsArticles = (reportHandler: PropertyReportHandler | null, gen
     const [newsArticlesLoading, setNewsArticlesLoading] = useState(true);
     const [newsArticlesError, setNewsArticlesError] = useState<string | null>(null);
     const [attemptCount, setAttemptCount] = useState(0);
+    const MAX_RETRY_ATTEMPTS = 3;
 
     useEffect(() => {
         // Don't fetch if we already have articles
@@ -27,6 +28,14 @@ export const useNewsArticles = (reportHandler: PropertyReportHandler | null, gen
             return;
         }
 
+        // Stop retrying after MAX_RETRY_ATTEMPTS
+        if (attemptCount >= MAX_RETRY_ATTEMPTS) {
+            if (newsArticlesError === null) {
+                setNewsArticlesError("Failed to retrieve news articles after multiple attempts");
+            }
+            setNewsArticlesLoading(false);
+            return;
+        }
 
         let isMounted = true;
         let timeoutId: NodeJS.Timeout;

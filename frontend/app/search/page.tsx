@@ -76,8 +76,6 @@ export default function GetStarted() {
           const place = autocompleteInstance.current?.getPlace()
           if (place?.formatted_address) {
             if (autocompleteInstance.current) {
-              // const place = autocompleteInstance.current.getPlace();
-              console.log("place", place);
               if (!place || !isAddressInIndiana(place)) {
                 setError("Sorry, we only support properties in Indiana at this time.");
                 setIsLoading(false);

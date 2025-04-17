@@ -3,9 +3,9 @@
 import { Loader2 } from "lucide-react";
 import "@/styles/report.css";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, ReferenceLine } from 'recharts';
-import { YearlyPopulationGraphDataPoint, PopulationPyramidDataPoint } from "@/schemas/views/market-research-schema";
+import { YearlyPopulationGraphDataPointSchema, PopulationPyramidDataPointSchema } from "@/schemas/views/market-research-schema";
 
-export const PopulationGraphs = ({yearlyPopulationData, populationPyramidData, endYear}: {yearlyPopulationData: YearlyPopulationGraphDataPoint[], populationPyramidData: PopulationPyramidDataPoint[], endYear: number}) => {
+export const PopulationGraphs = ({yearlyPopulationData, populationPyramidData, endYear}: {yearlyPopulationData: YearlyPopulationGraphDataPointSchema[], populationPyramidData: PopulationPyramidDataPointSchema[], endYear: number}) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
@@ -14,11 +14,11 @@ export const PopulationGraphs = ({yearlyPopulationData, populationPyramidData, e
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart
                             data={yearlyPopulationData}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                            margin={{ top: 20, right: 30, left: 30, bottom: 5 }}
                         >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="year" />
-                            <YAxis />
+                            <YAxis tickFormatter={(value) => new Intl.NumberFormat().format(value)} />
                             <Tooltip 
                                 formatter={(value: number) => new Intl.NumberFormat().format(value)}
                                 labelFormatter={(label: string) => `Year: ${label}`}

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { GeneralPropertyInfo, DataPoint, GeneralPropertyInfoSchema } from "../schemas/views/general-property-info-schema";
 import { DevelopmentInfo, DevelopmentInfoSchema } from "../schemas/views/development-info-schema";
+import { MarketResearch, MarketResearchSchema } from "../schemas/views/market-research-schema";
 /**
  * PropertyReportHandler class for managing and processing real estate property reports.
  * It handles data collection, validation, and formatting for property analysis.
@@ -8,6 +9,7 @@ import { DevelopmentInfo, DevelopmentInfoSchema } from "../schemas/views/develop
 export class PropertyReportHandler {
   private generalInfo: GeneralPropertyInfo | null = null;
   private developmentInfo: DevelopmentInfo | null = null;
+  private marketResearch: MarketResearch | null = null;
   private rawData: Record<string, unknown> = {};
   private propertyUrl: string | null = null;
   private createdAt: Date = new Date();
@@ -75,6 +77,31 @@ export class PropertyReportHandler {
     return this.developmentInfo;
   } 
 
+  setMarketResearch(data: Partial<MarketResearch>): void {
+    try {
+      const mergedData = this.marketResearch
+        ? this.mergeMarketResearch(this.marketResearch, data)
+        : data;
+      this.rawData = { ...this.rawData, ...data };
+      try {
+        this.marketResearch = PropertyReportHandler.validateMarketResearch(mergedData as MarketResearch);
+      } catch (error) {
+        console.log("validation error", error);
+      }
+      this.updatedAt = new Date();
+      this.status = "updated";
+    } catch (error) {
+      this.handleError(
+        "validation_error",
+        `Failed to set market research: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  getMarketResearch(): MarketResearch | null {
+    return this.marketResearch;
+  }
+
   updateDataPoint(
     path: string,
     value: string | number | null,
@@ -141,6 +168,8 @@ export class PropertyReportHandler {
     return {
       propertyUrl: this.propertyUrl,
       generalInfo: this.generalInfo,
+      developmentInfo: this.developmentInfo,
+      marketResearch: this.marketResearch,
       status: this.status,
       errors: this.errors,
       createdAt: this.createdAt.toISOString(),
@@ -256,6 +285,17 @@ export class PropertyReportHandler {
     }
   }
 
+  public static validateMarketResearch(data: MarketResearch): MarketResearch {
+    try {
+      return MarketResearchSchema.parse(data);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        throw new Error(`Validation error: ${JSON.stringify(error.errors)}`); 
+      }
+      throw error;
+    }
+  }
+
   private mergeGeneralInfo(
     existing: GeneralPropertyInfo,
     updates: Partial<GeneralPropertyInfo>
@@ -268,6 +308,13 @@ export class PropertyReportHandler {
     updates: Partial<DevelopmentInfo>
   ): DevelopmentInfo {
     return this.deepMerge(existing, updates) as DevelopmentInfo;
+  }
+
+  private mergeMarketResearch(
+    existing: MarketResearch,
+    updates: Partial<MarketResearch>
+  ): MarketResearch {
+    return this.deepMerge(existing, updates) as MarketResearch;
   }
 
   private deepMerge(
@@ -365,6 +412,8 @@ export interface ReportError {
 export interface PropertyReportJSON {
   propertyUrl: string | null;
   generalInfo: GeneralPropertyInfo | null;
+  developmentInfo: DevelopmentInfo | null;
+  marketResearch: MarketResearch | null;
   status: ReportStatus;
   errors: ReportError[];
   createdAt: string;

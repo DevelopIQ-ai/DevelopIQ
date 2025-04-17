@@ -276,10 +276,10 @@ export default function PropertyAnalysisDashboard() {
             <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">Market Research</h2>
               <p className="text-muted-foreground">
-                Market research and analysis of the area.
+                Market research and analysis of the area, compiled from US Census data and Esri.
               </p>
             </div>
-            <MarketResearchTab county={county} state={state} />
+            <MarketResearchTab reportHandler={reportHandler!} county={county} state={state} />
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">

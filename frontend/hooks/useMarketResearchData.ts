@@ -1,52 +1,197 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { MarketResearchData, YearlyPopulationGraphDataPoint, PopulationPyramidDataPoint, YearlyPopulationData } from "@/schemas/views/market-research-schema";
+import { YearlyPopulationGraphDataPointSchema, PopulationPyramidDataPointSchema, YearlyPopulationDataSchema, MarketResearch, MarketResearchDataSchema } from "@/schemas/views/market-research-schema";
 import { SupabaseClient } from '@supabase/supabase-js';
+import { PropertyReportHandler } from '@/lib/report-handler';
 
 export function useMarketResearchData(
+  reportHandler: PropertyReportHandler,
   county: string | null, 
   state: string | null,
   startYear: number,
   endYear: number
 ) {
-  const [marketData, setMarketData] = useState<MarketResearchData | null>(null);
+  const [marketData, setMarketData] = useState<MarketResearchDataSchema | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [msaName, setMsaName] = useState<string | null>(null);
-  const [yearlyPopulationData, setYearlyPopulationData] = useState<YearlyPopulationGraphDataPoint[]>([]);
-  const [populationPyramidData, setPopulationPyramidData] = useState<PopulationPyramidDataPoint[]>([]);
+  const [yearlyPopulationData, setYearlyPopulationData] = useState<YearlyPopulationGraphDataPointSchema[]>([]);
+  const [populationPyramidData, setPopulationPyramidData] = useState<PopulationPyramidDataPointSchema[]>([]);
   
   useEffect(() => {
     async function fetchMarketData() {
       if (!county || !state) return;
+
+      if (!reportHandler) return;
+
+      if (reportHandler.getMarketResearch()) {
+        if (startYear === 2013) {
+          setYearlyPopulationData(reportHandler.getMarketResearch()?.tenYearData?.yearlyPopulationData || []);
+          setMarketData(reportHandler.getMarketResearch()?.tenYearData?.marketData || null);
+          setPopulationPyramidData(reportHandler.getMarketResearch()?.tenYearData?.populationPyramidData || []);
+        } else {
+          setYearlyPopulationData(reportHandler.getMarketResearch()?.fiveYearData?.yearlyPopulationData || []);
+          setMarketData(reportHandler.getMarketResearch()?.fiveYearData?.marketData || null);
+          setPopulationPyramidData(reportHandler.getMarketResearch()?.fiveYearData?.populationPyramidData || []);
+        }
+        setLoading(false);
+        return;
+      }
       
       setLoading(true);
       setError(null);
       
-      const supabase = createClient();
-      const location = county + ", " + state;
+      // Create a cache key based on county and state only (not year-dependent)
+      const cacheKey = "marketResearchData";
+      
+      // Determine if we need 5-year or 10-year data for display
+      const isDecadeView = startYear === 2013;
+      
+      // Check if complete data exists in localStorage
+      const cachedData = localStorage.getItem(cacheKey);
+
+      if (cachedData) {
+        try {
+          const parsedData = JSON.parse(cachedData);
+          setMsaName(parsedData.msaName);
+          
+          // Select the appropriate data set based on startYear
+          if (isDecadeView && parsedData.tenYearData) {
+            setYearlyPopulationData(parsedData.tenYearData.yearlyPopulationData);
+            setMarketData(parsedData.tenYearData.marketData);
+            setPopulationPyramidData(parsedData.tenYearData.populationPyramidData);
+          } else if (!isDecadeView && parsedData.fiveYearData) {
+            setYearlyPopulationData(parsedData.fiveYearData.yearlyPopulationData);
+            setMarketData(parsedData.fiveYearData.marketData);
+            setPopulationPyramidData(parsedData.fiveYearData.populationPyramidData);
+          } else {
+            // If we don't have the requested data range in cache, fetch it
+            throw new Error("Requested data range not in cache");
+          }
+
+          reportHandler.setMarketResearch(parsedData);
+          
+          setLoading(false);
+          return;
+        } catch (err) {
+          console.error('Error with cached data:', err);
+          // Continue with fetching if there's an issue with cached data
+        }
+      }
       
       try {
+        const supabase = createClient();
+        const location = county + ", " + state;
+        
         // Get MSA information
         const msaInfo = await fetchMsaInfo(supabase, location);
         setMsaName(msaInfo.msaName);
         
-        // Fetch yearly population data
-        const yearlyData = await fetchYearlyData(supabase, msaInfo.msaId, startYear, endYear);
-        setYearlyPopulationData(yearlyData);
+        // Prepare container for complete cache data
+        const completeData: MarketResearch = {
+          location: location,
+          msaName: msaInfo.msaName,
+          msaId: msaInfo.msaId,
+          fiveYearData: {
+            marketData: {
+              pop_end: 0,
+              pop_start: 0,
+              percent_population_change: 0,
+              male_percent_end: 0,
+              female_percent_end: 0,
+              male_moe_percent_end: 0,
+              female_moe_percent_end: 0,
+              median_age_end: 0,
+              median_age_start: 0,
+              median_age_change: 0,
+              youth_percent_2023: 0,
+              aging_percent_2023: 0,
+              working_age_percent_2023: 0,
+              age_dependency_ratio_2023: 0,
+              pop_change_25_to_34_percent: 0,
+              boomer_percent_2023: 0,
+              millennial_percent_2023: 0,
+            },
+            populationPyramidData: [],
+            yearlyPopulationData: [],
+          },
+          tenYearData: {
+            marketData: {
+              pop_end: 0,
+              pop_start: 0,
+              percent_population_change: 0,
+              male_percent_end: 0,
+              female_percent_end: 0,
+              male_moe_percent_end: 0,
+              female_moe_percent_end: 0,
+              median_age_end: 0,
+              median_age_start: 0,
+              median_age_change: 0,
+              youth_percent_2023: 0,
+              aging_percent_2023: 0,
+              working_age_percent_2023: 0,
+              age_dependency_ratio_2023: 0,
+              pop_change_25_to_34_percent: 0,
+              boomer_percent_2023: 0,
+              millennial_percent_2023: 0,
+            },
+            populationPyramidData: [],
+            yearlyPopulationData: [],
+          },
+        };
         
-        // Fetch start and end year detailed data
-        const dataStart = await fetchYearData(supabase, msaInfo.msaId, startYear);
-        const dataEnd = await fetchYearData(supabase, msaInfo.msaId, endYear);
+        // Fetch 10-year data (2013-2023)
+        const tenYearStart = 2013;
+        const tenYearEnd = 2023;
+        const tenYearlyData = await fetchYearlyData(supabase, msaInfo.msaId, tenYearStart, tenYearEnd);
         
-        // Process the data
-        const compiledData = compileMarketResearchData(dataStart, dataEnd);
-        setMarketData(compiledData);
+        // Fetch 10-year start and end detailed data
+        const tenYearDataStart = await fetchYearData(supabase, msaInfo.msaId, tenYearStart);
+        const tenYearDataEnd = await fetchYearData(supabase, msaInfo.msaId, tenYearEnd);
         
-        // Create population pyramid data
-        if (dataEnd) {
-          const pyramidData = createPopulationPyramidData(dataEnd);
-          setPopulationPyramidData(pyramidData);
+        // Process 10-year data
+        const tenYearCompiledData = compileMarketResearchData(tenYearDataStart, tenYearDataEnd);
+        const tenYearPyramidData = createPopulationPyramidData(tenYearDataEnd);
+        
+        // Store 10-year data in complete data object
+        completeData.tenYearData = {
+          marketData: tenYearCompiledData,
+          populationPyramidData: tenYearPyramidData,
+          yearlyPopulationData: tenYearlyData
+        };
+        
+        // Fetch 5-year data (2018-2023)
+        const fiveYearStart = 2018;
+        const fiveYearlyData = tenYearlyData.filter(item => item.year >= fiveYearStart);
+        
+        // Fetch 5-year start and end detailed data
+        const fiveYearDataStart = await fetchYearData(supabase, msaInfo.msaId, fiveYearStart);
+        // We already have 2023 data from above
+        
+        // Process 5-year data
+        const fiveYearCompiledData = compileMarketResearchData(fiveYearDataStart, tenYearDataEnd);
+        // We can reuse the pyramid data from 2023
+        
+        // Store 5-year data in complete data object
+        completeData.fiveYearData = {
+          marketData: fiveYearCompiledData,
+          populationPyramidData: tenYearPyramidData, // Same pyramid data as both use 2023 end data
+          yearlyPopulationData: fiveYearlyData
+        };
+        
+        // Store the complete data with both 5 and 10 year datasets in localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(completeData));
+        reportHandler.setMarketResearch(completeData);
+        
+        // Set the appropriate data based on current startYear selection
+        if (isDecadeView) {
+          setYearlyPopulationData(tenYearlyData);
+          setMarketData(tenYearCompiledData);
+          setPopulationPyramidData(tenYearPyramidData);
+        } else {
+          setYearlyPopulationData(fiveYearlyData);
+          setMarketData(fiveYearCompiledData);
+          setPopulationPyramidData(tenYearPyramidData);
         }
       } catch (err) {
         console.error('Error fetching market research data:', err);
@@ -57,7 +202,7 @@ export function useMarketResearchData(
     }
     
     fetchMarketData();
-  }, [county, state, startYear, endYear]);
+  }, [reportHandler, county, state, startYear, endYear]);
   
   return {
     marketData,
@@ -92,6 +237,9 @@ async function fetchYearlyData(supabase: SupabaseClient, msaId: string, startYea
   const yearlyData = [];
   
   for (let year = startYear; year <= endYear; year++) {
+    if (year === 2020) {
+      continue;
+    }
     try {
       const { data: yearData, error: yearError } = await supabase
         .from(`${year}_Population_Data`)
@@ -125,7 +273,7 @@ async function fetchYearData(supabase: SupabaseClient, msaId: string, year: numb
   return data;
 }
 
-function compileMarketResearchData(dataStart: YearlyPopulationData, dataEnd: YearlyPopulationData) {
+function compileMarketResearchData(dataStart: YearlyPopulationDataSchema, dataEnd: YearlyPopulationDataSchema) {
   return {
     // Population growth
     pop_end: dataEnd.total_population,
@@ -203,7 +351,7 @@ function compileMarketResearchData(dataStart: YearlyPopulationData, dataEnd: Yea
   };
 }
 
-function createPopulationPyramidData(dataEnd: YearlyPopulationData) {
+function createPopulationPyramidData(dataEnd: YearlyPopulationDataSchema) {
   const pyramidData = [
     { ageGroup: '0-4', percentage: dataEnd.population_under_5_percent },
     { ageGroup: '5-9', percentage: dataEnd.population_5_to_9_percent },

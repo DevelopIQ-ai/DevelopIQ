@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { MarketResearchData } from "@/schemas/views/market-research-schema";
+import { MarketResearchDataSchema } from "@/schemas/views/market-research-schema";
 
 const formatNumber = (num: number | null | undefined) => {
     if (num === null || num === undefined) return 'N/A';
@@ -12,7 +12,7 @@ const formatPercent = (num: number | null | undefined) => {
     return `${num}%`;
 };
 
-export const PopulationMetrics = ({marketData, startYear, endYear}: {marketData: MarketResearchData, startYear: number, endYear: number}) => {
+export const PopulationMetrics = ({marketData, startYear, endYear}: {marketData: MarketResearchDataSchema, startYear: number, endYear: number}) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
