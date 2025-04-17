@@ -1,24 +1,42 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { MarketResearchData, YearlyPopulationGraphDataPoint, PopulationPyramidDataPoint, YearlyPopulationData, BaseMarketResearchData } from "@/schemas/views/market-research-schema";
+import { YearlyPopulationGraphDataPointSchema, PopulationPyramidDataPointSchema, YearlyPopulationDataSchema, MarketResearch, MarketResearchDataSchema } from "@/schemas/views/market-research-schema";
 import { SupabaseClient } from '@supabase/supabase-js';
+import { PropertyReportHandler } from '@/lib/report-handler';
 
 export function useMarketResearchData(
+  reportHandler: PropertyReportHandler,
   county: string | null, 
   state: string | null,
   startYear: number,
   endYear: number
 ) {
-  const [marketData, setMarketData] = useState<MarketResearchData | null>(null);
+  const [marketData, setMarketData] = useState<MarketResearchDataSchema | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [msaName, setMsaName] = useState<string | null>(null);
-  const [yearlyPopulationData, setYearlyPopulationData] = useState<YearlyPopulationGraphDataPoint[]>([]);
-  const [populationPyramidData, setPopulationPyramidData] = useState<PopulationPyramidDataPoint[]>([]);
+  const [yearlyPopulationData, setYearlyPopulationData] = useState<YearlyPopulationGraphDataPointSchema[]>([]);
+  const [populationPyramidData, setPopulationPyramidData] = useState<PopulationPyramidDataPointSchema[]>([]);
   
   useEffect(() => {
     async function fetchMarketData() {
       if (!county || !state) return;
+
+      if (!reportHandler) return;
+
+      if (reportHandler.getMarketResearch()) {
+        if (startYear === 2013) {
+          setYearlyPopulationData(reportHandler.getMarketResearch()?.tenYearData?.yearlyPopulationData || []);
+          setMarketData(reportHandler.getMarketResearch()?.tenYearData?.marketData || null);
+          setPopulationPyramidData(reportHandler.getMarketResearch()?.tenYearData?.populationPyramidData || []);
+        } else {
+          setYearlyPopulationData(reportHandler.getMarketResearch()?.fiveYearData?.yearlyPopulationData || []);
+          setMarketData(reportHandler.getMarketResearch()?.fiveYearData?.marketData || null);
+          setPopulationPyramidData(reportHandler.getMarketResearch()?.fiveYearData?.populationPyramidData || []);
+        }
+        setLoading(false);
+        return;
+      }
       
       setLoading(true);
       setError(null);
@@ -31,7 +49,7 @@ export function useMarketResearchData(
       
       // Check if complete data exists in localStorage
       const cachedData = localStorage.getItem(cacheKey);
-      
+
       if (cachedData) {
         try {
           const parsedData = JSON.parse(cachedData);
@@ -50,6 +68,8 @@ export function useMarketResearchData(
             // If we don't have the requested data range in cache, fetch it
             throw new Error("Requested data range not in cache");
           }
+
+          reportHandler.setMarketResearch(parsedData);
           
           setLoading(false);
           return;
@@ -68,10 +88,56 @@ export function useMarketResearchData(
         setMsaName(msaInfo.msaName);
         
         // Prepare container for complete cache data
-        const completeData: BaseMarketResearchData = {
+        const completeData: MarketResearch = {
           location: location,
           msaName: msaInfo.msaName,
           msaId: msaInfo.msaId,
+          fiveYearData: {
+            marketData: {
+              pop_end: 0,
+              pop_start: 0,
+              percent_population_change: 0,
+              male_percent_end: 0,
+              female_percent_end: 0,
+              male_moe_percent_end: 0,
+              female_moe_percent_end: 0,
+              median_age_end: 0,
+              median_age_start: 0,
+              median_age_change: 0,
+              youth_percent_2023: 0,
+              aging_percent_2023: 0,
+              working_age_percent_2023: 0,
+              age_dependency_ratio_2023: 0,
+              pop_change_25_to_34_percent: 0,
+              boomer_percent_2023: 0,
+              millennial_percent_2023: 0,
+            },
+            populationPyramidData: [],
+            yearlyPopulationData: [],
+          },
+          tenYearData: {
+            marketData: {
+              pop_end: 0,
+              pop_start: 0,
+              percent_population_change: 0,
+              male_percent_end: 0,
+              female_percent_end: 0,
+              male_moe_percent_end: 0,
+              female_moe_percent_end: 0,
+              median_age_end: 0,
+              median_age_start: 0,
+              median_age_change: 0,
+              youth_percent_2023: 0,
+              aging_percent_2023: 0,
+              working_age_percent_2023: 0,
+              age_dependency_ratio_2023: 0,
+              pop_change_25_to_34_percent: 0,
+              boomer_percent_2023: 0,
+              millennial_percent_2023: 0,
+            },
+            populationPyramidData: [],
+            yearlyPopulationData: [],
+          },
         };
         
         // Fetch 10-year data (2013-2023)
@@ -115,6 +181,7 @@ export function useMarketResearchData(
         
         // Store the complete data with both 5 and 10 year datasets in localStorage
         localStorage.setItem(cacheKey, JSON.stringify(completeData));
+        reportHandler.setMarketResearch(completeData);
         
         // Set the appropriate data based on current startYear selection
         if (isDecadeView) {
@@ -135,7 +202,7 @@ export function useMarketResearchData(
     }
     
     fetchMarketData();
-  }, [county, state, startYear, endYear]);
+  }, [reportHandler, county, state, startYear, endYear]);
   
   return {
     marketData,
@@ -206,7 +273,7 @@ async function fetchYearData(supabase: SupabaseClient, msaId: string, year: numb
   return data;
 }
 
-function compileMarketResearchData(dataStart: YearlyPopulationData, dataEnd: YearlyPopulationData) {
+function compileMarketResearchData(dataStart: YearlyPopulationDataSchema, dataEnd: YearlyPopulationDataSchema) {
   return {
     // Population growth
     pop_end: dataEnd.total_population,
@@ -284,7 +351,7 @@ function compileMarketResearchData(dataStart: YearlyPopulationData, dataEnd: Yea
   };
 }
 
-function createPopulationPyramidData(dataEnd: YearlyPopulationData) {
+function createPopulationPyramidData(dataEnd: YearlyPopulationDataSchema) {
   const pyramidData = [
     { ageGroup: '0-4', percentage: dataEnd.population_under_5_percent },
     { ageGroup: '5-9', percentage: dataEnd.population_5_to_9_percent },

@@ -7,8 +7,9 @@ import { PopulationGraphs } from "@/components/population-graphs";
 import { AlertCircle, Users2 } from "lucide-react";
 import "@/styles/report.css";
 import { useMarketResearchData } from "@/hooks/useMarketResearchData";
+import { PropertyReportHandler } from "@/lib/report-handler";
 
-export function MarketResearchTab({ county, state }: { county: string | null, state: string | null }) {
+export function MarketResearchTab({ reportHandler, county, state }: { reportHandler: PropertyReportHandler, county: string | null, state: string | null }) {
   const [startYear, setStartYear] = useState(2013);
   const [endYear, setEndYear] = useState(2023);
   const [selectedYearRange, setSelectedYearRange] = useState<string>("10-year-data");
@@ -20,7 +21,7 @@ export function MarketResearchTab({ county, state }: { county: string | null, st
     msaName, 
     loading, 
     error 
-  } = useMarketResearchData(county, state, startYear, endYear);
+  } = useMarketResearchData(reportHandler, county, state, startYear, endYear);
   
   const handleFiveYears = () => {
     setStartYear(2018);

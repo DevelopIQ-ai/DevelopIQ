@@ -3,9 +3,9 @@
 import { Loader2 } from "lucide-react";
 import "@/styles/report.css";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, ReferenceLine } from 'recharts';
-import { YearlyPopulationGraphDataPoint, PopulationPyramidDataPoint } from "@/schemas/views/market-research-schema";
+import { YearlyPopulationGraphDataPointSchema, PopulationPyramidDataPointSchema } from "@/schemas/views/market-research-schema";
 
-export const PopulationGraphs = ({yearlyPopulationData, populationPyramidData, endYear}: {yearlyPopulationData: YearlyPopulationGraphDataPoint[], populationPyramidData: PopulationPyramidDataPoint[], endYear: number}) => {
+export const PopulationGraphs = ({yearlyPopulationData, populationPyramidData, endYear}: {yearlyPopulationData: YearlyPopulationGraphDataPointSchema[], populationPyramidData: PopulationPyramidDataPointSchema[], endYear: number}) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
