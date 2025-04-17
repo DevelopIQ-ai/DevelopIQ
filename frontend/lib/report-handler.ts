@@ -168,6 +168,8 @@ export class PropertyReportHandler {
     return {
       propertyUrl: this.propertyUrl,
       generalInfo: this.generalInfo,
+      developmentInfo: this.developmentInfo,
+      marketResearch: this.marketResearch,
       status: this.status,
       errors: this.errors,
       createdAt: this.createdAt.toISOString(),
@@ -410,6 +412,8 @@ export interface ReportError {
 export interface PropertyReportJSON {
   propertyUrl: string | null;
   generalInfo: GeneralPropertyInfo | null;
+  developmentInfo: DevelopmentInfo | null;
+  marketResearch: MarketResearch | null;
   status: ReportStatus;
   errors: ReportError[];
   createdAt: string;
