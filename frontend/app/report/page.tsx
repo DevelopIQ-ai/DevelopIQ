@@ -6,9 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
 import { GeneralPropertyTab } from "@/app/report/general-property-info-tab";
+import { GeneralPropertyFallbackTab } from "@/components/general-property-info-fallback";
 import { DevelopmentInfoTab } from "@/app/report/development-info";
+import { DevelopmentInfoFallbackTab } from "@/components/development-info-fallback";
 import { MarketResearchTab } from "@/app/report/market-research";
 import { NewsArticlesTab } from "@/app/report/news-articles";
+import { NewsArticlesFallbackTab } from "@/components/news-articles-fallback";
 import { PrintDialog } from "@/components/print-dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, Loader2 } from "lucide-react"
@@ -37,6 +40,8 @@ export default function PropertyAnalysisDashboard() {
   const [hasFeedback, setHasFeedback] = useState<boolean>(false);
   const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
   const [previousAddress, setPreviousAddress] = useState<string | null>(null);
+  const [isAddressSupported, setIsAddressSupported] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { generalPropertyInfoLoading, generalPropertyInfoError } = useGeneralPropertyInfo(reportHandler);
   const { developmentInfoLoading, developmentInfoError } = useDevelopmentInfo(reportHandler, generalPropertyInfoError);
   const { newsArticles, newsArticlesLoading, newsArticlesError } = useNewsArticles(reportHandler, generalPropertyInfoError);
@@ -49,6 +54,14 @@ export default function PropertyAnalysisDashboard() {
       if (!address) {
         return;
       }
+
+      const isAddressSupported = localStorage.getItem("isAddressSupported");
+      if (isAddressSupported === "false") {
+        setIsAddressSupported(false);
+      } else {
+        setIsAddressSupported(true);
+      }
+      setIsLoading(false);
       
       // Check if this is a new property search
       if (previousAddress && previousAddress !== address) {
@@ -237,32 +250,59 @@ export default function PropertyAnalysisDashboard() {
           </div>
         </div>
 
-        <Tabs defaultValue="property" className="space-y-8">
-          <TabsList className="tabs-list">
-            <TabsTrigger value="property">General Property Information</TabsTrigger>
-            <TabsTrigger value="development">Development Info</TabsTrigger>
-            <TabsTrigger value="market_research">Market Research</TabsTrigger>
-            <TabsTrigger value="news">News Articles</TabsTrigger>
-          </TabsList>
+        {isLoading && (
+          <div className="flex justify-center items-center h-screen">
+            <Loader2 className="h-10 w-10 animate-spin" />
+          </div>
+        )}
+
+        {!isLoading && (
+          <Tabs defaultValue={isAddressSupported ? "property" : "market_research"} className="space-y-8">
+            <TabsList className="tabs-list">
+              <TabsTrigger value="property">General Property Information</TabsTrigger>
+              <TabsTrigger value="development">Development Info</TabsTrigger>
+              <TabsTrigger value="market_research">Market Research</TabsTrigger>
+              <TabsTrigger value="news">News Articles</TabsTrigger>
+            </TabsList>
 
           <TabsContent value="property" className="m-0" data-section="property">
-            <div className="mb-4">
+            <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">Detailed Property Analysis</h2>
-              <p className="text-muted-foreground">
-                Comprehensive assessment of physical characteristics, zoning requirements, and development potential.
-              </p>
+              {isAddressSupported ? (
+                <p className="text-muted-foreground">
+                  Comprehensive assessment of physical characteristics, zoning requirements, and development potential.
+                </p>
+              ) : (
+                <p className="text-muted-foreground">
+                  Oh no! This address is not currently available. Please request this location to be notified when it is ready.
+                </p>
+              )}
             </div>
-            <GeneralPropertyTab reportHandler={reportHandler} generalPropertyInfoLoading={generalPropertyInfoLoading} generalPropertyInfoError={generalPropertyInfoError} />
+            {isAddressSupported ? (
+              <GeneralPropertyTab reportHandler={reportHandler} generalPropertyInfoLoading={generalPropertyInfoLoading} generalPropertyInfoError={generalPropertyInfoError} />
+            ) : (
+              <GeneralPropertyFallbackTab />
+            )}
           </TabsContent>
 
           <TabsContent value="development" className="m-0" data-section="development">
             <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">Development Information</h2>
-              <p className="text-muted-foreground">
-                Detailed overview of zoning parameters, building requirements, and development standards.
-              </p>
+              {isAddressSupported ? (
+                <p className="text-muted-foreground">
+                  Detailed overview of zoning parameters, building requirements, and development standards.
+                </p>
+              ) : (
+                <p className="text-muted-foreground">
+                  Oh no! This address is not currently available. Please request this location to be notified when it is ready.
+                </p>
+              )}
             </div>
-            <DevelopmentInfoTab reportHandler={reportHandler!} developmentInfoLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
+            {isAddressSupported ? (
+              <DevelopmentInfoTab reportHandler={reportHandler!} developmentInfoLoading={developmentInfoLoading} developmentInfoError={developmentInfoError} />
+            ) : (
+              <DevelopmentInfoFallbackTab />
+            )}
           </TabsContent>
 
           <TabsContent value="market_research" className="m-0" data-section="market_research">
@@ -276,15 +316,26 @@ export default function PropertyAnalysisDashboard() {
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">
-            <div className="mb-4">
+            <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-4">News Articles</h2>
-              <p className="text-muted-foreground">
-                Latest news articles and updates about the area.
-              </p>
+              {isAddressSupported ? (
+                <p className="text-muted-foreground">
+                  Latest news articles and updates about the area.
+                </p>
+              ) : (
+                <p className="text-muted-foreground">
+                  Oh no! This address is not currently available. Please request this location to be notified when it is ready.
+                </p>
+              )}
             </div>
-            <NewsArticlesTab newsArticles={newsArticles} newsLoading={newsArticlesLoading} newsError={newsArticlesError} />
+            {isAddressSupported ? (
+              <NewsArticlesTab newsArticles={newsArticles} newsLoading={newsArticlesLoading} newsError={newsArticlesError} />
+            ) : (
+              <NewsArticlesFallbackTab />
+            )}
           </TabsContent>
         </Tabs>
+        )}
       </div>
     </main>
   );

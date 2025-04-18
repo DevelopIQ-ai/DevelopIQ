@@ -12,12 +12,14 @@ export function useMarketResearchData(
     async function fetchMarketData() {
       if (!reportHandler) return;
 
-      const generalInfo = reportHandler.getGeneralInfo();
-      if (!generalInfo) return;
-
-      const geospatialInfo = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"];
-      const latitude = geospatialInfo.latitude?.value as string;
-      const longitude = geospatialInfo.longitude?.value as string;
+      // Get latitude and longitude from localStorage
+      const latitude = localStorage.getItem("propertyLatitude");
+      const longitude = localStorage.getItem("propertyLongitude");
+      if (!latitude || !longitude) {
+        setError("No latitude or longitude found for this location.");
+        setLoading(false);
+        return;
+      }
 
       if (reportHandler.getMarketResearch()) {
         setMarketData(reportHandler.getMarketResearch() || null);
