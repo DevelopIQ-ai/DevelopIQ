@@ -1,42 +1,47 @@
 "use client";
 import React from "react";
-import { EsriData2024Schema } from "@/schemas/views/market-research-schema";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { EsriData2024Schema, MarketResearch, Radius } from "@/schemas/views/market-research-schema";
 
 const formatNumber = (num: number | null | undefined) => {
     if (num === null || num === undefined) return 'N/A';
     return new Intl.NumberFormat().format(num);
 };
 
-// Map of industry keys to display names
-const industryMap = {
-    agricultureForestryFishingHuntingPopulation: "Agriculture, Forestry, Fishing & Hunting",
-    miningQuarryingOilAndGasExtractionPopulation: "Mining, Quarrying, Oil & Gas Extraction",
-    constructionPopulation: "Construction",
-    manufacturingPopulation: "Manufacturing",
-    wholesaleTradePopulation: "Wholesale Trade",
-    retailTradePopulation: "Retail Trade",
-    transportationWarehousingPopulation: "Transportation & Warehousing",
-    utilitiesPopulation: "Utilities",
-    informationPopulation: "Information",
-    financeInsurancePopulation: "Finance & Insurance",
-    realEstateRentalLeasingPopulation: "Real Estate, Rental & Leasing",
-    professionalScientificTechnicalServicesPopulation: "Professional, Scientific & Technical Services",
-    managementOfCompaniesEnterprisesPopulation: "Management of Companies & Enterprises",
-    administrativeSupportWasteManagementServicesPopulation: "Administrative Support & Waste Management",
-    educationalServicesPopulation: "Educational Services",
-    healthCareSocialAssistancePopulation: "Healthcare & Social Assistance",
-    artsEntertainmentRecreationPopulation: "Arts, Entertainment & Recreation",
-    accommodationFoodServicesPopulation: "Accommodation & Food Services",
-    otherServicesPopulation: "Other Services",
-    publicAdministrationPopulation: "Public Administration",
+const formatRadius = (radius: Radius) => {
+    return radius === 1 ? "one" : radius === 3 ? "three" : "five";
 };
 
-export const IndustryGraph = ({esriData2024}: {esriData2024: EsriData2024Schema}) => {
-    if (!esriData2024 || !esriData2024.employmentByIndustry) return (
+// Map of industry keys to display names
+const industryMap = {
+    agriculture_forestry_fishing_hunting_population: "Agriculture, Forestry, Fishing, and Hunting",
+    mining_quarrying_oil_and_gas_extraction_population: "Mining, Quarrying, and Oil and Gas Extraction",
+    construction_population: "Construction",
+    manufacturing_population: "Manufacturing",
+    wholesale_trade_population: "Wholesale Trade",
+    retail_trade_population: "Retail Trade",
+    transportation_warehousing_population: "Transportation and Warehousing",
+    utilities_population: "Utilities",
+    information_population: "Information and Cultural Industries",
+    finance_insurance_population: "Finance and Insurance",
+    real_estate_rental_leasing_population: "Real Estate and Rental and Leasing",
+    professional_scientific_technical_services_population: "Professional, Scientific, and Technical Services",
+    management_of_companies_enterprises_population: "Management of Companies and Enterprises",
+    administrative_support_waste_management_services_population: "Administrative and Support and Waste Management and Remediation Services",
+    educational_services_population: "Educational Services",
+    health_care_social_assistance_population: "Health Care and Social Assistance",
+    arts_entertainment_recreation_population: "Arts, Entertainment, and Recreation",
+    accommodation_food_services_population: "Accommodation and Food Services",
+    other_services_population: "Other Services",
+    public_administration_population: "Public Administration",
+};
+
+export const IndustryGraph = ({marketData, radius}: {marketData: MarketResearch, radius: Radius}) => {
+    const dataInRadius = marketData[`${formatRadius(radius)}_mile_attributes`];
+    if (!dataInRadius || !dataInRadius.employment_data?.employment_by_industry) return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
-                <h3 className="text-lg font-semibold mb-2">Employment By Industry Pie Chart</h3>
+                <h3 className="text-lg font-semibold mb-2">Employment By Industry Pie Chart &#40;2024&#41;</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <div className="stat-item">
                         <p className="text-sm text-muted-foreground">This data is not available for this county.</p>
@@ -50,7 +55,7 @@ export const IndustryGraph = ({esriData2024}: {esriData2024: EsriData2024Schema}
     const pieData = Object.entries(industryMap)
         .map(([key, name]) => ({
             name,
-            value: esriData2024.employmentByIndustry![key as keyof EsriData2024Schema] as number || 0
+            value: dataInRadius.employment_data.employment_by_industry![key as keyof EsriData2024Schema] as number || 0
         }))
         .filter(item => item.value > 0)
         .sort((a, b) => b.value - a.value);
@@ -66,7 +71,7 @@ export const IndustryGraph = ({esriData2024}: {esriData2024: EsriData2024Schema}
     return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
-                <h3 className="text-lg font-semibold mb-2">Employment By Industry Pie Chart</h3>
+                <h3 className="text-lg font-semibold mb-2">Employment By Industry Pie Chart &#40;2024&#41;</h3>
                 
                 {/* Pie Chart Section */}
                 <div className="mb-8">

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { MarketResearchDataSchema, EsriData2024Schema } from "@/schemas/views/market-research-schema";
+import { MarketResearch, Radius } from "@/schemas/views/market-research-schema";
 
 const formatNumber = (num: number | null | undefined) => {
     if (num === null || num === undefined) return 'N/A';
@@ -9,90 +9,94 @@ const formatNumber = (num: number | null | undefined) => {
 
 const formatPercent = (num: number | null | undefined) => {
     if (num === null || num === undefined) return 'N/A';
-    return `${num}%`;
+    return `${num.toFixed(1)}%`;
 };
 
-export const PopulationMetrics = ({marketData, startYear, endYear, esriData2024}: {marketData: MarketResearchDataSchema, startYear: number, endYear: number, esriData2024: EsriData2024Schema}) => {
+const formatRadius = (radius: Radius) => {
+    return radius === 1 ? "one" : radius === 3 ? "three" : "five";
+};
+
+export const PopulationMetrics = ({ marketData, radius }: {marketData: MarketResearch, radius: Radius}) => {
+    
+    const dataInRadius = marketData[`${formatRadius(radius)}_mile_attributes`];
+    const population2020 = dataInRadius?.population_data?.yearly_populations?.total_population_2020;
+    const population2024 = dataInRadius?.population_data?.yearly_populations?.total_population_2024;
+    const populationChange = population2024 && population2020 ? ((population2024 - population2020) / population2020) * 100 : null;
+    const malePopulation = dataInRadius?.population_data?.male_population;
+    const femalePopulation = dataInRadius?.population_data?.female_population;
+    const malePercent = malePopulation && population2024 ? (malePopulation / population2024) * 100 : null;
+    const femalePercent = femalePopulation && population2024 ? (femalePopulation / population2024) * 100 : null;
+    const medianAge = dataInRadius?.population_data?.median_age;
+    const youthPopulation = dataInRadius?.population_data?.youth_population;
+    const agingPopulation = dataInRadius?.population_data?.elderly_population;
+    const workingAgePopulation = dataInRadius?.population_data?.working_age_population;
+    const youthPercent = youthPopulation && population2024 ? (youthPopulation / population2024) * 100 : null;
+    const agingPercent = agingPopulation && population2024 ? (agingPopulation / population2024) * 100 : null;
+    const workingAgePercent = workingAgePopulation && population2024 ? (workingAgePopulation / population2024) * 100 : null;
+    const unemploymentRate = dataInRadius?.employment_data?.unemployment_rate;
+    
     return (
         <div className="flex flex-col gap-6">
             <div className="market-data-section">
                 <h3 className="text-lg font-semibold mb-2">Population Growth</h3>
                 <div className="grid grid-cols-2 gap-4">
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">{startYear} Population</p>
-                    <p className="text-2xl font-bold">{formatNumber(marketData.pop_start)}</p>
+                    <p className="text-sm text-muted-foreground">2020 Population</p>
+                    <p className="text-2xl font-bold">{formatNumber(population2020)}</p>
                 </div>
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">{endYear} Population</p>
-                    <p className="text-2xl font-bold">{formatNumber(marketData.pop_end)}</p>
+                    <p className="text-sm text-muted-foreground">2024 Population</p>
+                    <p className="text-2xl font-bold">{formatNumber(population2024)}</p>
                 </div>
                 <div className="stat-item col-span-2">
-                    <p className="text-sm text-muted-foreground">Population Change ({startYear}-{endYear})</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.percent_population_change)}</p>
+                    <p className="text-sm text-muted-foreground">Population Change &#40;2020-2024&#41;</p>
+                    <p className="text-2xl font-bold">{formatPercent(populationChange)}</p>
                 </div>
                 </div>
             </div>
 
             <div className="market-data-section">
-                <h3 className="text-lg font-semibold mb-2">Gender Distribution ({endYear})</h3>
+                <h3 className="text-lg font-semibold mb-2">Gender Distribution &#40;2024&#41;</h3>
                 <div className="grid grid-cols-2 gap-4">
                 <div className="stat-item">
                     <p className="text-sm text-muted-foreground">Male</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.male_percent_end)}</p>
-                    <p className="text-xs text-muted-foreground">±{formatPercent(marketData.male_moe_percent_end)}</p>
+                    <p className="text-2xl font-bold">{formatPercent(malePercent)}</p>
                 </div>
                 <div className="stat-item">
                     <p className="text-sm text-muted-foreground">Female</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.female_percent_end)}</p>
-                    <p className="text-xs text-muted-foreground">±{formatPercent(marketData.female_moe_percent_end)}</p>
+                    <p className="text-2xl font-bold">{formatPercent(femalePercent)}</p>
                 </div>
                 </div>
             </div>
 
             <div className="market-data-section">
-                <h3 className="text-lg font-semibold mb-2">Age Demographics</h3>
+                <h3 className="text-lg font-semibold mb-2">Age Demographics &#40;2024&#41;</h3>
                 <div className="grid grid-cols-2 gap-4">
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Median Age ({startYear})</p>
-                    <p className="text-2xl font-bold">{marketData.median_age_start}</p>
+                    <p className="text-sm text-muted-foreground">Median Age</p>
+                    <p className="text-2xl font-bold">{formatNumber(medianAge)}</p>
                 </div>
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Median Age ({endYear})</p>
-                    <p className="text-2xl font-bold">{marketData.median_age_end}</p>
+                    <p className="text-sm text-muted-foreground">Youth Population &#40;0-24&#41;</p>
+                    <p className="text-2xl font-bold">{formatPercent(youthPercent)}</p>
                 </div>
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Youth Population (0-24)</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.youth_percent_2023)}</p>
+                    <p className="text-sm text-muted-foreground">Working Age &#40;25-64&#41;</p>
+                    <p className="text-2xl font-bold">{formatPercent(workingAgePercent)}</p>
                 </div>
                 <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Aging Population (65+)</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.aging_percent_2023)}</p>
+                    <p className="text-sm text-muted-foreground">Aging Population &#40;65+&#41;</p>
+                    <p className="text-2xl font-bold">{formatPercent(agingPercent)}</p>
                 </div>
                 </div>
             </div>
 
             <div className="market-data-section">
-                <h3 className="text-lg font-semibold mb-2">Workforce & Generations</h3>
+                <h3 className="text-lg font-semibold mb-2">Workforce & Dependency &#40;2024&#41;</h3>
                 <div className="grid grid-cols-2 gap-4">
-                <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Working Age (25-44)</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.working_age_percent_2023)}</p>
-                </div>
-                <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Age Dependency Ratio</p>
-                    <p className="text-2xl font-bold">{marketData.age_dependency_ratio_2023}</p>
-                </div>
-                <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Boomer Share</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.boomer_percent_2023)}</p>
-                </div>
-                <div className="stat-item">
-                    <p className="text-sm text-muted-foreground">Millennial Share</p>
-                    <p className="text-2xl font-bold">{formatPercent(marketData.millennial_percent_2023)}</p>
-                </div>
                 <div className="stat-item">
                     <p className="text-sm text-muted-foreground">Unemployment Rate</p>
-                    <p className="text-2xl font-bold">{formatPercent(esriData2024?.unemploymentRate)}</p>
+                    <p className="text-2xl font-bold">{formatPercent(unemploymentRate)}</p>
                 </div>
                 </div>
             </div>

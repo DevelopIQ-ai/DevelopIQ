@@ -1,41 +1,26 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { YearlyPopulationGraphDataPointSchema, PopulationPyramidDataPointSchema, YearlyPopulationDataSchema, MarketResearch, MarketResearchDataSchema, EsriData2024Schema } from "@/schemas/views/market-research-schema";
-import { SupabaseClient } from '@supabase/supabase-js';
 import { PropertyReportHandler } from '@/lib/report-handler';
-
+import { MarketResearch } from '@/schemas/views/market-research-schema';
 export function useMarketResearchData(
-  reportHandler: PropertyReportHandler,
-  county: string | null, 
-  state: string | null,
-  startYear: number,
-  endYear: number
+  reportHandler: PropertyReportHandler
 ) {
-  const [marketData, setMarketData] = useState<MarketResearchDataSchema | null>(null);
+  const [marketData, setMarketData] = useState<MarketResearch | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [msaName, setMsaName] = useState<string | null>(null);
-  const [yearlyPopulationData, setYearlyPopulationData] = useState<YearlyPopulationGraphDataPointSchema[]>([]);
-  const [populationPyramidData, setPopulationPyramidData] = useState<PopulationPyramidDataPointSchema[]>([]);
-  const [esriData2024, setEsriData2024] = useState<EsriData2024Schema | null>(null);
   
   useEffect(() => {
     async function fetchMarketData() {
-      if (!county || !state) return;
-
       if (!reportHandler) return;
 
+      const generalInfo = reportHandler.getGeneralInfo();
+      if (!generalInfo) return;
+
+      const geospatialInfo = generalInfo["Property Identification & Legal Framework"]["Geospatial Information"];
+      const latitude = geospatialInfo.latitude?.value as string;
+      const longitude = geospatialInfo.longitude?.value as string;
+
       if (reportHandler.getMarketResearch()) {
-        if (startYear === 2014) {
-          setYearlyPopulationData(reportHandler.getMarketResearch()?.tenYearData?.yearlyPopulationData || []);
-          setMarketData(reportHandler.getMarketResearch()?.tenYearData?.marketData || null);
-          setPopulationPyramidData(reportHandler.getMarketResearch()?.tenYearData?.populationPyramidData || []);
-        } else {
-          setYearlyPopulationData(reportHandler.getMarketResearch()?.fiveYearData?.yearlyPopulationData || []);
-          setMarketData(reportHandler.getMarketResearch()?.fiveYearData?.marketData || null);
-          setPopulationPyramidData(reportHandler.getMarketResearch()?.fiveYearData?.populationPyramidData || []);
-        }
-        setEsriData2024(reportHandler.getMarketResearch()?.esriData2024 || null);
+        setMarketData(reportHandler.getMarketResearch() || null);
         setLoading(false);
         return;
       }
@@ -43,38 +28,17 @@ export function useMarketResearchData(
       setLoading(true);
       setError(null);
       
-      // Create a cache key based on county and state only (not year-dependent)
+      // Create a cache key based on coordinates
       const cacheKey = "marketResearchData";
       
-      // Determine if we need 5-year or 10-year data for display
-      const isDecadeView = startYear === 2014;
-      
-      // Check if complete data exists in localStorage
+      // Check if data exists in localStorage
       const cachedData = localStorage.getItem(cacheKey);
 
       if (cachedData) {
         try {
           const parsedData = JSON.parse(cachedData);
-          setMsaName(parsedData.msaName);
-          
-          // Select the appropriate data set based on startYear
-          if (isDecadeView && parsedData.tenYearData) {
-            setYearlyPopulationData(parsedData.tenYearData.yearlyPopulationData);
-            setMarketData(parsedData.tenYearData.marketData);
-            setPopulationPyramidData(parsedData.tenYearData.populationPyramidData);
-          } else if (!isDecadeView && parsedData.fiveYearData) {
-            setYearlyPopulationData(parsedData.fiveYearData.yearlyPopulationData);
-            setMarketData(parsedData.fiveYearData.marketData);
-            setPopulationPyramidData(parsedData.fiveYearData.populationPyramidData);
-          } else {
-            // If we don't have the requested data range in cache, fetch it
-            throw new Error("Requested data range not in cache");
-          }
-
-          setEsriData2024(parsedData.esriData2024);
-
+          setMarketData(parsedData);
           reportHandler.setMarketResearch(parsedData);
-          
           setLoading(false);
           return;
         } catch (err) {
@@ -84,193 +48,19 @@ export function useMarketResearchData(
       }
       
       try {
-        const supabase = createClient();
-        const location = county + ", " + state;
-        
-        // Get MSA information
-        const msaInfo = await fetchMsaInfo(supabase, location);
-        console.log(msaInfo);
-        setMsaName(msaInfo.msaName);
-        
-        // Prepare container for complete cache data
-        const completeData: MarketResearch = {
-          location: location,
-          msaName: msaInfo.msaName,
-          msaId: msaInfo.msaId,
-          fipsCode: msaInfo.fipsCode,
-          fiveYearData: {
-            marketData: {
-              pop_end: 0,
-              pop_start: 0,
-              percent_population_change: 0,
-              male_percent_end: 0,
-              female_percent_end: 0,
-              male_moe_percent_end: 0,
-              female_moe_percent_end: 0,
-              median_age_end: 0,
-              median_age_start: 0,
-              median_age_change: 0,
-              youth_percent_2023: 0,
-              aging_percent_2023: 0,
-              working_age_percent_2023: 0,
-              age_dependency_ratio_2023: 0,
-              pop_change_25_to_34_percent: 0,
-              boomer_percent_2023: 0,
-              millennial_percent_2023: 0,
-            },
-            populationPyramidData: [],
-            yearlyPopulationData: [],
-          },
-          tenYearData: {
-            marketData: {
-              pop_end: 0,
-              pop_start: 0,
-              percent_population_change: 0,
-              male_percent_end: 0,
-              female_percent_end: 0,
-              male_moe_percent_end: 0,
-              female_moe_percent_end: 0,
-              median_age_end: 0,
-              median_age_start: 0,
-              median_age_change: 0,
-              youth_percent_2023: 0,
-              aging_percent_2023: 0,
-              working_age_percent_2023: 0,
-              age_dependency_ratio_2023: 0,
-              pop_change_25_to_34_percent: 0,
-              boomer_percent_2023: 0,
-              millennial_percent_2023: 0,
-            },
-            populationPyramidData: [],
-            yearlyPopulationData: [],
-          },
-          esriData2024: {
-            averageHouseholdIncome: -1,
-            employmentPopulation: -1,
-            medianHomeValue: -1,
-            medianHouseholdIncome: -1,
-            ownerOccupiedUnits: -1,
-            renterOccupiedUnits: -1,
-            unemploymentPopulation: -1,
-            vacantUnits: -1,
-            workingAgePopulation: -1,
-            unemploymentRate: -1,
-            employmentByIndustry: {
-              industryBasePopulation: -1,
-              agricultureForestryFishingHuntingPopulation: -1,
-              miningQuarryingOilAndGasExtractionPopulation: -1,
-              constructionPopulation: -1,
-              manufacturingPopulation: -1,
-              wholesaleTradePopulation: -1,
-              retailTradePopulation: -1,
-              transportationWarehousingPopulation: -1,
-              utilitiesPopulation: -1,
-              informationPopulation: -1,
-              financeInsurancePopulation: -1,
-              realEstateRentalLeasingPopulation: -1,
-              professionalScientificTechnicalServicesPopulation: -1,
-              managementOfCompaniesEnterprisesPopulation: -1,
-              administrativeSupportWasteManagementServicesPopulation: -1,
-              educationalServicesPopulation: -1,
-              healthCareSocialAssistancePopulation: -1,
-              artsEntertainmentRecreationPopulation: -1,
-              accommodationFoodServicesPopulation: -1,
-              otherServicesPopulation: -1,
-              publicAdministrationPopulation: -1,
-            }
-          }
+        const coords = {
+          x: latitude,
+          y: longitude
         };
         
-        // Fetch 10-year data (2013-2023)
-        const tenYearStart = 2014;
-        const tenYearEnd = 2023;
-        const tenYearlyData = await fetchYearlyData(supabase, msaInfo.msaId, tenYearStart, tenYearEnd);
+        // Fetch and flatten ESRI data using coordinates
+        const data = await fetchAndFlattenStats(coords);
+        console.log(data);
+        setMarketData(data);
         
-        // Fetch 10-year start and end detailed data
-        const tenYearDataStart = await fetchYearData(supabase, msaInfo.msaId, tenYearStart);
-        const tenYearDataEnd = await fetchYearData(supabase, msaInfo.msaId, tenYearEnd);
-        
-        // Process 10-year data
-        const tenYearCompiledData = compileMarketResearchData(tenYearDataStart, tenYearDataEnd);
-        const tenYearPyramidData = createPopulationPyramidData(tenYearDataEnd);
-        
-        // Store 10-year data in complete data object
-        completeData.tenYearData = {
-          marketData: tenYearCompiledData,
-          populationPyramidData: tenYearPyramidData,
-          yearlyPopulationData: tenYearlyData
-        };
-        
-        // Fetch 5-year data (2018-2023)
-        const fiveYearStart = 2019;
-        const fiveYearlyData = tenYearlyData.filter(item => item.year >= fiveYearStart);
-        
-        // Fetch 5-year start and end detailed data
-        const fiveYearDataStart = await fetchYearData(supabase, msaInfo.msaId, fiveYearStart);
-        // We already have 2023 data from above
-        
-        // Process 5-year data
-        const fiveYearCompiledData = compileMarketResearchData(fiveYearDataStart, tenYearDataEnd);
-        // We can reuse the pyramid data from 2023
-        
-        // Store 5-year data in complete data object
-        completeData.fiveYearData = {
-          marketData: fiveYearCompiledData,
-          populationPyramidData: tenYearPyramidData, // Same pyramid data as both use 2023 end data
-          yearlyPopulationData: fiveYearlyData
-        };
-
-        const stats = await fetchAndFlattenStats(msaInfo.fipsCode);
-        if (completeData.esriData2024 && completeData.esriData2024.employmentByIndustry) {
-          completeData.esriData2024.averageHouseholdIncome = stats.average_household_income;
-          completeData.esriData2024.employmentPopulation = stats.employment_population;
-          completeData.esriData2024.medianHomeValue = stats.median_home_value;
-          completeData.esriData2024.medianHouseholdIncome = stats.median_household_income;
-          completeData.esriData2024.ownerOccupiedUnits = stats.owner_occupied_units;
-          completeData.esriData2024.renterOccupiedUnits = stats.renter_occupied_units;
-          completeData.esriData2024.unemploymentPopulation = stats.unemployment_population;
-          completeData.esriData2024.vacantUnits = stats.vacant_units;
-          completeData.esriData2024.workingAgePopulation = stats.working_age_population;
-          completeData.esriData2024.unemploymentRate = parseFloat(((stats.unemployment_population / stats.working_age_population) * 100).toFixed(1));
-          completeData.esriData2024.employmentByIndustry.industryBasePopulation = stats.industry_base_population;
-          completeData.esriData2024.employmentByIndustry.agricultureForestryFishingHuntingPopulation = stats.agriculture_forestry_fishing_hunting_population;
-          completeData.esriData2024.employmentByIndustry.miningQuarryingOilAndGasExtractionPopulation = stats.mining_quarrying_oil_and_gas_extraction_population;
-          completeData.esriData2024.employmentByIndustry.constructionPopulation = stats.construction_population;
-          completeData.esriData2024.employmentByIndustry.manufacturingPopulation = stats.manufacturing_population;
-          completeData.esriData2024.employmentByIndustry.wholesaleTradePopulation = stats.wholesale_trade_population;
-          completeData.esriData2024.employmentByIndustry.retailTradePopulation = stats.retail_trade_population;
-          completeData.esriData2024.employmentByIndustry.transportationWarehousingPopulation = stats.transportation_warehousing_population;
-          completeData.esriData2024.employmentByIndustry.utilitiesPopulation = stats.utilities_population;
-          completeData.esriData2024.employmentByIndustry.informationPopulation = stats.information_population;
-          completeData.esriData2024.employmentByIndustry.financeInsurancePopulation = stats.finance_insurance_population;
-          completeData.esriData2024.employmentByIndustry.realEstateRentalLeasingPopulation = stats.real_estate_rental_leasing_population;
-          completeData.esriData2024.employmentByIndustry.professionalScientificTechnicalServicesPopulation = stats.professional_scientific_technical_services_population;
-          completeData.esriData2024.employmentByIndustry.managementOfCompaniesEnterprisesPopulation = stats.management_of_companies_enterprises_population;
-          completeData.esriData2024.employmentByIndustry.administrativeSupportWasteManagementServicesPopulation = stats.administrative_support_waste_management_services_population;
-          completeData.esriData2024.employmentByIndustry.educationalServicesPopulation = stats.educational_services_population;
-          completeData.esriData2024.employmentByIndustry.healthCareSocialAssistancePopulation = stats.health_care_social_assistance_population;
-          completeData.esriData2024.employmentByIndustry.artsEntertainmentRecreationPopulation = stats.arts_entertainment_recreation_population;
-          completeData.esriData2024.employmentByIndustry.accommodationFoodServicesPopulation = stats.accommodation_food_services_population;
-          completeData.esriData2024.employmentByIndustry.otherServicesPopulation = stats.other_services_population;
-          completeData.esriData2024.employmentByIndustry.publicAdministrationPopulation = stats.public_administration_population;
-        }
-        setEsriData2024(completeData.esriData2024);
-        
-        // Store the complete data with both 5 and 10 year datasets in localStorage
-        localStorage.setItem(cacheKey, JSON.stringify(completeData));
-        reportHandler.setMarketResearch(completeData);
-        
-        // Set the appropriate data based on current startYear selection
-        if (isDecadeView) {
-          setYearlyPopulationData(tenYearlyData);
-          setMarketData(tenYearCompiledData);
-          setPopulationPyramidData(tenYearPyramidData);
-        } else {
-          setYearlyPopulationData(fiveYearlyData);
-          setMarketData(fiveYearCompiledData);
-          setPopulationPyramidData(tenYearPyramidData);
-        }
-
+        // Store the data in localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+        reportHandler.setMarketResearch(data);
         
       } catch (err) {
         console.error('Error fetching market research data:', err);
@@ -281,290 +71,411 @@ export function useMarketResearchData(
     }
     
     fetchMarketData();
-  }, [reportHandler, county, state, startYear, endYear]);
+  }, [reportHandler]);
   
   return {
     marketData,
-    yearlyPopulationData,
-    populationPyramidData,
-    esriData2024,
-    msaName,
     loading,
     error
   };
 }
 
-// Helper functions
-async function fetchMsaInfo(supabase: SupabaseClient, location: string) {
-  const { data: msaData, error: msaError } = await supabase
-    .from("2023_Catwalk")
-    .select("msa, msa_name, fips_code")
-    .eq("county_name", location)
-    .limit(1);
-  
-  if (msaError) throw msaError;
-  if (!msaData || msaData.length === 0) {
-    throw new Error(`No MSA found for county: ${location}`);
-  }
-  
-  return {
-    msaId: msaData[0].msa,
-    msaName: msaData[0].msa_name,
-    fipsCode: msaData[0].fips_code
-  };
+// List of ESRI variables to fetch
+const variables = [
+  'TOTPOP_CY',
+  'TSPOP23_CY',
+  'TSPOP22_CY',
+  'TSPOP21_CY',
+  'TSPOP20_CY',
+  'MALES_CY',
+  'FEMALES_CY',
+  'MEDAGE_CY',
+  'CHILD_CY',
+  'WORKAGE_CY',
+  'SENIOR_CY',
+  'MEDHINC_CY',
+  'AVGHINC_CY',
+  'OWNER_CY',
+  'RENTER_CY',
+  'VACANT_CY',
+  'AVGVAL_CY',
+  'TOTHH_CY',
+  'TSHH23_CY',
+  'TSHH22_CY',
+  'TSHH21_CY',
+  'TSHH20_CY',
+  'TOTHU_CY',
+  'TSHU23_CY',
+  'TSHU22_CY',
+  'TSHU21_CY',
+  'TSHU20_CY',
+  'UNEMPRT_CY',
+  'INDBASE_CY',
+  'INDAGRI_CY',
+  'INDMIN_CY',
+  'INDCONS_CY',
+  'INDMANU_CY',
+  'INDWHTR_CY',
+  'INDRTTR_CY',
+  'INDTRAN_CY',
+  'INDUTIL_CY',
+  'INDINFO_CY',
+  'INDFIN_CY',
+  'INDRE_CY',
+  'INDTECH_CY',
+  'INDMGMT_CY',
+  'INDADMN_CY',
+  'INDEDUC_CY',
+  'INDHLTH_CY',
+  'INDARTS_CY',
+  'INDFOOD_CY',
+  'INDOTSV_CY',
+  'INDPUBL_CY',
+  'POP0_CY',
+  'POP5_CY',
+  'POP10_CY',
+  'POP15_CY',
+  'POP20_CY',
+  'POP25_CY',
+  'POP30_CY',
+  'POP35_CY',
+  'POP40_CY',
+  'POP45_CY',
+  'POP50_CY',
+  'POP55_CY',
+  'POP60_CY',
+  'POP65_CY',
+  'POP70_CY',
+  'POP75_CY',
+  'POP80_CY',
+  'POP85_CY',
+];
+
+interface Coordinates {
+  x: string; // latitude
+  y: string; // longitude
 }
-
-async function fetchYearlyData(supabase: SupabaseClient, msaId: string, startYear: number, endYear: number) {
-  const yearlyData = [];
-  
-  for (let year = startYear; year <= endYear; year++) {
-    if (year === 2020) {
-      continue;
-    }
-    try {
-      const { data: yearData, error: yearError } = await supabase
-        .from(`${year}_Population_Data`)
-        .select("total_population")
-        .eq("id", msaId)
-        .single();
-        
-      if (!yearError && yearData) {
-        yearlyData.push({ 
-          year: year, 
-          population: yearData.total_population
-        });
-      }
-    } catch (err) {
-      console.error(`Error fetching data for year ${year}:`, err);
-      // Continue with other years even if one fails
-    }
-  }
-  
-  return yearlyData;
-}
-
-async function fetchYearData(supabase: SupabaseClient, msaId: string, year: number) {
-  const { data, error } = await supabase
-    .from(`${year}_Population_Data`)
-    .select("*")
-    .eq("id", msaId)
-    .single();
-  
-  if (error) throw error;
-  return data;
-}
-
-function compileMarketResearchData(dataStart: YearlyPopulationDataSchema, dataEnd: YearlyPopulationDataSchema) {
-  return {
-    // Population growth
-    pop_end: dataEnd.total_population,
-    pop_start: dataStart.total_population,
-    percent_population_change: dataStart.total_population 
-      ? parseFloat(((dataEnd.total_population - dataStart.total_population) * 100 / dataStart.total_population).toFixed(2))
-      : null,
-      
-    // Gender distribution
-    male_percent_end: dataEnd.male_population_percent,
-    female_percent_end: dataEnd.female_population_percent,
-    male_moe_percent_end: dataEnd.male_population_moe_percent,
-    female_moe_percent_end: dataEnd.female_population_moe_percent,
-    
-    // Age demographics
-    median_age_end: dataEnd.median_age,
-    median_age_start: dataStart.median_age,
-    median_age_change: parseFloat((dataEnd.median_age - dataStart.median_age).toFixed(2)),
-    
-    // Youth vs Aging (2023)
-    youth_percent_2023: parseFloat((
-      dataEnd.population_under_5_percent + 
-      dataEnd.population_5_to_9_percent + 
-      dataEnd.population_10_to_14_percent + 
-      dataEnd.population_15_to_19_percent + 
-      dataEnd.population_20_to_24_percent
-    ).toFixed(2)),
-    
-    aging_percent_2023: parseFloat((
-      dataEnd.population_65_to_74_percent + 
-      dataEnd.population_75_to_84_percent + 
-      dataEnd.population_85_older_percent
-    ).toFixed(2)),
-    
-    // Prime working age
-    working_age_percent_2023: parseFloat((
-      dataEnd.population_25_to_34_percent + 
-      dataEnd.population_35_to_44_percent
-    ).toFixed(2)),
-    
-    // Age dependency ratio
-    age_dependency_ratio_2023: parseFloat((
-      (dataEnd.population_under_5_percent + 
-        dataEnd.population_5_to_9_percent + 
-        dataEnd.population_10_to_14_percent +
-        dataEnd.population_65_to_74_percent + 
-        dataEnd.population_75_to_84_percent + 
-        dataEnd.population_85_older_percent) /
-      (dataEnd.population_15_to_19_percent + 
-        dataEnd.population_20_to_24_percent + 
-        dataEnd.population_25_to_34_percent +
-        dataEnd.population_35_to_44_percent + 
-        dataEnd.population_45_to_54_percent + 
-        dataEnd.population_55_to_59_percent +
-        dataEnd.population_60_to_64_percent || 1)
-    ).toFixed(2)),
-    
-    // Population Change by Age Bracket
-    pop_change_25_to_34_percent: dataStart.population_25_to_34_percent
-      ? parseFloat(((dataEnd.population_25_to_34_percent - dataStart.population_25_to_34_percent) * 100 / 
-          dataStart.population_25_to_34_percent).toFixed(2))
-      : null,
-    
-    // Generations
-    boomer_percent_2023: parseFloat((
-      dataEnd.population_55_to_59_percent + 
-      dataEnd.population_60_to_64_percent + 
-      dataEnd.population_65_to_74_percent
-    ).toFixed(2)),
-    
-    millennial_percent_2023: parseFloat((
-      dataEnd.population_25_to_34_percent + 
-      dataEnd.population_35_to_44_percent
-    ).toFixed(2))
-  };
-}
-
-function createPopulationPyramidData(dataEnd: YearlyPopulationDataSchema) {
-  const pyramidData = [
-    { ageGroup: '0-4', percentage: dataEnd.population_under_5_percent },
-    { ageGroup: '5-9', percentage: dataEnd.population_5_to_9_percent },
-    { ageGroup: '10-14', percentage: dataEnd.population_10_to_14_percent },
-    { ageGroup: '15-19', percentage: dataEnd.population_15_to_19_percent },
-    { ageGroup: '20-24', percentage: dataEnd.population_20_to_24_percent },
-    { ageGroup: '25-29', percentage: dataEnd.population_25_to_34_percent / 2 },
-    { ageGroup: '30-34', percentage: dataEnd.population_25_to_34_percent / 2 },
-    { ageGroup: '35-39', percentage: dataEnd.population_35_to_44_percent / 2 },
-    { ageGroup: '40-44', percentage: dataEnd.population_35_to_44_percent / 2 },
-    { ageGroup: '45-49', percentage: dataEnd.population_45_to_54_percent / 2 },
-    { ageGroup: '50-54', percentage: dataEnd.population_45_to_54_percent / 2 },
-    { ageGroup: '55-59', percentage: dataEnd.population_55_to_59_percent },
-    { ageGroup: '60-64', percentage: dataEnd.population_60_to_64_percent },
-    { ageGroup: '65-69', percentage: dataEnd.population_65_to_74_percent / 2 },
-    { ageGroup: '70-74', percentage: dataEnd.population_65_to_74_percent / 2 },
-    { ageGroup: '75-79', percentage: dataEnd.population_75_to_84_percent / 2 },
-    { ageGroup: '80-84', percentage: dataEnd.population_75_to_84_percent / 2 },
-    { ageGroup: '85+', percentage: dataEnd.population_85_older_percent },
-  ];
-
-  
-  // Sort from oldest to youngest for proper display
-  return pyramidData.reverse();
-} 
 
 interface EsriResponse {
   results: [{
     value: {
       FeatureSet: [{
-        features: [{
-          attributes: {
-            MEDHINC_CY: number;
-            AVGHINC_CY: number;
-            OWNER_CY: number;
-            RENTER_CY: number;
-            VACANT_CY: number;
-            UNEMP_CY: number;
-            EMP_CY: number;
-            AVGVAL_CY: number;
-            WORKAGE_CY: number;
-            INDBASE_CY: number;
-            INDAGRI_CY: number;
-            INDMIN_CY: number;
-            INDCONS_CY: number;
-            INDMANU_CY: number;
-            INDWHTR_CY: number;
-            INDRTTR_CY: number;
-            INDTRAN_CY: number;
-            INDUTIL_CY: number;
-            INDINFO_CY: number;
-            INDFIN_CY: number;
-            INDRE_CY: number;
-            INDTECH_CY: number;
-            INDMGMT_CY: number;
-            INDADMN_CY: number;
-            INDEDUC_CY: number;
-            INDHLTH_CY: number;
-            INDARTS_CY: number;
-            INDFOOD_CY: number;
-            INDOTSV_CY: number;
-            INDPUBL_CY: number;
-          }
-        }]
+        features: [
+          { attributes: Record<string, number> },
+          { attributes: Record<string, number> },
+          { attributes: Record<string, number> }
+        ]
       }]
     }
   }]
 }
 
-async function fetchEsriData(fipsCode: string) {
+async function fetchEsriData(coords: Coordinates) {
   const apiKey = process.env.NEXT_PUBLIC_ESRI_API_KEY;
   const baseUrl = 'https://geoenrich.arcgis.com/arcgis/rest/services/World/GeoEnrichmentServer/GeoEnrichment/enrich';
 
   const url = new URL(baseUrl);
   url.searchParams.append('f', 'json');
   url.searchParams.append('token', apiKey || '');
-  url.searchParams.append('studyAreas', JSON.stringify([{"sourceCountry":"US","layer":"US.Counties","ids":[fipsCode]}]));
-  url.searchParams.append('analysisVariables', 'MEDHINC_CY,AVGHINC_CY,OWNER_CY,RENTER_CY,VACANT_CY,UNEMP_CY,EMP_CY,AVGVAL_CY,AVGRENT_CY,INSPOP_CY,WORKAGE_CY,INDBASE_CY,INDAGRI_CY,INDMIN_CY,INDCONS_CY,INDMANU_CY,INDWHTR_CY,INDRTTR_CY,INDTRAN_CY,INDUTIL_CY,INDINFO_CY,INDFIN_CY,INDRE_CY,INDTECH_CY,INDMGMT_CY,INDADMN_CY,INDEDUC_CY,INDHLTH_CY,INDARTS_CY,INDFOOD_CY,INDOTSV_CY,INDPUBL_CY');
+  url.searchParams.append('studyAreas', JSON.stringify([{
+    "sourceCountry": "US",
+    "geometry": { "x": coords.y, "y": coords.x },
+    "areaType": "RingBuffer",
+    "bufferUnits": "esriMiles",
+    "bufferRadii": [1, 3, 5]
+  }]));
+  url.searchParams.append('analysisVariables', variables.join(','));
 
   const response = await fetch(url.toString(), {
     method: 'GET',
   });
 
   const data = await response.json();
-  console.log(data);
   return data;
 }
 
 function flattenGeoenrichmentResponse(data: EsriResponse) {
-  const attributes = data?.results?.[0]?.value?.FeatureSet?.[0]?.features?.[0]?.attributes;
+  const oneMileAttributes = data?.results?.[0]?.value?.FeatureSet?.[0]?.features?.[0]?.attributes;
+  const threeMileAttributes = data?.results?.[0]?.value?.FeatureSet?.[0]?.features?.[1]?.attributes;
+  const fiveMileAttributes = data?.results?.[0]?.value?.FeatureSet?.[0]?.features?.[2]?.attributes;
 
-  if (!attributes) {
+  if (!oneMileAttributes || !threeMileAttributes || !fiveMileAttributes) {
     throw new Error('Invalid GeoEnrichment response structure.');
   }
 
   return {
-    median_household_income: attributes.MEDHINC_CY ?? null,
-    average_household_income: attributes.AVGHINC_CY ?? null,
-    owner_occupied_units: attributes.OWNER_CY ?? null,
-    renter_occupied_units: attributes.RENTER_CY ?? null,
-    vacant_units: attributes.VACANT_CY ?? null,
-    unemployment_population: attributes.UNEMP_CY ?? null,
-    employment_population: attributes.EMP_CY ?? null,
-    median_home_value: attributes.AVGVAL_CY ?? null,
-    working_age_population: attributes.WORKAGE_CY ?? null,
-    industry_base_population: attributes.INDBASE_CY ?? null,
-    agriculture_forestry_fishing_hunting_population: attributes.INDAGRI_CY ?? null,
-    mining_quarrying_oil_and_gas_extraction_population: attributes.INDMIN_CY ?? null,
-    construction_population: attributes.INDCONS_CY ?? null,
-    manufacturing_population: attributes.INDMANU_CY ?? null,
-    wholesale_trade_population: attributes.INDWHTR_CY ?? null,
-    retail_trade_population: attributes.INDRTTR_CY ?? null,
-    transportation_warehousing_population: attributes.INDTRAN_CY ?? null,
-    utilities_population: attributes.INDUTIL_CY ?? null,
-    information_population: attributes.INDINFO_CY ?? null,
-    finance_insurance_population: attributes.INDFIN_CY ?? null,
-    real_estate_rental_leasing_population: attributes.INDRE_CY ?? null,
-    professional_scientific_technical_services_population: attributes.INDTECH_CY ?? null,
-    management_of_companies_enterprises_population: attributes.INDMGMT_CY ?? null,
-    administrative_support_waste_management_services_population: attributes.INDADMN_CY ?? null,
-    educational_services_population: attributes.INDEDUC_CY ?? null,
-    health_care_social_assistance_population: attributes.INDHLTH_CY ?? null,
-    arts_entertainment_recreation_population: attributes.INDARTS_CY ?? null,
-    accommodation_food_services_population: attributes.INDFOOD_CY ?? null,
-    other_services_population: attributes.INDOTSV_CY ?? null,
-    public_administration_population: attributes.INDPUBL_CY ?? null,
+    one_mile_attributes: {
+      population_data: {
+        yearly_populations: {
+          total_population_2024: oneMileAttributes.TOTPOP_CY ?? null,
+          total_population_2023: oneMileAttributes.TSPOP23_CY ?? null,
+          total_population_2022: oneMileAttributes.TSPOP22_CY ?? null,
+          total_population_2021: oneMileAttributes.TSPOP21_CY ?? null,
+          total_population_2020: oneMileAttributes.TSPOP20_CY ?? null,
+        },
+        five_year_age_brackets: {
+           age_0_4: oneMileAttributes.POP0_CY ?? null,
+           age_5_9: oneMileAttributes.POP5_CY ?? null,
+           age_10_14: oneMileAttributes.POP10_CY ?? null,
+           age_15_19: oneMileAttributes.POP15_CY ?? null,
+           age_20_24: oneMileAttributes.POP20_CY ?? null,
+           age_25_29: oneMileAttributes.POP25_CY ?? null,
+           age_30_34: oneMileAttributes.POP30_CY ?? null,  
+           age_35_39: oneMileAttributes.POP35_CY ?? null, 
+           age_40_44: oneMileAttributes.POP40_CY ?? null, 
+           age_45_49: oneMileAttributes.POP45_CY ?? null, 
+           age_50_54: oneMileAttributes.POP50_CY ?? null, 
+           age_55_59: oneMileAttributes.POP55_CY ?? null, 
+           age_60_64: oneMileAttributes.POP60_CY ?? null, 
+           age_65_69: oneMileAttributes.POP65_CY ?? null, 
+           age_70_74: oneMileAttributes.POP70_CY ?? null, 
+           age_75_79: oneMileAttributes.POP75_CY ?? null, 
+           age_80_84: oneMileAttributes.POP80_CY ?? null, 
+           age_85_plus: oneMileAttributes.POP85_CY ?? null, 
+        },
+        male_population: oneMileAttributes.MALES_CY ?? null,
+        female_population: oneMileAttributes.FEMALES_CY ?? null,
+        median_age: oneMileAttributes.MEDAGE_CY ?? null,
+        youth_population: oneMileAttributes.CHILD_CY ?? null,
+        working_age_population: oneMileAttributes.WORKAGE_CY ?? null,
+        elderly_population: oneMileAttributes.SENIOR_CY ?? null,
+      },
+      housing_data: {
+        median_household_income: oneMileAttributes.MEDHINC_CY ?? null,
+        average_household_income: oneMileAttributes.AVGHINC_CY ?? null,
+        owner_occupied_units: oneMileAttributes.OWNER_CY ?? null,
+        renter_occupied_units: oneMileAttributes.RENTER_CY ?? null,
+        vacant_units: oneMileAttributes.VACANT_CY ?? null,
+        median_home_value: oneMileAttributes.AVGVAL_CY ?? null,
+        total_renters: oneMileAttributes.RENTER_CY ?? null,
+        total_owner_occupied: oneMileAttributes.OWNER_CY ?? null,
+        total_vacant: oneMileAttributes.VACANT_CY ?? null,
+        households: {
+          total_households_2024: oneMileAttributes.TOTHH_CY ?? null,
+          total_households_2023: oneMileAttributes.TSHH23_CY ?? null,
+          total_households_2022: oneMileAttributes.TSHH22_CY ?? null,
+          total_households_2021: oneMileAttributes.TSHH21_CY ?? null,
+          total_households_2020: oneMileAttributes.TSHH20_CY ?? null,
+        },
+        housing_units: {
+          total_housing_units_2024: oneMileAttributes.TOTHU_CY ?? null,
+          total_housing_units_2023: oneMileAttributes.TSHU23_CY ?? null,
+          total_housing_units_2022: oneMileAttributes.TSHU22_CY ?? null,
+          total_housing_units_2021: oneMileAttributes.TSHU21_CY ?? null,
+          total_housing_units_2020: oneMileAttributes.TSHU20_CY ?? null,
+        }
+      },
+      employment_data: {
+        working_age_population: oneMileAttributes.WORKAGE_CY ?? null,
+        unemployment_rate: oneMileAttributes.UNEMPRT_CY ?? null,
+        industry_base_population: oneMileAttributes.INDBASE_CY ?? null,
+        employment_by_industry: {
+          agriculture_forestry_fishing_hunting_population: oneMileAttributes.INDAGRI_CY ?? null,
+          mining_quarrying_oil_and_gas_extraction_population: oneMileAttributes.INDMIN_CY ?? null,
+          construction_population: oneMileAttributes.INDCONS_CY ?? null,
+          manufacturing_population: oneMileAttributes.INDMANU_CY ?? null,
+          wholesale_trade_population: oneMileAttributes.INDWHTR_CY ?? null,
+          retail_trade_population: oneMileAttributes.INDRTTR_CY ?? null,
+          transportation_warehousing_population: oneMileAttributes.INDTRAN_CY ?? null,
+          utilities_population: oneMileAttributes.INDUTIL_CY ?? null,
+          information_population: oneMileAttributes.INDINFO_CY ?? null,
+          finance_insurance_population: oneMileAttributes.INDFIN_CY ?? null,
+          real_estate_rental_leasing_population: oneMileAttributes.INDRE_CY ?? null,
+          professional_scientific_technical_services_population: oneMileAttributes.INDTECH_CY ?? null,
+          management_of_companies_enterprises_population: oneMileAttributes.INDMGMT_CY ?? null,
+          administrative_support_waste_management_services_population: oneMileAttributes.INDADMN_CY ?? null,
+          educational_services_population: oneMileAttributes.INDEDUC_CY ?? null,
+          health_care_social_assistance_population: oneMileAttributes.INDHLTH_CY ?? null,
+          arts_entertainment_recreation_population: oneMileAttributes.INDARTS_CY ?? null,
+          accommodation_food_services_population: oneMileAttributes.INDFOOD_CY ?? null,
+          other_services_population: oneMileAttributes.INDOTSV_CY ?? null,
+          public_administration_population: oneMileAttributes.INDPUBL_CY ?? null,
+        }
+      }
+    },
+    three_mile_attributes: {
+      population_data: {
+        yearly_populations: {
+          total_population_2024: threeMileAttributes.TOTPOP_CY ?? null,
+          total_population_2023: threeMileAttributes.TSPOP23_CY ?? null,
+          total_population_2022: threeMileAttributes.TSPOP22_CY ?? null,
+          total_population_2021: threeMileAttributes.TSPOP21_CY ?? null,
+          total_population_2020: threeMileAttributes.TSPOP20_CY ?? null,
+        },
+        five_year_age_brackets: {
+          age_0_4: threeMileAttributes.POP0_CY ?? null,
+          age_5_9: threeMileAttributes.POP5_CY ?? null,
+          age_10_14: threeMileAttributes.POP10_CY ?? null,
+          age_15_19: threeMileAttributes.POP15_CY ?? null,
+          age_20_24: threeMileAttributes.POP20_CY ?? null,
+          age_25_29: threeMileAttributes.POP25_CY ?? null,
+          age_30_34: threeMileAttributes.POP30_CY ?? null,  
+          age_35_39: threeMileAttributes.POP35_CY ?? null, 
+          age_40_44: threeMileAttributes.POP40_CY ?? null, 
+          age_45_49: threeMileAttributes.POP45_CY ?? null, 
+          age_50_54: threeMileAttributes.POP50_CY ?? null, 
+          age_55_59: threeMileAttributes.POP55_CY ?? null, 
+          age_60_64: threeMileAttributes.POP60_CY ?? null, 
+          age_65_69: threeMileAttributes.POP65_CY ?? null, 
+          age_70_74: threeMileAttributes.POP70_CY ?? null, 
+          age_75_79: threeMileAttributes.POP75_CY ?? null, 
+          age_80_84: threeMileAttributes.POP80_CY ?? null, 
+          age_85_plus: threeMileAttributes.POP85_CY ?? null, 
+       },
+        male_population: threeMileAttributes.MALES_CY ?? null,
+        female_population: threeMileAttributes.FEMALES_CY ?? null,
+        median_age: threeMileAttributes.MEDAGE_CY ?? null,
+        youth_population: threeMileAttributes.CHILD_CY ?? null,
+        working_age_population: threeMileAttributes.WORKAGE_CY ?? null,
+        elderly_population: threeMileAttributes.SENIOR_CY ?? null,
+      },
+      housing_data: {
+        median_household_income: threeMileAttributes.MEDHINC_CY ?? null,
+        average_household_income: threeMileAttributes.AVGHINC_CY ?? null,
+        owner_occupied_units: threeMileAttributes.OWNER_CY ?? null,
+        renter_occupied_units: threeMileAttributes.RENTER_CY ?? null,
+        vacant_units: threeMileAttributes.VACANT_CY ?? null,
+        median_home_value: threeMileAttributes.AVGVAL_CY ?? null,
+        total_renters: threeMileAttributes.RENTER_CY ?? null,
+        total_owner_occupied: threeMileAttributes.OWNER_CY ?? null,
+        total_vacant: threeMileAttributes.VACANT_CY ?? null,
+        households: {
+          total_households_2024: threeMileAttributes.TOTHH_CY ?? null,
+          total_households_2023: threeMileAttributes.TSHH23_CY ?? null,
+          total_households_2022: threeMileAttributes.TSHH22_CY ?? null,
+          total_households_2021: threeMileAttributes.TSHH21_CY ?? null,
+          total_households_2020: threeMileAttributes.TSHH20_CY ?? null,
+        },
+        housing_units: {
+          total_housing_units_2024: threeMileAttributes.TOTHU_CY ?? null,
+          total_housing_units_2023: threeMileAttributes.TSHU23_CY ?? null,
+          total_housing_units_2022: threeMileAttributes.TSHU22_CY ?? null,
+          total_housing_units_2021: threeMileAttributes.TSHU21_CY ?? null,
+          total_housing_units_2020: threeMileAttributes.TSHU20_CY ?? null,
+        }
+      },
+      employment_data: {
+        working_age_population: threeMileAttributes.WORKAGE_CY ?? null,
+        unemployment_rate: threeMileAttributes.UNEMPRT_CY ?? null,
+        industry_base_population: threeMileAttributes.INDBASE_CY ?? null,
+        employment_by_industry: {
+          agriculture_forestry_fishing_hunting_population: threeMileAttributes.INDAGRI_CY ?? null,
+          mining_quarrying_oil_and_gas_extraction_population: threeMileAttributes.INDMIN_CY ?? null,
+          construction_population: threeMileAttributes.INDCONS_CY ?? null,
+          manufacturing_population: threeMileAttributes.INDMANU_CY ?? null,
+          wholesale_trade_population: threeMileAttributes.INDWHTR_CY ?? null,
+          retail_trade_population: threeMileAttributes.INDRTTR_CY ?? null,
+          transportation_warehousing_population: threeMileAttributes.INDTRAN_CY ?? null,
+          utilities_population: threeMileAttributes.INDUTIL_CY ?? null,
+          information_population: threeMileAttributes.INDINFO_CY ?? null,
+          finance_insurance_population: threeMileAttributes.INDFIN_CY ?? null,
+          real_estate_rental_leasing_population: threeMileAttributes.INDRE_CY ?? null,
+          professional_scientific_technical_services_population: threeMileAttributes.INDTECH_CY ?? null,
+          management_of_companies_enterprises_population: threeMileAttributes.INDMGMT_CY ?? null,
+          administrative_support_waste_management_services_population: threeMileAttributes.INDADMN_CY ?? null,
+          educational_services_population: threeMileAttributes.INDEDUC_CY ?? null,
+          health_care_social_assistance_population: threeMileAttributes.INDHLTH_CY ?? null,
+          arts_entertainment_recreation_population: threeMileAttributes.INDARTS_CY ?? null,
+          accommodation_food_services_population: threeMileAttributes.INDFOOD_CY ?? null,
+          other_services_population: threeMileAttributes.INDOTSV_CY ?? null,
+          public_administration_population: threeMileAttributes.INDPUBL_CY ?? null,
+        }
+      }
+    },
+    five_mile_attributes: {
+      population_data: {
+        yearly_populations: {
+          total_population_2024: fiveMileAttributes.TOTPOP_CY ?? null,
+          total_population_2023: fiveMileAttributes.TSPOP23_CY ?? null,
+          total_population_2022: fiveMileAttributes.TSPOP22_CY ?? null,
+          total_population_2021: fiveMileAttributes.TSPOP21_CY ?? null,
+          total_population_2020: fiveMileAttributes.TSPOP20_CY ?? null,
+        },
+        five_year_age_brackets: {
+          age_0_4: fiveMileAttributes.POP0_CY ?? null,
+          age_5_9: fiveMileAttributes.POP5_CY ?? null,
+          age_10_14: fiveMileAttributes.POP10_CY ?? null,
+          age_15_19: fiveMileAttributes.POP15_CY ?? null,
+          age_20_24: fiveMileAttributes.POP20_CY ?? null,
+          age_25_29: fiveMileAttributes.POP25_CY ?? null,
+          age_30_34: fiveMileAttributes.POP30_CY ?? null,  
+          age_35_39: fiveMileAttributes.POP35_CY ?? null, 
+          age_40_44: fiveMileAttributes.POP40_CY ?? null, 
+          age_45_49: fiveMileAttributes.POP45_CY ?? null, 
+          age_50_54: fiveMileAttributes.POP50_CY ?? null, 
+          age_55_59: fiveMileAttributes.POP55_CY ?? null, 
+          age_60_64: fiveMileAttributes.POP60_CY ?? null, 
+          age_65_69: fiveMileAttributes.POP65_CY ?? null, 
+          age_70_74: fiveMileAttributes.POP70_CY ?? null, 
+          age_75_79: fiveMileAttributes.POP75_CY ?? null, 
+          age_80_84: fiveMileAttributes.POP80_CY ?? null, 
+          age_85_plus: fiveMileAttributes.POP85_CY ?? null, 
+       },
+        male_population: fiveMileAttributes.MALES_CY ?? null,
+        female_population: fiveMileAttributes.FEMALES_CY ?? null,
+        median_age: fiveMileAttributes.MEDAGE_CY ?? null,
+        youth_population: fiveMileAttributes.CHILD_CY ?? null,
+        working_age_population: fiveMileAttributes.WORKAGE_CY ?? null,
+        elderly_population: fiveMileAttributes.SENIOR_CY ?? null,
+      },
+      housing_data: {
+        median_household_income: fiveMileAttributes.MEDHINC_CY ?? null,
+        average_household_income: fiveMileAttributes.AVGHINC_CY ?? null,
+        owner_occupied_units: fiveMileAttributes.OWNER_CY ?? null,
+        renter_occupied_units: fiveMileAttributes.RENTER_CY ?? null,
+        vacant_units: fiveMileAttributes.VACANT_CY ?? null,
+        median_home_value: fiveMileAttributes.AVGVAL_CY ?? null,
+        total_renters: fiveMileAttributes.RENTER_CY ?? null,
+        total_owner_occupied: fiveMileAttributes.OWNER_CY ?? null,
+        total_vacant: fiveMileAttributes.VACANT_CY ?? null,
+        households: {
+          total_households_2024: fiveMileAttributes.TOTHH_CY ?? null,
+          total_households_2023: fiveMileAttributes.TSHH23_CY ?? null,
+          total_households_2022: fiveMileAttributes.TSHH22_CY ?? null,
+          total_households_2021: fiveMileAttributes.TSHH21_CY ?? null,
+          total_households_2020: fiveMileAttributes.TSHH20_CY ?? null,
+        },
+        housing_units: {
+          total_housing_units_2024: fiveMileAttributes.TOTHU_CY ?? null,
+          total_housing_units_2023: fiveMileAttributes.TSHU23_CY ?? null,
+          total_housing_units_2022: fiveMileAttributes.TSHU22_CY ?? null,
+          total_housing_units_2021: fiveMileAttributes.TSHU21_CY ?? null,
+          total_housing_units_2020: fiveMileAttributes.TSHU20_CY ?? null,
+        }
+      },
+      employment_data: {
+        working_age_population: fiveMileAttributes.WORKAGE_CY ?? null,
+        unemployment_rate: fiveMileAttributes.UNEMPRT_CY ?? null,
+        industry_base_population: fiveMileAttributes.INDBASE_CY ?? null,
+        employment_by_industry: {
+          agriculture_forestry_fishing_hunting_population: fiveMileAttributes.INDAGRI_CY ?? null,
+          mining_quarrying_oil_and_gas_extraction_population: fiveMileAttributes.INDMIN_CY ?? null,
+          construction_population: fiveMileAttributes.INDCONS_CY ?? null,
+          manufacturing_population: fiveMileAttributes.INDMANU_CY ?? null,
+          wholesale_trade_population: fiveMileAttributes.INDWHTR_CY ?? null,
+          retail_trade_population: fiveMileAttributes.INDRTTR_CY ?? null,
+          transportation_warehousing_population: fiveMileAttributes.INDTRAN_CY ?? null,
+          utilities_population: fiveMileAttributes.INDUTIL_CY ?? null,
+          information_population: fiveMileAttributes.INDINFO_CY ?? null,
+          finance_insurance_population: fiveMileAttributes.INDFIN_CY ?? null,
+          real_estate_rental_leasing_population: fiveMileAttributes.INDRE_CY ?? null,
+          professional_scientific_technical_services_population: fiveMileAttributes.INDTECH_CY ?? null,
+          management_of_companies_enterprises_population: fiveMileAttributes.INDMGMT_CY ?? null,
+          administrative_support_waste_management_services_population: fiveMileAttributes.INDADMN_CY ?? null,
+          educational_services_population: fiveMileAttributes.INDEDUC_CY ?? null,
+          health_care_social_assistance_population: fiveMileAttributes.INDHLTH_CY ?? null,
+          arts_entertainment_recreation_population: fiveMileAttributes.INDARTS_CY ?? null,
+          accommodation_food_services_population: fiveMileAttributes.INDFOOD_CY ?? null,
+          other_services_population: fiveMileAttributes.INDOTSV_CY ?? null,
+          public_administration_population: fiveMileAttributes.INDPUBL_CY ?? null,
+        }
+      }
+    }
   };
 }
 
-async function fetchAndFlattenStats(fipsCode: string) {
-  const rawData = await fetchEsriData(fipsCode);
+async function fetchAndFlattenStats(coords: Coordinates) {
+  const rawData = await fetchEsriData(coords);
   const cleanData = flattenGeoenrichmentResponse(rawData);
-  console.log(cleanData);
   return cleanData;
 }

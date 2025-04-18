@@ -34,8 +34,6 @@ import Link from "next/link";
 export default function PropertyAnalysisDashboard() {
   const [reportHandler, setReportHandler] = useState<PropertyReportHandler | null>(null);
   const [propertyAddress, setPropertyAddress] = useState<string | null>(null);
-  const [county, setCounty] = useState<string | null>(null);
-  const [state, setState] = useState<string | null>(null);
   const [hasFeedback, setHasFeedback] = useState<boolean>(false);
   const [isEvalModalOpen, setIsEvalModalOpen] = useState<boolean>(false);
   const [previousAddress, setPreviousAddress] = useState<string | null>(null);
@@ -51,9 +49,6 @@ export default function PropertyAnalysisDashboard() {
       if (!address) {
         return;
       }
-
-      const county = localStorage.getItem("county");
-      const state = localStorage.getItem("state");
       
       // Check if this is a new property search
       if (previousAddress && previousAddress !== address) {
@@ -78,8 +73,6 @@ export default function PropertyAnalysisDashboard() {
       
       setPreviousAddress(address);
       setPropertyAddress(address);
-      setCounty(county || null);
-      setState(state || null);
       if (!reportHandler) {
         const handler = new PropertyReportHandler();
         setReportHandler(handler);
@@ -279,7 +272,7 @@ export default function PropertyAnalysisDashboard() {
                 Market research and analysis of the area, compiled from US Census data and powered by <Link href="https://www.esri.com/en-us/home">Esri</Link>.
               </p>
             </div>
-            <MarketResearchTab reportHandler={reportHandler!} county={county} state={state} />
+            {propertyAddress && <MarketResearchTab reportHandler={reportHandler!} propertyAddress={propertyAddress} />}
           </TabsContent>
 
           <TabsContent value="news" className="m-0" data-section="news">

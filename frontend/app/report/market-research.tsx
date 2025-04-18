@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PopulationMetrics } from "@/components/population-metrics";
 import { PopulationGraphs } from "@/components/population-graphs";
 import { HousingMetrics } from "@/components/housing-metrics";
+import { HousingGraphs } from "@/components/housing-graphs";
 import { AlertCircle, Users2, House, HardHat } from "lucide-react";
 import "@/styles/report.css";
 import { useMarketResearchData } from "@/hooks/useMarketResearchData";
@@ -12,49 +13,55 @@ import { PropertyReportHandler } from "@/lib/report-handler";
 import { IndustryTable } from "@/components/industry-table";
 import { IndustryGraph } from "@/components/industry-graph";
 
-export function MarketResearchTab({ reportHandler, county, state }: { reportHandler: PropertyReportHandler, county: string | null, state: string | null }) {
-  const [startYear, setStartYear] = useState(2014);
-  const [endYear, setEndYear] = useState(2023);
-  const [selectedYearRange, setSelectedYearRange] = useState<string>("10-year-data");
+type Radius = 1 | 3 | 5;
+
+export function MarketResearchTab({ reportHandler, propertyAddress }: { reportHandler: PropertyReportHandler, propertyAddress: string }) {
+  const [radius, setRadius] = useState<Radius>(1);
   
   const { 
-    marketData, 
-    yearlyPopulationData, 
-    populationPyramidData, 
-    esriData2024,
-    msaName, 
+    marketData,
     loading, 
     error 
-  } = useMarketResearchData(reportHandler, county, state, startYear, endYear);
+  } = useMarketResearchData(reportHandler);
   
-  const handleFiveYears = () => {
-    setStartYear(2019);
-    setEndYear(2023);
-    setSelectedYearRange("5-year-data");
+  const handleOneMileRadius = () => {
+    setRadius(1);
   }
 
-  const handleTenYears = () => {
-    setStartYear(2014);
-    setEndYear(2023);
-    setSelectedYearRange("10-year-data");
+  const handleThreeMileRadius = () => {
+    setRadius(3);
   }
 
-  const FiveYearsButton = () => {
+  const handleFiveMileRadius = () => {
+    setRadius(5);
+  }
+
+  const OneMileRadiusButton = () => {
     return (
         <button 
-            onClick={handleFiveYears} 
-            className={`text-sm px-2 py-1 rounded-md ${selectedYearRange === "5-year-data" ? "bg-primary text-white" : "bg-white text-[#f97316] border border-primary"}`}>
-                Last 5 Years
+            onClick={handleOneMileRadius} 
+            className={`text-sm px-2 py-1 rounded-md ${radius === 1 ? "bg-primary text-white" : "bg-white text-[#f97316] border border-primary"}`}>
+                One Mile Radius
         </button>
     );
   }
 
-  const TenYearsButton = () => {
+  const ThreeMileRadiusButton = () => {
     return (
         <button 
-            onClick={handleTenYears} 
-            className={`text-sm px-2 py-1 rounded-md ${selectedYearRange === "10-year-data" ? "bg-primary text-white" : "bg-white text-[#f97316] border border-primary"}`}>
-                Last 10 Years
+            onClick={handleThreeMileRadius} 
+            className={`text-sm px-2 py-1 rounded-md ${radius === 3 ? "bg-primary text-white" : "bg-white text-[#f97316] border border-primary"}`}>
+                Three Mile Radius
+        </button>
+    );
+  }
+
+  const FiveMileRadiusButton = () => {
+    return (
+        <button 
+            onClick={handleFiveMileRadius} 
+            className={`text-sm px-2 py-1 rounded-md ${radius === 5 ? "bg-primary text-white" : "bg-white text-[#f97316] border border-primary"}`}>
+                Five Mile Radius
         </button>
     );
   }
@@ -74,7 +81,7 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
   return (
     <div className="container mx-auto max-w-7xl py-6">
       <div className="grid gap-8">
-        {marketData && esriData2024 && (
+        {marketData && (
             <>
             <div className="rounded-lg border bg-card shadow-sm">
                 <div className="flex flex-row justify-between items-center gap-2 border-b md:col-span-2 col-span-1 px-6 py-4">
@@ -83,15 +90,16 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
                         <h2 className="text-lg font-semibold">Population Demographics</h2>
                     </div>
                     <div className="flex items-center gap-2">
-                        <TenYearsButton />
-                        <FiveYearsButton />
+                        <OneMileRadiusButton />
+                        <ThreeMileRadiusButton />
+                        <FiveMileRadiusButton />
                     </div>
                 </div>
                 <div className="p-4">
-                    <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state} → {msaName}</p>
+                    <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data within a {radius} mile radius of {propertyAddress}</p>
                     <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-6">
-                        <PopulationMetrics marketData={marketData} startYear={startYear} endYear={endYear} esriData2024={esriData2024} />
-                        <PopulationGraphs yearlyPopulationData={yearlyPopulationData} populationPyramidData={populationPyramidData} endYear={endYear} />
+                        <PopulationMetrics marketData={marketData} radius={radius} />
+                        <PopulationGraphs marketData={marketData} radius={radius} />
                     </div>
                 </div>
             </div>
@@ -102,13 +110,16 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
                       <h2 className="text-lg font-semibold">Housing Information</h2>
                   </div>
                   <div className="flex items-center gap-2">
-                      2024 Esri Data
+                      <OneMileRadiusButton />
+                      <ThreeMileRadiusButton />
+                      <FiveMileRadiusButton />
                   </div>
               </div>
               <div className="p-4">
-                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state}</p>
-                  <div className="grid grid-cols-1 gap-6 mb-6">
-                      <HousingMetrics esriData2024={esriData2024} />
+                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data within a {radius} mile radius of {propertyAddress}</p>
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-6">
+                      <HousingMetrics marketData={marketData} radius={radius} />
+                      <HousingGraphs marketData={marketData} radius={radius} />
                   </div>
               </div>
             </div>
@@ -119,15 +130,17 @@ export function MarketResearchTab({ reportHandler, county, state }: { reportHand
                       <h2 className="text-lg font-semibold">Employment By Industry</h2>
                   </div>
                   <div className="flex items-center gap-2">
-                      2024 Esri Data
+                      <OneMileRadiusButton />
+                      <ThreeMileRadiusButton />
+                      <FiveMileRadiusButton />
                   </div>
               </div>
               <div className="p-4">
-                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state}</p>
+                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data within a {radius} mile radius of {propertyAddress}</p>
                   <div className="grid grid-cols-1 gap-6 mb-6">
-                      <IndustryTable esriData2024={esriData2024} />
+                      <IndustryTable marketData={marketData} radius={radius} />
                       <div className="hidden sm:block">
-                          <IndustryGraph esriData2024={esriData2024} />
+                          <IndustryGraph marketData={marketData} radius={radius} />
                       </div>
                   </div>
               </div>
