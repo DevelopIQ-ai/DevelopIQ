@@ -12,6 +12,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^1.2.2",
     "@aws-sdk/client-s3": "^3.782.0",
+    "@emailjs/browser": "^4.4.1",
     "@langchain/langgraph-sdk": "^0.0.62",
     "@mapbox/vector-tile": "^2.0.3",
     "@mastra/core": "^0.4.4",
