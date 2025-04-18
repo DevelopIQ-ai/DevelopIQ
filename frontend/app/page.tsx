@@ -9,7 +9,6 @@ import { NavBar } from "@/components/nav-bar"
 import { FeatureCard } from "@/components/feature-card"
 import { CarouselImage } from "@/components/carousel-image"
 import { useRouter } from "next/navigation"
-import { canFetchAttomData } from "@/lib/attom-data-fetcher"
 import { v4 as uuidv4 } from "uuid"
 
 // Helper to load Google Maps script
@@ -204,13 +203,7 @@ export default function Home() {
       const state = stateComponent?.long_name || stateComponent?.short_name;
       localStorage.setItem("state", state || "");
     }
-
-    const canFetch = await canFetchAttomData(address)
-    if (!canFetch) {
-      localStorage.setItem("isAddressSupported", "false")
-    } else {
-      localStorage.setItem("isAddressSupported", "true")
-    }
+    
     // test attom api call
     router.push("/report")
   }
