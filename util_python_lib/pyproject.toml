@@ -23,7 +23,8 @@ dependencies = [
     "browserbase (>=1.2.0,<2.0.0)",
     "mvt (>=2.6.0,<3.0.0)",
     "mapbox-vector-tile (>=2.1.0,<3.0.0)",
-    "shapely (>=2.0.7,<3.0.0)"
+    "shapely (>=2.0.7,<3.0.0)",
+    "supabase (>=2.15.0,<3.0.0)"
 ]
 
 
