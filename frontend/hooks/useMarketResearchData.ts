@@ -15,6 +15,8 @@ export function useMarketResearchData(
       // Get latitude and longitude from localStorage
       const latitude = localStorage.getItem("propertyLatitude");
       const longitude = localStorage.getItem("propertyLongitude");
+      const county = localStorage.getItem("county");
+      const state = localStorage.getItem("state");
       if (!latitude || !longitude) {
         setError("No latitude or longitude found for this location.");
         setLoading(false);
@@ -32,8 +34,6 @@ export function useMarketResearchData(
       
       // Create a cache key based on coordinates
       const cacheKey = "marketResearchData";
-      
-      // Check if data exists in localStorage
       const cachedData = localStorage.getItem(cacheKey);
 
       if (cachedData) {
@@ -57,6 +57,11 @@ export function useMarketResearchData(
         
         // Fetch and flatten ESRI data using coordinates
         const data = await fetchAndFlattenStats(coords);
+        if (county && state) {
+          const blsData = await fetchBlsData(county, state);
+          console.log(blsData);
+
+        }
         console.log(data);
         setMarketData(data);
         
@@ -170,6 +175,18 @@ interface EsriResponse {
       }]
     }
   }]
+}
+
+async function fetchBlsData(county: string, state: string) {
+  const response = await fetch("/api/bls", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ county, state, queryType: "unemployment_rate" }),
+  });
+  const data = await response.json();
+  return data;
 }
 
 async function fetchEsriData(coords: Coordinates) {
