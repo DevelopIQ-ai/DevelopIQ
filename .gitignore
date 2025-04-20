@@ -1,74 +1,77 @@
 # ----------------------------------------
-# OS-specific, editor-specific junk
+# OS-specific files
 # ----------------------------------------
 .DS_Store
 Thumbs.db
+
+# ----------------------------------------
+# Editor-specific files
+# ----------------------------------------
 *.swp
 .vscode/
 .idea/
+.cache/
+.cache-loader/
 
 # ----------------------------------------
-# Node / Next.js ignores
+# Node.js / Next.js
 # ----------------------------------------
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
 .npm/
-yarn-error.log
-npm-debug.log
-yarn-debug.log
-yarn.lock
-dist/
-.next/
-/out
-# local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Uncomment if using pnpm
-# pnpm-lock.yaml
-
+.yarn/install-state.gz
 # Uncomment if using Yarn Berry
 # .yarn/cache
 # .pnp.*
+# Uncomment if using pnpm
+# pnpm-lock.yaml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+.next/
+/out/
+/build/
 
 # ----------------------------------------
-# Python / FastAPI ignores
+# Python / FastAPI
 # ----------------------------------------
-# Byte-compiled / virtualenv / distribution
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.egg-info/
-*.egg
 *.pyo
 *.pyd
+
+# Distribution / packaging
+*.egg-info/
+*.egg
 *.whl
 *.manifest
 *.spec
-venv/
-.venv/
 pip-wheel-metadata/
 pip-log.txt
+
+# Virtual environments
+venv/
+.venv/
 env/
 ENV/
 
+# ----------------------------------------
 # Langgraph API files
+# ----------------------------------------
 .langgraph_api/
 .langgraph_api/*.pckl
 .langgraph_api/*.vectors
 
-# local env files
-.env
-.env.*
-
 # ----------------------------------------
-# Log files
-# ----------------------------------------
-*.log
-*.log.*
-
-# ----------------------------------------
-# Chroma DB ignores
+# Chroma DB
 # ----------------------------------------
 .chroma/
 chroma/
@@ -86,19 +89,34 @@ codebook_db/*/length.bin
 codebook_db/*/link_lists.bin
 
 # ----------------------------------------
-# Output files
+# Environment variables
 # ----------------------------------------
-crews/search_crew/chapter_output.json
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# But do not ignore example env file
+!.env.example
 
+# ----------------------------------------
+# Logs
+# ----------------------------------------
+*.log
+*.log.*
+
+# ----------------------------------------
+# Application specific
+# ----------------------------------------
+# Codebook agent tables
+codebook_agent/tables/
 
 # ----------------------------------------
 # Misc
 # ----------------------------------------
 coverage/
-.cache/
-.cache-loader/
 *.bak
 .vercel
-
-# Ignore tables folder
-codebook_agent/tables/
+*.pem
+*.tsbuildinfo
+next-env.d.ts
