@@ -80,7 +80,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Transform your property research workflow with AI-powered insights
+              Everything you used to Google — in one click.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
