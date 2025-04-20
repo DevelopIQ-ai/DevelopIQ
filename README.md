@@ -1,6 +1,18 @@
 # DevelopIQ
 
-DevelopIQ is a real estate data aggregation and analysis system designed to automate property research. The system processes parcel addresses, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis. 
+## ✨ Core Use Cases
+
+- 🧭 **Instant Site Investigation Reports**  
+  Upload a parcel or link — get zoning, use tables, setbacks, height limits, entitlement process, flood risk, etc.
+
+- 🧠 **AI-Powered Zoning Interpretation**  
+  No more searching PDFs or calling city planners. Our agent understands the code for you.
+
+- 🗺️ **Jurisdiction Detection & Conflict Mapping**  
+  We identify overlapping city/county rules, historical commissions, or HOA overlays that kill deals.
+
+- 💸 **Red Flag Finder**  
+  Spot deal-breakers like 2-year entitlement windows, $150k/unit impact fees, or topography issues instantly.
 
 ## 🏗️ Project Structure
 
