@@ -6,6 +6,7 @@ We help developers, brokers, and land teams stop wasting hours on PDF scavenger 
 
 ---
 
+
 ## ✅ Current Capabilities (MVP)
 
 > What’s working *today* — and where it delivers value.
@@ -19,6 +20,7 @@ Given an address or parcel ID, we fetch and aggregate:
 > 🔍 Data sourced from public APIs and government databases.
 
 ---
+
 
 ### 📘 2. Zoning Codebook Intelligence
 This is our **LangGraph-powered agentic system**, focused on zoning feasibility.
@@ -38,6 +40,7 @@ This is our **LangGraph-powered agentic system**, focused on zoning feasibility.
 > 🚨 This is *not* a chatbot. It’s a deterministic pipeline focused on **structured zoning answers**.
 ---
 
+
 ## 🔄 System Architecture
 
 ```
@@ -52,7 +55,9 @@ This is our **LangGraph-powered agentic system**, focused on zoning feasibility.
 
 ---
 
+
 ## 🧪 Try It Locally
+
 
 ### Frontend
 ```bash
@@ -64,6 +69,7 @@ npm run dev
 
 Frontend runs on `http://localhost:3000`
 
+
 ### Backend
 Use Langsmith or LangGraph local dev mode.
 
@@ -73,9 +79,8 @@ langgraph dev
 
 ---
 
-## 🎯 What We’re Not Yet Doing
 
-We're being honest:
+## 🎯 What We’re Not Yet Doing
 
 - ❌ No AI-generated proformas or valuations (yet)
 - ❌ No user-uploaded documents (yet)
@@ -85,7 +90,9 @@ This is **MVP 0.1** — validating structured site investigation automation.
 
 ---
 
+
 ## 👀 What’s Next
+
 
 - Integrate parcel lookup with zoning agent output
 - Add surface-level red flag detection (e.g. “requires rezoning”, “2-year entitlement”)
@@ -93,6 +100,7 @@ This is **MVP 0.1** — validating structured site investigation automation.
 - Create downloadable SIR (PDF or markdown)
 
 ---
+
 
 ## 👥 Contributors
 
