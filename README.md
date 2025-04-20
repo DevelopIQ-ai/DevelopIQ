@@ -1,3 +1,9 @@
+![image](https://github.com/user-attachments/assets/5b45d8fc-b502-4adb-a289-6815c6a281ae)
+
+
+
+
+
 # DevelopIQ
 
 DevelopIQ is a real estate data aggregation and analysis system designed to automate property research. The system processes parcel addresses, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis. 
