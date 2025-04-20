@@ -1,30 +1,29 @@
 # DevelopIQ
 
-DevelopIQ is an intelligent real estate data aggregation and analysis system designed to automate property research. The system processes property links, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis.
+DevelopIQ is a real estate data aggregation and analysis system designed to automate property research. The system processes parcel addresses, extracts relevant details from multiple sources, and compiles comprehensive datasets for real estate analysis. 
 
 ## 🏗️ Project Structure
 
 The project is organized into two main components:
 
-- **Frontend**: A Next.js application with React, TypeScript, and Tailwind CSS
-- **Server**: A FastAPI backend with Python that handles data extraction and processing
+- **/frontend**: A Next.js application with React, TypeScript, and Tailwind CSS
+- **/codebook_agent**: A langgraph backend for agentic behaviours, hosted on the langgraph platform.
+- **/util_python_lib**: A collection of various python scripts that we found useful. Disorganized.
+
 
 ## ✨ Features
 
 - Process property links to extract key identifiers and context
-- Retrieve information from multiple sources including listing platforms, government records, and market analysis platforms
-- Normalize and aggregate data into structured formats
-- Generate detailed property reports with insights and analysis
-- Handle high volumes of property links simultaneously
+- Retrieve information from multiple sources including attom, zoneomics, esri, BLS, census.gov, etc.
+- Finds jurisdiction codes and extracts crucial development information
+- Extensive AI powered market research
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm/yarn for the frontend
-- Python 3.11+ and Poetry for the server
-- Docker (optional, for containerized deployment)
-- Langgraph
+- Python >=3.9,<4.0 for langgraph 
 
 ### Frontend Setup
 
@@ -34,6 +33,7 @@ npm install
 cp .env.example .env.local  # Configure your environment variables
 npm run dev
 ```
+You will need a few environment variables.
 
 The frontend will be available at http://localhost:3000
 
@@ -47,35 +47,18 @@ langgraph dev
 
 The API will be available at the Langgraph URL, which is at {url}
 
-## 🛠️ Technologies
+## 🔄 Langgraph Workflow
 
-### Frontend
-- **Framework**: Next.js 14 with App Router
-- **UI**: React 18, Shadcn UI, Radix UI components
-- **Styling**: Tailwind CSS
-- **Language**: TypeScript
-- **Data Validation**: Zod
+There are two agents that are currently designed.
 
-### Backend
-- **Framework**: Langgraph
-- **Async Operations**: asyncio, aiohttp
-- **Web Automation**: Playwright
-- **Agent System**: AgentQL, BrowserBase
-- **Data Models**: Pydantic
+### EXTRACTOR AGENT
+1. Checks if the codebook exists
+2. If not, finds the codebook
+3. Chunks the codebook
 
-## 🔄 Workflow
-
-1. **Input**: The system accepts a property link as input
-2. **Processing**: Specialized agents extract data from multiple sources
-3. **Compilation**: Data is normalized and aggregated
-4. **Output**: A detailed report is generated with property information and insights
-
-## 🧩 Key Components
-
-- **Data Extraction Agents**: Specialized modules for retrieving information from different sources
-- **Data Normalization**: Standardizes data formats for consistency
-- **Cross-checking System**: Resolves discrepancies between data sources
-- **Report Generation**: Creates comprehensive property reports
+Querier Agent
+1. Queries the codebook for all relevant pre-defined questions
+2. Returns answers.
 
 ## 📝 License
 
