@@ -1,83 +1,107 @@
-# DevelopIQ
+# 🧠 DevelopIQ
 
-## ✨ Core Use Cases
+**DevelopIQ is an AI-powered tool for real estate developers to instantly surface zoning and development constraints — starting with automated site investigation reports.**
 
-- 🧭 **Instant Site Investigation Reports**  
-  Upload a parcel or link — get zoning, use tables, setbacks, height limits, entitlement process, flood risk, etc.
+We help developers, brokers, and land teams stop wasting hours on PDF scavenger hunts and city planner calls.
 
-- 🧠 **AI-Powered Zoning Interpretation**  
-  No more searching PDFs or calling city planners. Our agent understands the code for you.
+---
 
-- 🗺️ **Jurisdiction Detection & Conflict Mapping**  
-  We identify overlapping city/county rules, historical commissions, or HOA overlays that kill deals.
+## ✅ Current Capabilities (MVP)
 
-- 💸 **Red Flag Finder**  
-  Spot deal-breakers like 2-year entitlement windows, $150k/unit impact fees, or topography issues instantly.
+> What’s working *today* — and where it delivers value.
 
-## 🏗️ Project Structure
+### 📍 1. Property Overview
+Given an address or parcel ID, we fetch and aggregate:
 
-The project is organized into two main components:
+- Parcel metadata (location, size, owner, use class)
+- Market-level data (job trends, housing supply, demographics)
 
-- **/frontend**: A Next.js application with React, TypeScript, and Tailwind CSS
-- **/codebook_agent**: A langgraph backend for agentic behaviours, hosted on the langgraph platform.
-- **/util_python_lib**: A collection of various python scripts that we found useful. Disorganized.
+> 🔍 Data sourced from public APIs and government databases.
 
+---
 
-## ✨ Features
+### 📘 2. Zoning Codebook Intelligence
+This is our **LangGraph-powered agentic system**, focused on zoning feasibility.
 
-- Process property links to extract key identifiers and context
-- Retrieve information from multiple sources including attom, zoneomics, esri, BLS, census.gov, etc.
-- Finds jurisdiction codes and extracts crucial development information
-- Extensive AI powered market research
+- 🗂️ **Extractor Agent**  
+  - Finds and retrieves the appropriate municipal codebook (HTML or PDF)
+  - Chunks and indexes it for semantic search
 
-## 🚀 Getting Started
+- 🔍 **Querier Agent**  
+  - Asks predefined development questions:
+    - What are the permitted uses for this site?
+    - What are the setbacks and height limits?
+    - What is the rezoning process?
+    - Are there historical overlays or design commissions?
+  - Returns answers (with source citations) based on zoning code
 
-### Prerequisites
+> 🚨 This is *not* a chatbot. It’s a deterministic pipeline focused on **structured zoning answers**.
+---
 
-- Node.js 18+ and npm/yarn for the frontend
-- Python >=3.9,<4.0 for langgraph 
+## 🔄 System Architecture
 
-### Frontend Setup
+```
+/frontend          ← Next.js (React, Tailwind) app for UI
+/codebook_agent    ← LangGraph backend (agents + codebook parsing logic)
+/util_python_lib   ← Utility scripts (data ingestion, API pipelines, needs cleanup)
+```
 
+- Hosted on LangGraph Platform
+- Data currently flows one-way from static sources
+- No user-upload support yet (coming)
+
+---
+
+## 🧪 Try It Locally
+
+### Frontend
 ```bash
 cd frontend
 npm install
-cp .env.example .env.local  # Configure your environment variables
+cp .env.example .env.local
 npm run dev
 ```
-You will need a few environment variables.
 
-The frontend will be available at http://localhost:3000
+Frontend runs on `http://localhost:3000`
 
-### Server Setup
-
-Use Langsmith. After setting up a project, input the langgraph environment variables from your project. Specifically LANGGRAPH_URL = {url} and LANGGRAPH_TRACEABLE_V2 = True. Then, you may run
+### Backend
+Use Langsmith or LangGraph local dev mode.
 
 ```bash
 langgraph dev
 ```
 
-The API will be available at the Langgraph URL, which is at {url}
+---
 
-## 🔄 Langgraph Workflow
+## 🎯 What We’re Not Yet Doing
 
-There are two agents that are currently designed.
+We're being honest:
 
-### EXTRACTOR AGENT
-1. Checks if the codebook exists
-2. If not, finds the codebook
-3. Chunks the codebook
+- ❌ No AI-generated proformas or valuations (yet)
+- ❌ No user-uploaded documents (yet)
+- ❌ No live code conflict detection (yet)
 
-Querier Agent
-1. Queries the codebook for all relevant pre-defined questions
-2. Returns answers.
+This is **MVP 0.1** — validating structured site investigation automation.
+
+---
+
+## 👀 What’s Next
+
+- Integrate parcel lookup with zoning agent output
+- Add surface-level red flag detection (e.g. “requires rezoning”, “2-year entitlement”)
+- Merge historical overlays and flood/topo layers
+- Create downloadable SIR (PDF or markdown)
+
+---
+
+## 👥 Contributors
+
+- Kush Bhuwalka (`rhit-bhuwalk`)
+- Logan McLaughlin
+- Evan Brooks
+
+---
 
 ## 📝 License
 
 MIT License
-
-## 👥 Contributors
-
-- Kush Bhuwalka (rhit-bhuwalk)
-- Logan McLaughlin (loganmclaughlin)
-- Evan Brooks (evanbrooks)
