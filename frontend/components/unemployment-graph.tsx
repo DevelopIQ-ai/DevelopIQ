@@ -54,7 +54,11 @@ export const UnemploymentGraph = ({marketData, county, state}: {marketData: Mark
                     // Sort by date
                     return new Date(`${a.year}-${a.month}-01`).getTime() - 
                            new Date(`${b.year}-${b.month}-01`).getTime();
-                });
+                }).map(item => ({
+                    ...item,
+                    // Add a combined date field for the x-axis
+                    dateKey: `${item.year}-${item.month}`
+                }));
                 
                 setFilteredData(filtered);
             }
@@ -148,8 +152,12 @@ export const UnemploymentGraph = ({marketData, county, state}: {marketData: Mark
                         >
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis 
-                                dataKey="month" 
-                                tickFormatter={(tick) => `${monthNames[tick as keyof typeof monthNames].substring(0, 3)} ${filteredData.find(d => d.month === tick)?.year}`}
+                                dataKey="dateKey" 
+                                tickFormatter={(dateKey) => {
+                                    if (!dateKey) return "";
+                                    const [year, month] = dateKey.split('-');
+                                    return `${monthNames[month as keyof typeof monthNames].substring(0, 3)} ${year}`;
+                                }}
                                 interval="preserveStartEnd"
                             />
                             <YAxis 
@@ -158,9 +166,10 @@ export const UnemploymentGraph = ({marketData, county, state}: {marketData: Mark
                             />
                             <Tooltip 
                                 formatter={(value) => [`${value}%`, "Unemployment Rate"]}
-                                labelFormatter={(value) => {
-                                    const item = filteredData.find(d => d.month === value);
-                                    return `${monthNames[value as keyof typeof monthNames]} ${item?.year}`;
+                                labelFormatter={(dateKey) => {
+                                    if (!dateKey) return "";
+                                    const [year, month] = dateKey.split('-');
+                                    return `${monthNames[month as keyof typeof monthNames]} ${year}`;
                                 }}
                             />
                             <Legend />
