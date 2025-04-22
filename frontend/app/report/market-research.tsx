@@ -6,7 +6,8 @@ import { PopulationMetrics } from "@/components/population-metrics";
 import { PopulationGraphs } from "@/components/population-graphs";
 import { HousingMetrics } from "@/components/housing-metrics";
 import { HousingGraphs } from "@/components/housing-graphs";
-import { AlertCircle, Users2, House, HardHat } from "lucide-react";
+import { UnemploymentGraph } from "@/components/unemployment-graph";
+import { AlertCircle, Users2, House, HardHat, ChartBar } from "lucide-react";
 import "@/styles/report.css";
 import { useMarketResearchData } from "@/hooks/useMarketResearchData";
 import { PropertyReportHandler } from "@/lib/report-handler";
@@ -15,7 +16,7 @@ import { IndustryGraph } from "@/components/industry-graph";
 
 type Radius = 1 | 3 | 5;
 
-export function MarketResearchTab({ reportHandler, propertyAddress }: { reportHandler: PropertyReportHandler, propertyAddress: string }) {
+export function MarketResearchTab({ reportHandler, propertyAddress, county, state }: { reportHandler: PropertyReportHandler, propertyAddress: string, county: string | null, state: string | null }) {
   const [radius, setRadius] = useState<Radius>(1);
   
   const { 
@@ -120,6 +121,20 @@ export function MarketResearchTab({ reportHandler, propertyAddress }: { reportHa
                   <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-6">
                       <HousingMetrics marketData={marketData} radius={radius} />
                       <HousingGraphs marketData={marketData} radius={radius} />
+                  </div>
+              </div>
+            </div>
+            <div className="rounded-lg border bg-card shadow-sm">
+              <div className="flex flex-row justify-between items-center gap-2 border-b md:col-span-2 col-span-1 px-6 py-4">
+                  <div className="flex items-center gap-2">
+                      <ChartBar className="h-5 w-5" />
+                      <h2 className="text-lg font-semibold">Unemployment Rate</h2>
+                  </div>
+              </div>
+              <div className="p-4">
+                  <p className="text-sm text-muted-foreground mt-2 mb-6">Showing data for {county}, {state}</p>
+                  <div className="grid grid-cols-1 gap-6 mb-6">
+                      <UnemploymentGraph marketData={marketData} county={county} state={state} />
                   </div>
               </div>
             </div>
