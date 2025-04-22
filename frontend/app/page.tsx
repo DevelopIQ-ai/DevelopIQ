@@ -200,7 +200,7 @@ export default function Home() {
       const stateComponent = place.address_components?.find(component => 
         component.types.includes("administrative_area_level_1")
       );
-      const state = stateComponent?.long_name || stateComponent?.short_name;
+      const state = stateComponent?.short_name;
       localStorage.setItem("state", state || "");
     }
     

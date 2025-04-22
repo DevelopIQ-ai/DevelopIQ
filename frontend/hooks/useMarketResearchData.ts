@@ -15,8 +15,17 @@ export function useMarketResearchData(
       // Get latitude and longitude from localStorage
       const latitude = localStorage.getItem("propertyLatitude");
       const longitude = localStorage.getItem("propertyLongitude");
+      const county = localStorage.getItem("county");
+      const state = localStorage.getItem("state");
+
       if (!latitude || !longitude) {
         setError("No latitude or longitude found for this location.");
+        setLoading(false);
+        return;
+      }
+
+      if (!county || !state) {
+        setError("No county or state found for this location.");
         setLoading(false);
         return;
       }
@@ -58,11 +67,22 @@ export function useMarketResearchData(
         // Fetch and flatten ESRI data using coordinates
         const data = await fetchAndFlattenStats(coords);
         console.log(data);
-        setMarketData(data);
+
+        const blsData = await fetchBlsData(county, state);
+        console.log(blsData.data);
         
-        // Store the data in localStorage
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-        reportHandler.setMarketResearch(data);
+        const completeMarketData = {
+          ...data,
+          bls: {
+            unemployment_rate: blsData.data
+          }
+        };
+        
+        setMarketData(completeMarketData);
+        
+        // Store the complete data in localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(completeMarketData));
+        reportHandler.setMarketResearch(completeMarketData);
         
       } catch (err) {
         console.error('Error fetching market research data:', err);
@@ -170,6 +190,18 @@ interface EsriResponse {
       }]
     }
   }]
+}
+
+async function fetchBlsData(county: string, state: string) {
+  const response = await fetch("/api/bls", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ county, state, queryType: "unemployment_rate" }),
+  });
+  const data = await response.json();
+  return data;
 }
 
 async function fetchEsriData(coords: Coordinates) {

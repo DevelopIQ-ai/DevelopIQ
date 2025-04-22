@@ -177,10 +177,22 @@ export const MarketResearchRadiusSchema = z.object({
   }),
 });
 
+export const UnemploymentRateSchema = z.object({
+  year: z.string(),
+  month: z.string(),
+  value: z.number(),
+  preliminary: z.boolean(),
+});
+
+export const BLSDatasetSchema = z.object({
+  unemployment_rate: z.array(UnemploymentRateSchema),
+});
+
 export const MarketResearchSchema = z.object({
   one_mile_attributes: MarketResearchRadiusSchema,
   three_mile_attributes: MarketResearchRadiusSchema,
   five_mile_attributes: MarketResearchRadiusSchema,
+  bls: BLSDatasetSchema,
 });
 
 export type Radius = 1 | 3 | 5;
@@ -223,6 +235,8 @@ export type EsriData2024Schema = {
 
 export type MarketResearch = z.infer<typeof MarketResearchSchema>;
 export type MarketResearchDataSchema = z.infer<typeof marketResearchDataSchema>;
+export type BLSDatasetSchema = z.infer<typeof BLSDatasetSchema>;
+export type UnemploymentRateDataPoint = z.infer<typeof UnemploymentRateSchema>;
 export type PopulationPyramidDataPointSchema = z.infer<typeof populationPyramidDataPointSchema>;
 export type YearlyPopulationGraphDataPointSchema = z.infer<typeof yearlyPopulationGraphDataPointSchema>;
 export type YearlyPopulationDataSchema = z.infer<typeof yearlyPopulationDataSchema>;
