@@ -17,7 +17,7 @@ export const useRequestForLocation = () => {
   const [error, setError] = useState<Error | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || null;
-  const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || null;
+  const templateID = process.env.NEXT_PUBLIC_EMAILJS_REQUEST_FOR_LOCATION_TEMPLATE_ID || null;
   const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || null;
 
   // Initialize emailjs on hook mount

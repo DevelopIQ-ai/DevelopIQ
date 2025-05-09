@@ -12,12 +12,12 @@ export const NavBar = () => {
         </div>
         <div className="flex items-center gap-4">
           <CalendarButton variant="small" />
-          <a
-            href="mailto:kush@developiq.ai"
+          <Link
+            href="/contact"
             className="inline-flex h-10 items-center justify-center rounded-md bg-primary/5 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background"
           >
             Contact Us
-          </a>
+          </Link>
       </div>
     </header>
   )

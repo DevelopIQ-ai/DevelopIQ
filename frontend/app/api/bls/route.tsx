@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js';
 export const runtime  = 'nodejs';
 export const dynamic  = 'force-dynamic';
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_KEY = process.env.SUPABASE_KEY!;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const BLS_API_KEY  = process.env.BLS_API_KEY ?? '';
 const BLS_API_BASE = process.env.BLS_API_BASE_URL ?? 'https://api.bls.gov/publicAPI/';
 

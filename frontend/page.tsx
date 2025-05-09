@@ -79,9 +79,9 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            {/* <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Everything you used to Google — in one click.
-            </p>
+            </p> */}
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <CalendarButton />
