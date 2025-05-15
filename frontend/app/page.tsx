@@ -1,20 +1,113 @@
 "use client"
 
-import { Clock, Search, Zap, MousePointer, BookOpen, BarChart, Mail, Phone, Trello, Users, Table, Map, Loader, ArrowRight } from "lucide-react"
+import { Search, Zap, BookOpen, BarChart, Mail, Phone, Trello, Users, Table, Map, Loader, ArrowRight } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import "@/styles/animations.css"
 import { NavBar } from "@/components/nav-bar"
-import { FeatureCard } from "@/components/feature-card"
 import { CarouselImage } from "@/components/carousel-image"
 import { v4 as uuidv4 } from "uuid"
-import { JoinWaitlist } from "@/components/join-waitlist"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { Home, Brain, FileSpreadsheet } from "lucide-react"
+import { Brain, FileSpreadsheet } from "lucide-react"
+import { RealEstateFlowchart } from "@/components/RealEstateFlowchart"
+
+function WhyYouNeedUs() {
+  const points = [
+    {
+      title: "Real Estate is changing with AI",
+      description: "AI is transforming how real estate firms work, creating new competitive advantages",
+      icon: <Zap className="w-12 h-12 text-blue-600" />,
+      color: "bg-blue-50",
+      borderColor: "border-blue-200"
+    },
+    {
+      title: "Big players are investing heavily",
+      description: "Larger companies hire teams of AI engineers, spending millions on R&D",
+      icon: <Users className="w-12 h-12 text-green-600" />,
+      color: "bg-green-50",
+      borderColor: "border-green-200"
+    },
+    {
+      title: "Small firms get left behind",
+      description: "Smaller and mid-sized companies can't afford these resources.",
+      icon: <ArrowRight className="w-12 h-12 text-red-600" />,
+      color: "bg-red-50",
+      borderColor: "border-red-200"
+    },
+    {
+      title: "We bridge the gap",
+      description: "We offer quick custom solutions to keep you in the competition.",
+      icon: <Brain className="w-12 h-12 text-purple-600" />,
+      color: "bg-purple-50",
+      borderColor: "border-purple-200"
+    }
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto w-full px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {points.map((point, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="h-64 perspective-1000 group"
+          >
+            {/* Flip card container - preserves 3D */}
+            <div className="relative w-full h-full transition-transform duration-500 transform-style-3d group-hover:rotate-y-180">
+              
+              {/* Front of card */}
+              <div className={`absolute w-full h-full ${point.color} border-2 ${point.borderColor} rounded-xl shadow-md backface-hidden flex flex-col items-center justify-center p-6`}>
+                <div className="mb-4">
+                  {point.icon}
+                </div>
+                <h3 className="text-xl font-bold text-center">{point.title}</h3>
+              </div>
+              
+              {/* Back of card */}
+              <div className={`absolute w-full h-full bg-white border-2 ${point.borderColor} rounded-xl shadow-md backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6`}>
+                <h3 className="text-xl font-bold text-center mb-4">{point.title}</h3>
+                <p className="text-gray-700 text-center">{point.description}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function AutomationShowcase() {
   const [selectedCategory, setSelectedCategory] = useState("featured");
   
+  const featured = [
+    {
+      catchyTitle: "Document Intelligence",
+      explanation: "Stop wasting hours on manual research. Our AI extracts key insights in seconds.",
+      pain: "Reading large codebooks",
+      solution: "Answers and citations in seconds",
+      painIcon: <BookOpen className="w-5 h-5 text-red-600" />,
+      solutionIcon: <Search className="w-5 h-5 text-green-600" />,
+      painColor: "bg-red-100",
+      solutionColor: "bg-green-100",
+      borderPain: "border-red-300",
+      borderSolution: "border-green-300"
+    },
+    {
+      catchyTitle: "Automated Market Research",
+      explanation: "Fresh insights delivered while you sleep. Wake up to data that's ready to use.",
+      pain: "Manual market-research reports",
+      solution: "Auto-built reports",
+      painIcon: <BarChart className="w-5 h-5 text-orange-600" />,
+      solutionIcon: <Zap className="w-5 h-5 text-blue-600" />,
+      painColor: "bg-orange-100",
+      solutionColor: "bg-blue-100",
+      borderPain: "border-orange-300",
+      borderSolution: "border-blue-300"
+    },
+  ];
   const developers = [
     {
       catchyTitle: "Document Intelligence",
@@ -117,8 +210,23 @@ function AutomationShowcase() {
       borderSolution: "border-lime-300"
     },
   ];
-  const architects = [];
-  const featured = [];
+  
+  // Define a type for the automation items based on the existing arrays
+  type AutomationItem = {
+    catchyTitle: string;
+    explanation: string;
+    pain: string;
+    solution: string;
+    painIcon: JSX.Element;
+    solutionIcon: JSX.Element;
+    painColor: string;
+    solutionColor: string;
+    borderPain: string;
+    borderSolution: string;
+  };
+  
+  // Use this type for the architects array
+  const architects: AutomationItem[] = [];
 
   // Map category names to their respective arrays
   const categoryMap = {
@@ -234,105 +342,16 @@ function AutomationShowcase() {
         className="mx-auto mt-6"
       >
         <div className="text-center p-4 bg-gradient-to-r from-orange-100 via-amber-100 to-orange-100 rounded-xl shadow-md border-2 border-black">
-          <p className="font-medium text-gray-700 italic">Need something else? We'll build it.</p>
+          <p className="font-medium text-gray-700 italic">Need something else? We&apos;ll build it.</p>
         </div>
       </motion.div>
     </div>
   );
 }
 
-function RealEstateFlowchart() {
-  return (
-    <div className="flex flex-col items-center mt-20">
-      {/* First Node - Property Search */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative z-10 w-[250px]"
-      >
-        <div className="flex items-center gap-3 p-3 bg-amber-100 rounded-xl shadow-md border-4 border-white">
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-sm">
-            <Home className="w-5 h-5 text-amber-600" />
-          </div>
-          <h2 className="text-lg font-bold text-amber-700">Property Search</h2>
-        </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rounded-full border border-amber-300 z-30"></div>
-      </motion.div>
-      {/* Animated Flowing Line 1 - Vertical */}
-      <div className="w-[2px] h-[60px] mt-[1.5px] mb-[1.5px] overflow-hidden">
-        <svg width="2" height="100%" preserveAspectRatio="none">
-          <motion.path
-            d="M1,0 L1,100"
-            stroke="#F6D199"
-            strokeWidth="2"
-            strokeDasharray="6 6"
-            fill="none"
-            initial={{ strokeDashoffset: 0 }}
-            animate={{ strokeDashoffset: -100 }}
-            transition={{
-              repeat: Number.POSITIVE_INFINITY,
-              duration: 3,
-              ease: "linear",
-            }}
-          />
-        </svg>
-      </div>
-      {/* Second Node - Market Analysis */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="relative z-10 w-[250px]"
-      >
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border border-purple-300 z-30"></div>
-        <div className="flex items-center gap-3 p-3 bg-purple-100 rounded-xl shadow-md border-4 border-white">
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-sm">
-            <Brain className="w-5 h-5 text-purple-600" />
-          </div>
-          <h2 className="text-lg font-bold text-purple-700">Market Analysis</h2>
-        </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white rounded-full border border-purple-300 z-30"></div>
-      </motion.div>
-      {/* Animated Flowing Line 2 - Vertical */}
-      <div className="w-[2px] h-[60px] mt-[1.5px] mb-[1.5px] overflow-hidden">
-        <svg width="2" height="100%" preserveAspectRatio="none">
-          <motion.path
-            d="M1,0 L1,100"
-            stroke="#D8B4FE"
-            strokeWidth="2"
-            strokeDasharray="6 6"
-            fill="none"
-            initial={{ strokeDashoffset: 0 }}
-            animate={{ strokeDashoffset: -100 }}
-            transition={{
-              repeat: Number.POSITIVE_INFINITY,
-              duration: 3,
-              ease: "linear",
-            }}
-          />
-        </svg>
-      </div>
-      {/* Third Node - Investment Report */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1.6 }}
-        className="relative z-10 w-[250px]"
-      >
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border border-green-300 z-30"></div>
-        <div className="flex items-center gap-3 p-3 bg-green-100 rounded-xl shadow-md border-4 border-white">
-          <div className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-sm">
-            <FileSpreadsheet className="w-5 h-5 text-green-600" />
-          </div>
-          <h2 className="text-lg font-bold text-green-700">Investment Report</h2>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
 function WhyUs() {
+
+  
   const whyUsPoints = [
     {
       title: "Outcome pricing",
@@ -378,13 +397,23 @@ function WhyUs() {
           </motion.div>
         ))}
       </div>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        viewport={{ once: true, margin: "-100px" }}
+        className="text-center mt-12"
+      >
+        <p className="text-xl font-medium italic">We are not a consulting firm. We are a product company.</p>
+      </motion.div>
     </div>
   );
+
+
 }
 
 export default function HomePage() {
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
-  const [hasJoinedWaitlist, setHasJoinedWaitlist] = useState(false)
 
   useEffect(() => {
     // Generate and store a UUID if it doesn't exist
@@ -442,6 +471,34 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Add CSS for 3D flip effect at beginning of component
+  useEffect(() => {
+    // Add CSS for 3D transformations
+    const style = document.createElement('style');
+    style.textContent = `
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .transform-style-3d {
+        transform-style: preserve-3d;
+      }
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+      .group:hover .group-hover\\:rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const carouselImages = [
     {
       src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/rose-ZQTzVi9ahKDc5ATRSF6DKJVXR0vl4s.png",
@@ -477,28 +534,7 @@ export default function HomePage() {
     },
   ];
 
-  const featureCards = [
-    {
-      title: "Get reports of aggregated public information instantly",
-      description: "Access comprehensive property data in seconds",
-      icon: <Zap className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Never Miss a data point",
-      description: "Our AI ensures complete coverage of all relevant information",
-      icon: <Search className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Save hours that you can spend on assessing more properties",
-      description: "Focus on analysis, not data gathering",
-      icon: <Clock className="h-6 w-6 text-primary" />
-    },
-    {
-      title: "Interact with your data seamlessly",
-      description: "Intuitive interface for exploring property information",
-      icon: <MousePointer className="h-6 w-6 text-primary" />
-    }
-  ];
+
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col opacity-0 animate-fade-in">
@@ -517,18 +553,18 @@ export default function HomePage() {
               <div className="w-full">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.1] mt-1 text-left">
                   <span className="block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1">
-                    Smarter Real Estate
+                    Affordable AI
                   </span>
                   <span className="block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1">
-                    Starts Here
+                    for Real Estate
                   </span>
                 </h1>
               </div>
 
               <div className="w-full">
                 <h4 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-[1.1] my-16 text-left">
-                  <span className="block mb-2">Use AI to slash hours and save money...</span>
-                  <span className="block mb-2">Your competitors already are</span>
+                  <span className="block mb-2">The <i>big guys</i> are having all the fun...</span>
+                  <span className="block mb-2">We're here to change that</span>
                 </h4>
               </div>
 
@@ -564,6 +600,24 @@ export default function HomePage() {
             sectionRefs.current[1] = el
             return undefined
           }}
+          className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500 bg-gray-50"
+        >
+          <div className="max-w-4xl mx-auto w-full text-center mb-12">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
+              <span className="block py-1">
+                Why DevelopIQ?
+              </span>
+            </h1>
+          </div>
+
+          <WhyYouNeedUs />
+        </section>
+
+        <section
+          ref={(el) => {
+            sectionRefs.current[2] = el
+            return undefined
+          }}
           className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500"
         >
           <div className="max-w-4xl mx-auto w-full text-center">
@@ -583,7 +637,7 @@ export default function HomePage() {
 
         <section
           ref={(el) => {
-            sectionRefs.current[2] = el
+            sectionRefs.current[3] = el
             return undefined
           }}
           className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500 bg-gray-50"
@@ -591,7 +645,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto w-full text-center mb-12">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
               <span className="block py-1">
-                Why DevelopIQ
+                Our DNA
               </span>
             </h1>
           </div>
@@ -601,7 +655,7 @@ export default function HomePage() {
 
         <section
           ref={(el) => {
-            sectionRefs.current[3] = el
+            sectionRefs.current[4] = el
             return undefined
           }}
           className="w-full overflow-hidden py-20 bg-background border-t border-border section opacity-0 transition-all duration-500"
