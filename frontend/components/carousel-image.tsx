@@ -14,7 +14,7 @@ export function CarouselImage({ src, alt }: { src: string, alt: string }) {
                 className="object-contain opacity-50 hover:opacity-100 transition-opacity"
                 />
             </div>
-            <span className="text-sm text-muted-foreground">{alt}</span>
+            {/* <span className="text-sm text-muted-foreground">{alt}</span> */}
         </div>
     );
 }
