@@ -18,12 +18,10 @@ interface BlogPost {
 
 export default function BlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Load blog posts directly from the imported data
     setBlogPosts(blogData.blogs || []);
-    setLoading(false);
     
     // Animation observer code
     const sections = document.querySelectorAll('.section');
@@ -64,7 +62,7 @@ export default function BlogPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
                 {blogPosts.map((post) => (
-                  <div key={post.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <div key={post.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-indigo-100 border-2 border-black">
                     <div className="p-6">
                       <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
                       <div className="flex text-sm text-muted-foreground mb-3">
@@ -75,7 +73,7 @@ export default function BlogPage() {
                       <p className="text-muted-foreground mb-4">
                         {post.content.substring(0, 120)}...
                       </p>
-                      <Button asChild>
+                      <Button asChild className="w-full p-6 bg-gradient-to-r from-orange-100 via-amber-100 to-orange-100 rounded-xl shadow-md border-2 border-black text-gray-700 font-medium hover:bg-gradient-to-r hover:from-orange-200 hover:via-amber-200 hover:to-orange-200 text-md">
                         <Link href={`/blog/${post.id}`}>
                           Read More
                         </Link>

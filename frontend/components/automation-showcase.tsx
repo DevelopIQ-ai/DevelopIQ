@@ -7,20 +7,22 @@ import { motion } from "framer-motion"
 
 export default function AutomationShowcase() {
     const [selectedCategory, setSelectedCategory] = useState("featured");
+
+    // Define a type for the automation items based on the existing arrays
+    type AutomationItem = {
+      catchyTitle: string;
+      explanation: string;
+      pain: string;
+      solution: string;
+      painIcon: JSX.Element;
+      solutionIcon: JSX.Element;
+      painColor: string;
+      solutionColor: string;
+      borderPain: string;
+      borderSolution: string;
+    };
     
-    const featured = [
-      {
-        catchyTitle: "Document Intelligence",
-        explanation: "Stop wasting hours on manual research. Our AI extracts key insights in seconds.",
-        pain: "Reading large codebooks",
-        solution: "Answers and citations in seconds",
-        painIcon: <BookOpen className="w-5 h-5 text-red-600" />,
-        solutionIcon: <Search className="w-5 h-5 text-green-600" />,
-        painColor: "bg-red-100",
-        solutionColor: "bg-green-100",
-        borderPain: "border-red-300",
-        borderSolution: "border-green-300"
-      },
+    const featured: AutomationItem[] = [
       {
         catchyTitle: "Automated Market Research",
         explanation: "Fresh insights delivered while you sleep. Wake up to data that's ready to use.",
@@ -33,13 +35,37 @@ export default function AutomationShowcase() {
         borderPain: "border-orange-300",
         borderSolution: "border-blue-300"
       },
-    ];
-    const developers = [
       {
         catchyTitle: "Document Intelligence",
         explanation: "Stop wasting hours on manual research. Our AI extracts key insights in seconds.",
         pain: "Reading large codebooks",
-        solution: "Answers and citations in seconds",
+        solution: "Instant answers",
+        painIcon: <BookOpen className="w-5 h-5 text-red-600" />,
+        solutionIcon: <Search className="w-5 h-5 text-green-600" />,
+        painColor: "bg-red-100",
+        solutionColor: "bg-green-100",
+        borderPain: "border-red-300",
+        borderSolution: "border-green-300"
+      },
+      {
+        catchyTitle: "Rapid Site Assessment",
+        explanation: "Make informed go/no-go decisions instantly.",
+        pain: "Conducting early site assessments",
+        solution: "Fast site evaluator",
+        painIcon: <Loader className="w-5 h-5 text-violet-600" />,
+        solutionIcon: <Map className="w-5 h-5 text-lime-600" />,
+        painColor: "bg-violet-100",
+        solutionColor: "bg-lime-100",
+        borderPain: "border-violet-300",
+        borderSolution: "border-lime-300"
+      },
+    ];
+    const developers: AutomationItem[] = [
+      {
+        catchyTitle: "Document Intelligence",
+        explanation: "Stop wasting hours on manual research. Our AI extracts key insights in seconds.",
+        pain: "Reading large codebooks",
+        solution: "Instant answers",
         painIcon: <BookOpen className="w-5 h-5 text-red-600" />,
         solutionIcon: <Search className="w-5 h-5 text-green-600" />,
         painColor: "bg-red-100",
@@ -96,12 +122,12 @@ export default function AutomationShowcase() {
         borderSolution: "border-sky-300"
       },
     ];
-    const brokers = [
+    const brokers: AutomationItem[] = [
       {
         catchyTitle: "Call Intelligence Bot",
         explanation: "Let AI handle the tedious calls. Focus on meaningful conversations that matter.",
         pain: "Cold-call drudgery",
-        solution: "Voice bot gathers broker intel, writes the summary for you",
+        solution: "Voice bot gathers broker intel",
         painIcon: <Phone className="w-5 h-5 text-rose-600" />,
         solutionIcon: <Zap className="w-5 h-5 text-teal-600" />,
         painColor: "bg-rose-100",
@@ -113,7 +139,7 @@ export default function AutomationShowcase() {
         catchyTitle: "One-Click Personalization",
         explanation: "Mass communications with a personal touch. Connect authentically at scale.",
         pain: "CRM busywork",
-        solution: "Personalized mail-merge ready in a click",
+        solution: "Mail-merge ready in a click",
         painIcon: <Users className="w-5 h-5 text-fuchsia-600" />,
         solutionIcon: <Zap className="w-5 h-5 text-cyan-600" />,
         painColor: "bg-fuchsia-100",
@@ -122,12 +148,12 @@ export default function AutomationShowcase() {
         borderSolution: "border-cyan-300"
       },
     ];
-    const landAcquisition = [
+    const landAcquisition: AutomationItem[] = [
       {
         catchyTitle: "Rapid Site Assessment",
-        explanation: "Make informed go/no-go decisions instantly. Stop wasting time on dead-end properties.",
-        pain: "Early site (go / no-go)",
-        solution: "Fast site evaluator—zoning, comps, and risks in one view",
+        explanation: "Make informed go/no-go decisions instantly.",
+        pain: "Conducting early site assessments",
+        solution: "Fast site evaluator",
         painIcon: <Loader className="w-5 h-5 text-violet-600" />,
         solutionIcon: <Map className="w-5 h-5 text-lime-600" />,
         painColor: "bg-violet-100",
@@ -135,24 +161,47 @@ export default function AutomationShowcase() {
         borderPain: "border-violet-300",
         borderSolution: "border-lime-300"
       },
+      {
+        catchyTitle: "Easy LOIs",
+        explanation: "Generate LOIs in seconds. No more back-and-forth with clients.",
+        pain: "Manual LOI drafting",
+        solution: "AI-drafted LOIs",
+        painIcon: <Loader className="w-5 h-5 text-blue-600" />,
+        solutionIcon: <Map className="w-5 h-5 text-yellow-600" />,
+        painColor: "bg-blue-100",
+        solutionColor: "bg-yellow-100",
+        borderPain: "border-blue-300",
+        borderSolution: "border-yellow-300"
+      },
     ];
     
-    // Define a type for the automation items based on the existing arrays
-    type AutomationItem = {
-      catchyTitle: string;
-      explanation: string;
-      pain: string;
-      solution: string;
-      painIcon: JSX.Element;
-      solutionIcon: JSX.Element;
-      painColor: string;
-      solutionColor: string;
-      borderPain: string;
-      borderSolution: string;
-    };
-    
     // Use this type for the architects array
-    const architects: AutomationItem[] = [];
+    const architects: AutomationItem[] = [
+      {
+        catchyTitle: "Codebook Research",
+        explanation: "Stop wasting hours on manual research. Our AI extracts every data point in seconds.",
+        pain: "Reading large codebooks",
+        solution: "Instant data extraction",
+        painIcon: <BookOpen className="w-5 h-5 text-yellow-600" />,
+        solutionIcon: <Search className="w-5 h-5 text-orange-600" />,
+        painColor: "bg-yellow-100",
+        solutionColor: "bg-orange-100",
+        borderPain: "border-yellow-300",
+        borderSolution: "border-orange-300"
+      },
+      {
+        catchyTitle: "Hefty Planning Processes",
+        explanation: "Generated plans in seconds. No more manual drafting.",
+        pain: "Slow planning processes",
+        solution: "Auto-built plans",
+        painIcon: <BarChart className="w-5 h-5 text-lime-600" />,
+        solutionIcon: <Zap className="w-5 h-5 text-blue-600" />,
+        painColor: "bg-lime-100",
+        solutionColor: "bg-blue-100",
+        borderPain: "border-lime-300",
+        borderSolution: "border-blue-300"
+      },
+    ];
   
     // Map category names to their respective arrays
     const categoryMap = {
@@ -195,7 +244,7 @@ export default function AutomationShowcase() {
         </div>
   
         {/* Display items from selected category */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
           {currentList.map((item, index) => (
             <motion.div 
               key={index}

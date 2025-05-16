@@ -149,7 +149,7 @@ const workflows = [
   },
 ];
 
-function s(label, icon, bg, text, path) {
+function s(label: string, icon: React.ElementType, bg: string, text: string, path: string) {
   return { label, icon, bg, text, path };
 }
 

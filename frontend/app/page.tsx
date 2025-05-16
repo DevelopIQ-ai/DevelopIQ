@@ -103,10 +103,15 @@ export default function HomePage() {
               </div>
 
               <div className="w-full flex flex-row gap-4">
-                <CalendlyButton />
+                <div className="hidden sm:block">
+                  <CalendlyButton />
+                </div>
+                <div className="sm:hidden">
+                  <CalendlyButton size="small" />
+                </div>
                 <Link href="/contact">
                   <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-6 py-6 text-lg font-semibold rounded-lg w-[248px]"
+                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg font-semibold rounded-lg w-[180px] sm:w-[248px]"
                   >
                     Talk to Sales
                   </Button>
@@ -181,17 +186,22 @@ export default function HomePage() {
           <WhyUs />
         </section>
 
-        <section ref={(el) => {}} className="w-full pb-32 pt-12 flex items-center flex-col justify-center section">
+        <section className="w-full pb-32 pt-12 flex items-center flex-col justify-center section">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
                 <span className="block py-1 pb-10">
                     Get in Touch
                 </span>
             </h1>
             <div className="w-full flex flex-row justify-center gap-4">
-                <CalendlyButton />
+                <div className="hidden sm:block">
+                    <CalendlyButton />
+                </div>
+                <div className="sm:hidden">
+                    <CalendlyButton size="small" />
+                </div>
                 <Link href="/contact">
                   <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-6 py-6 text-lg font-semibold rounded-lg w-[248px]"
+                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg font-semibold rounded-lg w-[180px] sm:w-[248px]"
                   >
                     Talk to Sales
                   </Button>
