@@ -102,16 +102,11 @@ export default function HomePage() {
                 </h4>
               </div>
 
-              <div className="w-full flex flex-row gap-4">
-                <div className="hidden sm:block">
-                  <CalendlyButton />
-                </div>
-                <div className="sm:hidden">
-                  <CalendlyButton size="small" />
-                </div>
+              <div className="w-full flex flex-col sm:flex-row gap-4">
+                <CalendlyButton />
                 <Link href="/contact">
                   <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg font-semibold rounded-lg w-[180px] sm:w-[248px]"
+                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black p-6 text-lg font-semibold rounded-lg w-[248px]"
                   >
                     Talk to Sales
                   </Button>
@@ -192,16 +187,11 @@ export default function HomePage() {
                     Get in Touch
                 </span>
             </h1>
-            <div className="w-full flex flex-row justify-center gap-4">
-                <div className="hidden sm:block">
-                    <CalendlyButton />
-                </div>
-                <div className="sm:hidden">
-                    <CalendlyButton size="small" />
-                </div>
+            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4">
+                <CalendlyButton />
                 <Link href="/contact">
                   <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg font-semibold rounded-lg w-[180px] sm:w-[248px]"
+                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black p-6 text-lg font-semibold rounded-lg w-[248px]"
                   >
                     Talk to Sales
                   </Button>
