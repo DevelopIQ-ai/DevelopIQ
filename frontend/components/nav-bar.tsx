@@ -59,7 +59,7 @@ export const NavBar = () => {
             <CalendlyButton size="small" />
             <Link href="/contact">
               <Button 
-                className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 text-sm font-semibold rounded-lg w-[180px]"
+                className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 text-xs font-semibold rounded-lg w-[160px]"
               >
                 Talk to Sales
               </Button>

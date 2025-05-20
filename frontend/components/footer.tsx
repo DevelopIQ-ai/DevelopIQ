@@ -35,7 +35,7 @@ export const Footer = () => {
             <address className="not-italic text-sm text-gray-600 space-y-2">
               <p>3500 West Springwood Court</p>
               <p>Bloomington, IN 47404</p>
-              <p className="mt-2">evan@developiq.com</p>
+              <p className="mt-2">evan@developiq.ai</p>
               <p>(561) 789-8905</p>
             </address>
           </div>
