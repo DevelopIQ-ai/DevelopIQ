@@ -85,18 +85,18 @@ export default function HomePage() {
           <div className="w-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 py-16 md:py-8 mt-2 md:mt-0">
             <div className="flex flex-col items-start justify-center col-span-1">
               <div className="w-full">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.1] mt-1 text-left">
-                  <span className="block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1">
+                <h1 className="font-medium tracking-tight leading-[1.1] mt-1">
+                  <span className="text-5xl md:text-6xl lg:text-7xl block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1 text-center sm:text-left">
                     Affordable AI
                   </span>
-                  <span className="block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1">
+                  <span className="text-5xl md:text-6xl lg:text-7xl block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1 text-center sm:text-left">
                     for Real Estate
                   </span>
                 </h1>
               </div>
 
               <div className="w-full">
-                <h4 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-[1.1] my-16 text-left">
+                <h4 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-[1.1] my-16 text-center sm:text-left">
                   <span className="block mb-2">Major players build AI <span className="text-[#e86c24]">in-house</span></span>
                   <span className="block mb-2">We bring those same tools to everyone else</span>
                 </h4>
