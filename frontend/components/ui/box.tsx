@@ -36,7 +36,7 @@ const Box = React.forwardRef<HTMLDivElement, BoxProps>(
             </div>
 
             {/* Content row */}
-            <div className="px-12 flex-1">
+            <div className="px-6 md:px-12 flex-1">
               {children}
             </div>
 
@@ -49,7 +49,7 @@ const Box = React.forwardRef<HTMLDivElement, BoxProps>(
         )}
         
         {variant === "blank" && (
-          <div className="px-12">
+          <div className="px-6 md:px-12">
             {children}
           </div>
         )}
