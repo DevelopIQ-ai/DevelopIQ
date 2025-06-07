@@ -21,6 +21,58 @@
     color: white;
     font-family: monospace;
   }
+  .bidirectional-arrow {
+    position: relative;
+    width: 12rem;
+    height: 2px;
+    background-image: linear-gradient(to right, black 50%, transparent 50%);
+    background-size: 8px 1px;
+    background-repeat: repeat-x;
+  }
+  .bidirectional-arrow::before {
+    content: '<';
+    position: absolute;
+    left: -12px;
+    top: -8px;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .bidirectional-arrow::after {
+    content: '>';
+    position: absolute;
+    right: -12px;
+    top: -8px;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .vertical-bidirectional-arrow {
+    position: relative;
+    width: 2px;
+    height: 3rem;
+    background-image: linear-gradient(to bottom, black 50%, transparent 50%);
+    background-size: 1px 8px;
+    background-repeat: repeat-y;
+  }
+  .vertical-bidirectional-arrow::before {
+    content: '∧';
+    position: absolute;
+    top: -16px;
+    left: -4px;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .vertical-bidirectional-arrow::after {
+    content: '∨';
+    position: absolute;
+    bottom: -16px;
+    left: -4px;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1;
+  }
   .dashed-arrow {
     position: relative;
     width: 12rem;
