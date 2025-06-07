@@ -1,221 +1,244 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import "@/styles/animations.css"
-import { NavBar } from "@/components/nav-bar"
-import { CarouselImage } from "@/components/carousel-image"
-import { v4 as uuidv4 } from "uuid"
-import { Button } from "@/components/ui/button"
-import { RealEstateFlowchart } from "@/components/RealEstateFlowchart"
-import Link from "next/link"
 import CalendlyButton from "@/components/calendly-button"
-import WhyYouNeedUs from "@/components/why-you-need-us"
-import AutomationShowcase from "@/components/automation-showcase"
-import WhyUs from "@/components/why-us"
+import { NavBar } from "@/components/nav-bar"
+import { Box } from "@/components/ui/box"
+import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
+import Link from "next/link"
+import Image from "next/image"
 
 export default function HomePage() {
-  const sectionRefs = useRef<(HTMLElement | null)[]>([])
-
-  useEffect(() => {
-    // Generate and store a UUID if it doesn't exist
-    const existingUserId = localStorage.getItem("userId")
-    if (!existingUserId) {
-      const userId = uuidv4()
-      localStorage.setItem("userId", userId)
-    }
-
-    // remove the contact form submitted flag when they re-visit the page
-    const isFormSubmitted = localStorage.getItem("contactFormSubmitted") === "true"
-    if (isFormSubmitted) {
-      localStorage.removeItem("contactFormSubmitted")
-    }
-  }, [])
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active")
-          } else {
-            entry.target.classList.remove("active")
-          }
-        })
-      },
-      { threshold: 0.1 },
-    )
-
-    sectionRefs.current.forEach((section) => {
-      if (section) {
-        const rect = section.getBoundingClientRect()
-        if (rect.top < window.innerHeight && rect.bottom >= 0) {
-          section.classList.add("active")
-        }
-        observer.observe(section)
-      }
-    })
-
-    return () => observer.disconnect()
-  }, [])
-
-  const carouselImages = [
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/thompsonthrift-6ef1QqM6OIUNoaNE2MjQWW2aic7eX6.png",
-      alt: "Thompson Thrift"
-    },
-    {
-      src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/envoy-5xqmEFuIKXq7oapYzMCc5khDDV4HSD.png",
-      alt: "Envoy"
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col opacity-0 animate-fade-in">
-
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <NavBar />
-      <main className="flex-1 flex flex-col">
-        <section
-          ref={(el) => {
-            sectionRefs.current[0] = el
-            return undefined
-          }}
-          className="flex flex-col items-center justify-center text-center px-4 min-h-screen section opacity-0 transition-all duration-500"
-        >
-          <div className="w-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 py-16 md:py-8 mt-2 md:mt-0">
-            <div className="flex flex-col items-start justify-center col-span-1">
-              <div className="w-full">
-                <h1 className="font-medium tracking-tight leading-[1.1] mt-1">
-                  <span className="text-5xl md:text-6xl lg:text-7xl block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1 text-center sm:text-left">
-                    Affordable AI
-                  </span>
-                  <span className="text-5xl md:text-6xl lg:text-7xl block animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text text-transparent py-1 text-center sm:text-left">
-                    for Real Estate
-                  </span>
-                </h1>
+      <main className="flex-1 flex flex-col px-4">
+        <Box>
+          <div className="text-center py-8">
+            <h1 className="font-mono text-4xl md:text-6xl font-bold tracking-tight">
+              AUTOMATE. ACCELERATE.
+              <div className="flex items-center justify-center gap-1">
+                <div className="relative">
+                  <span className="relative z-10">BUILD FASTER.</span>
+                  <div className="absolute bottom-1.5 left-0 w-full h-[45%] bg-[#e86c24] z-[1]"></div>
+                </div>
               </div>
-
-              <div className="w-full">
-                <h4 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight leading-[1.1] my-16 text-center sm:text-left">
-                  <span className="block mb-2">Major players build AI <span className="text-[#e86c24]">in-house</span></span>
-                  <span className="block mb-2">We bring those same tools to everyone else</span>
-                </h4>
-              </div>
-
-              <div className="w-full flex flex-col sm:flex-row gap-4">
-                <CalendlyButton />
-                <Link href="/contact">
-                  <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black p-6 text-lg font-semibold rounded-lg w-[248px]"
-                  >
-                    Talk to Sales
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            </h1>
             
-            <div className="flex items-center justify-center mt-0 md:mt-0 pb-10">
-              <div className="w-full mx-auto">
-                <RealEstateFlowchart />
+            <p className="font-mono mt-8 text-base sm:text-lg">
+              DEVELOPIQ IS CHANGING THE WAY CONSTRUCTION FIRMS
+              <br className="hidden sm:block" />
+              <br className="block sm:hidden" />
+              OPERATE IN THE AGE OF AI
+            </p>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-28 mt-8">
+              <div className="hidden md:block w-[200px]">
+                <CalendlyButton size="large" />
               </div>
-            </div>
-
-          </div>
-        </section>
-
-        <section
-          ref={(el) => {
-            sectionRefs.current[1] = el
-            return undefined
-          }}
-          className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500 bg-gray-50"
-        >
-          <div className="max-w-4xl mx-auto w-full text-center mb-12">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
-              <span className="block py-1">
-                Why DevelopIQ?
-              </span>
-            </h1>
-          </div>
-
-          <WhyYouNeedUs />
-        </section>
-
-        <section
-          ref={(el) => {
-            sectionRefs.current[2] = el
-            return undefined
-          }}
-          className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500"
-        >
-          <div className="max-w-4xl mx-auto w-full text-center">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
-              <span className="block py-1">
-                What We Automate (A Taste)
-              </span>
-            </h1>
-          </div>
-
-          <div className="flex items-center justify-center mt-0 md:mt-0 pb-10">
-              <div className="w-full mx-auto">
-                <AutomationShowcase />
+              <div className="md:hidden w-[200px]">
+                <CalendlyButton size="small" />
               </div>
-            </div>
-        </section>
-
-        <section
-          ref={(el) => {
-            sectionRefs.current[3] = el
-            return undefined
-          }}
-          className="w-full py-20 flex items-center flex-col justify-center section opacity-0 transition-all duration-500 bg-gray-50"
-        >
-          <div className="max-w-4xl mx-auto w-full text-center mb-12">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
-              <span className="block py-1">
-                Our DNA
-              </span>
-            </h1>
-          </div>
-
-          <WhyUs />
-        </section>
-
-        <section className="w-full pb-32 pt-12 flex items-center flex-col justify-center section">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium tracking-tight leading-[1.1]">
-                <span className="block py-1 pb-10">
-                    Get in Touch
-                </span>
-            </h1>
-            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4">
-                <CalendlyButton />
+              <div className="hidden md:block w-[200px]">
                 <Link href="/contact">
-                  <Button 
-                    className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black p-6 text-lg font-semibold rounded-lg w-[248px]"
-                  >
-                    Talk to Sales
-                  </Button>
+                  <Button variant="secondary" size="large" className="w-full">Talk to Sales</Button>
                 </Link>
               </div>
-          </section>
-        <section
-          ref={(el) => {
-            sectionRefs.current[4] = el
-            return undefined
-          }}
-          className="w-full overflow-hidden py-20 bg-background border-t border-border section opacity-0 transition-all duration-500"
-        >
-          <p className="text-center text-sm text-muted-foreground mb-12">Built by Developers from</p>
-          <div className="flex justify-center">
-            <div className="flex items-center gap-16 px-4">
-              {carouselImages.map((image, index) => (
-                <CarouselImage key={index} {...image} />
-              ))}
+              <div className="md:hidden w-[200px]">
+                <Link href="/contact">
+                  <Button variant="secondary" size="small" className="w-full">Talk to Sales</Button>
+                </Link>
+              </div>
+            </div>
+
+            <p className="font-mono mt-8 text-sm">
+              TRUSTED BY [METRIC] TONS OF CONSTRUCTION FIRMS
+            </p>
+          </div>
+        </Box>
+
+        <Box variant="blank" className="mt-4 mb-4">
+          <div className="text-center py-12">
+            <h2 className="font-mono text-2xl md:text-3xl mb-12 text-black">
+              INTEGRATE EVERY TOOL IN YOUR CONSTRUCTION ARSENAL
+            </h2>
+            
+            <div className="flex flex-wrap justify-center items-center gap-4 mb-12">
+              <div className="bg-white p-4 w-[100px] h-[100px] flex items-center justify-center border-2 border-black">
+                <Image 
+                  src="/logos/procore.png" 
+                  alt="Procore logo"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              
+              <div className="bg-white p-4 w-[100px] h-[100px] flex items-center justify-center border-2 border-black">
+                <Image 
+                  src="/logos/argus.png" 
+                  alt="Argus logo"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              
+              <div className="bg-white p-4 w-[100px] h-[100px] flex items-center justify-center border-2 border-black">
+                <Image 
+                  src="/logos/gmail.png" 
+                  alt="Gmail logo"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              
+              <div className="bg-white p-4 w-[100px] h-[100px] flex items-center justify-center border-2 border-black">
+                <Image 
+                  src="/logos/autodesk.png" 
+                  alt="Autodesk logo"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              
+              <div className="bg-white p-4 w-[100px] h-[100px] flex items-center justify-center border-2 border-black">
+                <Image 
+                  src="/logos/monday.png" 
+                  alt="Monday.com logo"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+
+            <p className="font-mono text-black mt-8">[AND MANY MORE]</p>
+          </div>
+        </Box>
+
+        <Box variant="secondary" className="my-4">
+          <div className="text-center py-12">
+            <h1 className="font-mono text-4xl md:text-5xl text-white mb-4">
+              AUTOMATE THE ADMIN WORK
+            </h1>
+            <p className="font-mono text-xl text-white mb-16">
+              Save your firm time with DevelopIQ
+            </p>
+            <div className="flex justify-center">
+              <Image 
+                src="/images/automation.png" 
+                alt="Automation workflow diagram showing integration between Autodesk, Procore, Gmail, and Monday.com"
+                width={1024}
+                height={576}
+                className="w-full max-w-4xl"
+                priority
+              />
             </div>
           </div>
-        </section>
-        <Footer />
+        </Box>
+
+        <div className="text-center mt-16 mb-4">
+          <h1 className="font-mono text-4xl md:text-5xl mb-16">
+            SOME THINGS WE CAN DO
+          </h1>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto md:mb-0">
+            <Box variant="primary" className="relative">
+              <div className="text-center mb-12">
+                <h3 className="font-mono text-md">
+                  AUTOMATED<br />SUBCONTRACTOR BIDDING
+                </h3>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
+                <Image src="/logos/autodesk.png" alt="Autodesk" width={48} height={48} className="w-12 h-12 object-contain" />
+                <div className="hidden sm:block dashed-arrow"></div>
+                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <Image src="/logos/gmail.png" alt="Gmail" width={48} height={48} className="w-12 h-12 object-contain" />
+              </div>
+            </Box>
+
+            <Box variant="primary" className="relative">
+              <div className="text-center mb-12">
+                <h3 className="font-mono text-md">
+                  REAL-TIME CREW &<br />EQUIPMENT SCHEDULING
+                </h3>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
+                <Image src="/logos/procore.png" alt="Procore" width={48} height={48} className="w-12 h-12 object-contain" />
+                <div className="hidden sm:block dashed-arrow"></div>
+                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <Image src="/logos/monday.png" alt="Monday.com" width={48} height={48} className="w-12 h-12 object-contain" />
+              </div>
+            </Box>
+
+            <Box variant="primary" className="relative">
+              <div className="text-center mb-12">
+                <h3 className="font-mono text-md">
+                  AUTOMATED PROJECT<br />INVOICING
+                </h3>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
+                <Image src="/logos/procore.png" alt="Procore" width={48} height={48} className="w-12 h-12 object-contain" />
+                <div className="hidden sm:block dashed-arrow"></div>
+                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <Image src="/logos/argus.png" alt="Argus" width={48} height={48} className="w-12 h-12 object-contain" />
+              </div>
+            </Box>
+
+            <Box variant="primary" className="relative">
+              <div className="text-center mb-12">
+                <h3 className="font-mono text-md">
+                  CENTRALIZED<br />COMPLIANCE TRACKING
+                </h3>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
+                <Image src="/logos/argus.png" alt="Argus" width={48} height={48} className="w-12 h-12 object-contain" />
+                <div className="hidden sm:block dashed-arrow"></div>
+                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <Image src="/logos/monday.png" alt="Monday.com" width={48} height={48} className="w-12 h-12 object-contain" />
+              </div>
+            </Box>
+          </div>
+        </div>
+
+        <Box variant="blank" className="mb-72 mt-0 sm:mb-16 md:mb-32 sm:mt-32">
+          <div className="text-center py-8">
+            <h1 className="font-mono text-4xl md:text-5xl mb-4">
+              LET AI HANDLE THE HEAVY LIFTING
+            </h1>
+            <p className="font-mono text-lg mb-12">
+              Schedule a discovery call so we can help you
+            </p>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-28">
+              <div className="hidden md:block w-[200px]">
+                <CalendlyButton size="large" />
+              </div>
+              <div className="md:hidden w-[200px]">
+                <CalendlyButton size="small" />
+              </div>
+              <div className="hidden md:block w-[200px]">
+                <Link href="/contact">
+                  <Button variant="secondary" size="large" className="w-full">Talk to Sales</Button>
+                </Link>
+              </div>
+              <div className="md:hidden w-[200px]">
+                <Link href="/contact">
+                  <Button variant="secondary" size="small" className="w-full">Talk to Sales</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Box>
       </main>
+      <div className="w-full h-48 flex items-center">
+        <div className="w-full">
+          <Footer />
+        </div>
+      </div>
     </div>
   )
 }

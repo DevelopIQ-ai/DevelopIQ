@@ -6,6 +6,7 @@ import "@/styles/animations.css"
 import { Button } from "@/components/ui/button"
 import { NavBar } from "@/components/nav-bar"
 import { Footer } from "@/components/footer"
+import { Box } from "@/components/ui/box"
 import blogData from './blogs.json'
 
 interface BlogPost {
@@ -42,51 +43,57 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col animate-fade-in">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <NavBar />
-      <main className="flex-1 flex flex-col">
-        <section
-          className="flex flex-col justify-start px-4 min-h-screen section transition-all duration-500 mb-20"
-        >
-          <div className="w-full flex-1 max-w-7xl mx-auto px-4 py-16 md:py-8">
-            <div className="flex flex-col items-start justify-start">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1] mt-20">
-                <span className="block text-left animate-gradient-text bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_auto] bg-clip-text py-1">
-                  Articles
-                </span>
-              </h1>
-
-              <p className="text-lg text-left text-muted-foreground max-w-2xl my-6 text-[#000000]">
-                Latest articles and insights from our team
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
-                {blogPosts.map((post) => (
-                  <div key={post.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-indigo-100 border-2 border-black">
-                    <div className="p-6">
-                      <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-                      <div className="flex text-sm text-muted-foreground mb-3">
-                        <span>{post.date}</span>
-                        <span className="mx-2">•</span>
-                        <span>{post.author}</span>
-                      </div>
-                      <p className="text-muted-foreground mb-4">
-                        {post.content.substring(0, 120)}...
-                      </p>
-                      <Button asChild className="w-full p-6 bg-gradient-to-r from-orange-100 via-amber-100 to-orange-100 rounded-xl shadow-md border-2 border-black text-gray-700 font-medium hover:bg-gradient-to-r hover:from-orange-200 hover:via-amber-200 hover:to-orange-200 text-md">
-                        <Link href={`/blog/${post.id}`}>
-                          Read More
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+      <main className="flex-1 flex flex-col px-4">
+        <Box>
+          <div className="text-center py-8">
+            <h1 className="font-mono text-4xl md:text-6xl font-bold tracking-tight">
+              INSIGHTS & ARTICLES
+              <div className="flex items-center justify-center gap-1">
+                <div className="relative">
+                  <span className="relative z-10">FROM OUR TEAM.</span>
+                  <div className="absolute bottom-1.5 left-0 w-full h-[45%] bg-[#e86c24] z-[1]"></div>
+                </div>
               </div>
+            </h1>
+            
+            <p className="font-mono mt-8 text-lg">
+              LATEST UPDATES FROM THE DEVELOPIQ TEAM
+            </p>
+          </div>
+        </Box>
+
+        <Box variant="blank" className="mt-16 mb-72 md:mb-32">
+          <div className="text-center py-12">            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {blogPosts.map((post) => (
+                <Box key={post.id} variant="primary" className="relative">
+                  <div className="text-center p-8">
+                    <h3 className="font-mono text-lg mb-4">{post.title}</h3>
+                    <div className="flex justify-center text-sm font-mono mb-4 space-x-2">
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <span>{post.author}</span>
+                    </div>
+                    <p className="font-mono text-sm mb-8">
+                      {post.content.substring(0, 120)}...
+                    </p>
+                    <Link href={`/blog/${post.id}`}>
+                      <Button variant="secondary" size="small">READ MORE</Button>
+                    </Link>
+                  </div>
+                </Box>
+              ))}
             </div>
           </div>
-        </section>
+        </Box>
       </main>
-      <Footer />
+      <div className="w-full h-48 flex items-center">
+        <div className="w-full">
+          <Footer />
+        </div>
+      </div>
     </div>
   )
 }

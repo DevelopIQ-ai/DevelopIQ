@@ -4,6 +4,7 @@ import { Button } from "./ui/button"
 import CalendlyButton from "./calendly-button"
 import { useState, useEffect } from "react"
 import { X, Menu } from "lucide-react"
+import { Box } from "./ui/box"
 
 export const NavBar = () => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -25,48 +26,62 @@ export const NavBar = () => {
   }, [])
 
   return (
-    <header className="w-full mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center md:fixed sticky top-0 left-0 right-0 z-50 bg-background backdrop-blur-sm header-nav shadow-sm">
-      <div className="w-full flex justify-between items-center">
-        <Link href="/">
-          <Image src="/logos/developiq_logo_large.png" alt="DevelopIQ Logo" width={150} height={50} />
-        </Link>
-        {isMobile && (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsExpanded(!isExpanded)}
-            aria-label={isExpanded ? "Close menu" : "Open menu"}
-          >
-            {isExpanded ? <X size={24} /> : <Menu size={24} />}
-          </Button>
-        )}
-      </div>
-      
-      {(!isMobile || isExpanded) && (
-        <div className="flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0">
-          <div className="flex flex-row items-center gap-4">
-          <Link href="/" className="text-sm md:mr-4 text-black">
-              Home
+    <div className="w-full p-4">
+      <Box>
+        <div className="w-full flex flex-col md:flex-row justify-between items-center">
+          <div className="w-full flex justify-between items-center">
+            <Link href="/">
+              <Image src="/logos/developiq_logo_large.png" alt="DevelopIQ Logo" width={150} height={50} />
             </Link>
-            <Link href="/blog" className="text-sm md:mr-4 text-black">
-              Blog
-            </Link>
-          <Link href="/pricing" className="text-sm md:mr-4 text-black">
-              Pricing
-            </Link>
-          </div>
-          <div className="flex justify-center items-center gap-4 mt-2 md:mt-0">
-            <CalendlyButton size="small" />
-            <Link href="/contact">
-              <Button 
-                className="bg-[#ffffff] border-2 border-[#000000] hover:bg-[#000000] hover:text-white text-black px-4 py-4 text-xs font-semibold rounded-lg w-[160px]"
+            {isMobile && (
+              <button 
+                onClick={() => setIsExpanded(!isExpanded)}
+                aria-label={isExpanded ? "Close menu" : "Open menu"}
+                className="p-2 hover:bg-gray-100 rounded-md"
               >
-                Talk to Sales
-              </Button>
-            </Link>
+                {isExpanded ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
           </div>
+          
+          {(!isMobile || isExpanded) && (
+            <div className="flex flex-col md:flex-row items-center gap-4 mt-4 md:mt-0">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <Link href="/" className="text-sm md:mr-4 font-mono">
+                  Home
+                </Link>
+                <Link href="/blog" className="text-sm md:mr-4 font-mono">
+                  Blog
+                </Link>
+                <Link href="/pricing" className="text-sm md:mr-4 font-mono">
+                  Pricing
+                </Link>
+                <div className="md:hidden">
+                  <Link href="https://zcal.co/i/BT5kddcb" target="_blank" rel="noopener noreferrer" className="text-sm font-mono">
+                    Schedule a Call
+                  </Link>
+                </div>
+                <div className="md:hidden">
+                  <Link href="/contact" className="text-sm font-mono">
+                    Contact Us
+                  </Link>
+                </div>
+              </div>
+              <div className="hidden md:flex justify-center items-center gap-4 mt-2 md:mt-0">
+                <CalendlyButton size="small" />
+                <Link href="/contact">
+                  <Button 
+                    size="small"
+                    variant="secondary"
+                  >
+                    <span>Talk to Sales</span>
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </header>
+      </Box>
+    </div>
   )
 }

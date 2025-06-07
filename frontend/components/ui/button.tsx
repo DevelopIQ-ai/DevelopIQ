@@ -1,35 +1,31 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
+import { CircleDot } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap font-mono uppercase transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        default: "bg-[#e86c24] text-white border-2 border-[#e86c24] hover:bg-opacity-80 hover:border-[#ed8c4f]",
+        secondary: "bg-white text-black border-2 border-black hover:text-opacity-80 hover:border-opacity-80 hover:bg-gray-100",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
+        small: "px-3 py-2",
+        large: "px-8 py-4",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      size: "large",
     },
   }
 )
@@ -41,14 +37,44 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant = "default", size, asChild = false, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-      />
+      >
+        {/* Only show circles for default variant */}
+        {variant === 'default' && (
+          <>
+            <CircleDot className={cn(
+              "absolute text-white fill-white",
+              size === "small" ? "top-1 left-1" : "top-2 left-2"
+            )} size={8} />
+            <CircleDot className={cn(
+              "absolute text-white fill-white",
+              size === "small" ? "top-1 right-1" : "top-2 right-2"
+            )} size={8} />
+            <CircleDot className={cn(
+              "absolute text-white fill-white",
+              size === "small" ? "bottom-1 left-1" : "bottom-2 left-2"
+            )} size={8} />
+            <CircleDot className={cn(
+              "absolute text-white fill-white",
+              size === "small" ? "bottom-1 right-1" : "bottom-2 right-2"
+            )} size={8} />
+          </>
+        )}
+        
+        {/* Content */}
+        <span className={cn(
+          "flex-1 text-center p-2",
+          size === "small" ? "text-xs" : "text-base"
+        )}>
+          {children}
+        </span>
+      </Comp>
     )
   }
 )
