@@ -154,8 +154,8 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
                 <Image src="/logos/autodesk.png" alt="Autodesk" width={48} height={48} className="w-12 h-12 object-contain" />
-                <div className="hidden sm:block dashed-arrow"></div>
-                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <div className="hidden sm:block bidirectional-arrow"></div>
+                <div className="sm:hidden vertical-bidirectional-arrow"></div>
                 <Image src="/logos/gmail.png" alt="Gmail" width={48} height={48} className="w-12 h-12 object-contain" />
               </div>
             </Box>
@@ -168,8 +168,8 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
                 <Image src="/logos/procore.png" alt="Procore" width={48} height={48} className="w-12 h-12 object-contain" />
-                <div className="hidden sm:block dashed-arrow"></div>
-                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <div className="hidden sm:block bidirectional-arrow"></div>
+                <div className="block sm:hidden vertical-bidirectional-arrow"></div>
                 <Image src="/logos/monday.png" alt="Monday.com" width={48} height={48} className="w-12 h-12 object-contain" />
               </div>
             </Box>
@@ -182,8 +182,8 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
                 <Image src="/logos/procore.png" alt="Procore" width={48} height={48} className="w-12 h-12 object-contain" />
-                <div className="hidden sm:block dashed-arrow"></div>
-                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <div className="hidden sm:block bidirectional-arrow"></div>
+                <div className="block sm:hidden vertical-bidirectional-arrow"></div>
                 <Image src="/logos/argus.png" alt="Argus" width={48} height={48} className="w-12 h-12 object-contain" />
               </div>
             </Box>
@@ -196,8 +196,8 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-8 relative">
                 <Image src="/logos/argus.png" alt="Argus" width={48} height={48} className="w-12 h-12 object-contain" />
-                <div className="hidden sm:block dashed-arrow"></div>
-                <div className="block sm:hidden h-12 w-[2px] bg-black"></div>
+                <div className="hidden sm:block bidirectional-arrow"></div>
+                <div className="block sm:hidden vertical-bidirectional-arrow"></div>
                 <Image src="/logos/monday.png" alt="Monday.com" width={48} height={48} className="w-12 h-12 object-contain" />
               </div>
             </Box>
