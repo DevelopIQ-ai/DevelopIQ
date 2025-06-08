@@ -147,7 +147,7 @@ export default function Contact() {
                 
                 {error && (
                   <div className="p-4 font-mono text-sm border-2 border-red-500 bg-red-50 text-red-500">
-                    {error.message}
+                    There was an error sending your message. Please try again.
                   </div>
                 )}
                 
